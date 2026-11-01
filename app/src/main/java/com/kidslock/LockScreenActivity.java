@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,16 +18,24 @@ import android.widget.Toast;
 /**
  * 全屏答题锁屏页。
  * - 全屏铺满并保持常亮，拦截返回键
- * - 遥控器方向键选答案 + OK 确认；数字键 1-4 快捷作答（有数字键的设备）
+ * - 遥控器方向键选答案 + OK 确认；选项编号为 A/B/C/D，数字键 1-4 或字母键 A-D 也可快捷作答
  * - 连续答对 requiredCorrect 题解锁；答错清零重来
  * - 按【菜单键】进入家长密码通道：应用内置数字键盘（可见输入），不依赖系统输入法
  * - 锁屏状态写入持久化，按 HOME 切走会被重新拉起（尽力防绕过）
  */
 public class LockScreenActivity extends Activity {
+
+    /** 锁屏页是否在前台。QuizService / Keeper 用它避免"重复拉起"打断答题和家长密码输入。 */
+    public static volatile boolean sForeground = false;
+
     private Prefs prefs;
     private QuizEngine engine;
     private TextView tvQuestion, tvProgress, tvHint, tvFeedback;
     private Button[] optBtns = new Button[4];
+    /** 四个选项的编号：A / B / C / D。 */
+    private static final String[] OPT_LETTERS = {"A", "B", "C", "D"};
+    /** 序号与答案之间的留白（当前为空：A.紧跟答案）。 */
+    private static final String OPT_GAP = "";
     private QuizQuestion current;
     private int progress = 0;
     private boolean unlocking = false;
@@ -77,9 +86,40 @@ public class LockScreenActivity extends Activity {
         current = engine.nextQuestion();
         tvQuestion.setText(current.question);
         for (int i = 0; i < 4; i++) {
-            optBtns[i].setText((i + 1) + ". " + current.options[i]);
+            // 选项格式：A.    答案（字母 + 点 + 留白）
+            optBtns[i].setText(OPT_LETTERS[i] + "." + OPT_GAP + current.options[i]);
         }
         optBtns[0].requestFocus();
+        // 文字对齐：全部单行 → 上下居中；只要有任意一项换行 → 四个一起靠上
+        relayoutOptionText();
+    }
+
+    /** 依据"是否有选项换行"统一切换四个按钮的文字对齐方式。 */
+    private void relayoutOptionText() {
+        optBtns[0].postDelayed(new Runnable() {
+            @Override public void run() {
+                boolean anyWrap = false;
+                for (int i = 0; i < 4; i++) {
+                    android.text.Layout l = optBtns[i].getLayout();
+                    if (l != null && l.getLineCount() > 1) {
+                        anyWrap = true;
+                        break;
+                    }
+                }
+                int gravity = anyWrap
+                        ? (Gravity.TOP | Gravity.CENTER_HORIZONTAL)
+                        : Gravity.CENTER;
+                int padTop = anyWrap ? dp(8) : 0;
+                for (int i = 0; i < 4; i++) {
+                    optBtns[i].setGravity(gravity);
+                    optBtns[i].setPadding(dp(10), padTop, dp(10), 0);
+                }
+            }
+        }, 60);
+    }
+
+    private int dp(int v) {
+        return (int) (v * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private void updateProgressUI() {
@@ -111,7 +151,8 @@ public class LockScreenActivity extends Activity {
         } else {
             progress = 0;
             updateProgressUI();
-            tvFeedback.setText("✗ 回答错误，正确答案是：" + current.options[current.correctIndex]);
+            tvFeedback.setText("✗ 回答错误，正确答案是：" + OPT_LETTERS[current.correctIndex] + "."
+                    + OPT_GAP + current.options[current.correctIndex]);
             tvFeedback.setTextColor(0xFFE53935);   // 红
             handler.postDelayed(() -> {
                 tvFeedback.setText("");
@@ -144,9 +185,13 @@ public class LockScreenActivity extends Activity {
             showPinPad();
             return true;
         }
-        // 数字键 1-4 快捷答题（有数字键的设备可用）
+        // 快捷键作答：数字键 1-4 或字母键 A-D（有实体键/键盘的设备可用）
         if (keyCode >= KeyEvent.KEYCODE_1 && keyCode <= KeyEvent.KEYCODE_4) {
             onSelect(keyCode - KeyEvent.KEYCODE_1);
+            return true;
+        }
+        if (keyCode >= KeyEvent.KEYCODE_A && keyCode <= KeyEvent.KEYCODE_D) {
+            onSelect(keyCode - KeyEvent.KEYCODE_A);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -182,19 +227,24 @@ public class LockScreenActivity extends Activity {
     }
 
     // ---- 防绕过：被切走(如按HOME)后重新拉起 ----
+    @Override protected void onResume() {
+        super.onResume();
+        sForeground = true;
+    }
+
+    @Override protected void onPause() {
+        sForeground = false;
+        super.onPause();
+    }
+
     @Override protected void onStop() {
         super.onStop();
         if (!unlocking && prefs.isLocked()) {
             handler.postDelayed(() -> {
-                if (!unlocking && prefs.isLocked()) {
-                    try {
-                        Intent i = new Intent(this, LockScreenActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                    } catch (Exception ignored) {
-                    }
+                if (!unlocking && prefs.isLocked() && !sForeground) {
+                    Keeper.launchLock(this);
                 }
-            }, 200);
+            }, 300);
         }
     }
 

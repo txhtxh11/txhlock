@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>txhlock 答题锁屏 · 电视使用指南</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0f1420; color:#e8ecf3; font-family:"Microsoft YaHei","PingFang SC",sans-serif; line-height:1.7; padding-bottom:60px; }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:30px; color:#fff; margin-bottom:6px; }
+  .sub { color:#9aa7bd; margin-bottom:26px; font-size:15px; }
+  h2 { font-size:22px; color:#6fb3ff; margin:38px 0 8px; padding-left:12px; border-left:4px solid #6fb3ff; }
+  h3 { font-size:17px; color:#cfe2ff; margin:18px 0 6px; }
+  p { color:#dfe6f0; margin:8px 0; font-size:15px; }
+  .imgbox { margin:16px 0; background:#1a2332; border:1px solid #2a3547; border-radius:12px; padding:12px; text-align:center; }
+  .imgbox img { max-width:100%; border-radius:8px; display:block; margin:0 auto; }
+  .cap { color:#93a2b8; font-size:13px; margin-top:8px; }
+  .step { background:#16202f; border:1px solid #25324a; border-radius:10px; padding:14px 16px; margin:12px 0; }
+  .step b { color:#ffcf7a; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
+  th,td { border:1px solid #2a3547; padding:10px 12px; text-align:left; }
+  th { background:#1d2a3c; color:#9ecbff; }
+  td { background:#131c2a; color:#dfe6f0; }
+  .note { background:#2a2415; border:1px solid #5a4a1f; color:#ffe1a1; padding:12px 16px; border-radius:10px; margin:14px 0; font-size:14px; }
+  ul { padding-left:22px; margin:8px 0; }
+  li { margin:6px 0; color:#dfe6f0; font-size:15px; }
+  .foot { color:#7a8699; font-size:12px; margin-top:40px; text-align:center; }
+  .tag { display:inline-block; background:#2d6bb3; color:#fff; border-radius:6px; padding:2px 10px; font-size:13px; margin-right:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>txhlock 答题锁屏 · 电视使用指南</h1>
+  <div class="sub">给家长看的图文操作说明 —— 孩子看一段时间电视，必须先答对题才能继续看。</div>
+
+  <h2>这是什么</h2>
+  <p>安装在安卓电视（小米电视、峰米激光电视等）上的一个家长管控应用。核心逻辑：<b>孩子看满设定时长 → 电视全屏锁定 → 遥控器连续答对 N 道题才能解锁继续看</b>；家长随时可按遥控器【菜单键】输入密码直接解锁。</p>
+
+  <h2>一、家长怎么设置</h2>
+  <p>打开应用（桌面图标“txhlock”），会先要求输入家长密码（默认 <b>1234</b>）。</p>
+  <div class="imgbox"><img src="截图/家长验证门禁.png" alt="家长验证门禁"><div class="cap">图1 · 打开应用后先输家长密码（默认 1234）</div></div>
+  <p>密码键盘是<b>应用内置的数字键盘</b>，用遥控器方向键移动（选中键会高亮橙色），按【OK】确认。</p>
+  <div class="imgbox"><img src="截图/家长密码键盘.png" alt="家长密码键盘"><div class="cap">图2 · 数字键盘：方向键选中、OK 确认、右下角删除/确认</div></div>
+  <p>密码正确后进入家长设置界面：</p>
+  <div class="imgbox"><img src="截图/家长设置界面.png" alt="家长设置界面"><div class="cap">图3 · 家长设置界面（当前状态、监控开关、单次/每日时长）</div></div>
+
+  <div class="step"><b>设置要点：</b>所有选项都是<b>加减/勾选即保存</b>，设好后直接按遥控器【返回】退出即可，没有单独“保存”按钮。</div>
+
+  <table>
+    <tr><th>设置项</th><th>含义</th><th>说明</th></tr>
+    <tr><td>监控开关</td><td>是否启用计时锁屏</td><td>显示“已开启（点击停用）”= 正在生效，后台计时</td></tr>
+    <tr><td>单次连续观看</td><td>一次连续看多久后锁屏答题</td><td>到点弹锁屏，孩子答题解锁后可继续看（循环）</td></tr>
+    <tr><td>每日累计上限</td><td>一天总共能看多久</td><td>0 = 不限；到上限后当天不能再看（家长输密码可豁免），过午夜自动重置</td></tr>
+    <tr><td>连续答对题数</td><td>解锁需连续答对几道</td><td>范围 1～10，答错一次进度清零重来；默认 3</td></tr>
+    <tr><td>启用题型</td><td>出题范围</td><td>口算 / 认字（拼音）/ 古诗 / 英语 / 自定义，可多选</td></tr>
+    <tr><td>修改家长密码</td><td>换解锁密码</td><td>4～8 位数字</td></tr>
+    <tr><td>SMB 同步设置</td><td>从电脑局域网同步题库</td><td>见“题库”章节</td></tr>
+    <tr><td>立即锁定测试</td><td>手动模拟一次锁屏</td><td>仅供家长测试答题流程用；测完记得答题或输密码解锁</td></tr>
+  </table>
+
+  <h2>二、孩子怎么用（看电视流程）</h2>
+  <p>监控开启后，孩子正常看电视。看满“单次连续观看”的时长（例如 3 分钟），电视会自动弹出全屏答题锁屏：</p>
+  <div class="imgbox"><img src="截图/锁屏答题界面.png" alt="锁屏答题界面"><div class="cap">图4 · 锁屏答题页：看满时间后自动弹出，顶部显示“连续答对 0/3 题可解锁”</div></div>
+  <ul>
+    <li>顶部提示“答题解锁才能继续看电视”，并显示当前进度“连续答对 X / N 题可解锁”。</li>
+    <li>中间出题（拼音/口算/古诗/英语/自定义），下方 4 个选项。</li>
+    <li>用<b>方向键</b>选答案，按【OK】确认。</li>
+  </ul>
+  <p><b>答对</b>：绿色提示“✓ 回答正确”，进度 +1；连对满 N 题显示“✓ 回答正确，解锁成功！”并解锁。</p>
+  <p><b>答错</b>：红色提示“✗ 回答错误，正确答案是：X”，<b>进度清零</b>，需重新连续答对。</p>
+  <div class="note">解锁后回到之前看的画面继续看电视；计时会继续累计，到点再次锁屏。</div>
+
+  <h2>三、解锁的两种方式</h2>
+  <table>
+    <tr><th>方式</th><th>操作</th><th>适用</th></tr>
+    <tr><td>孩子答题解锁</td><td>连续答对 N 道题</td><td>单次到点，孩子自己认真做对题就能继续看</td></tr>
+    <tr><td>家长密码直解</td><td>锁屏页按遥控器【菜单键】→ 输家长密码</td><td>每日额度已用完 / 孩子答不出 / 家长随时放行</td></tr>
+  </table>
+  <p><b>每日额度已用完时</b>：孩子答题<b>无法</b>解锁（会提示“今日观看时间已用完，请家长输入密码”），只有家长输密码才能当日继续看。</p>
+
+  <h2>四、题库怎么放（本地 / 局域网 SMB）</h2>
+  <div class="step"><b>本地题库：</b>在电视内置存储的 <b>/sdcard/Download/txhlock/</b> 目录放入 .txt 文件（一行一题，格式“题干|答案”，可用 [pinyin]/[english]/[poetry]/[custom] 分段）。放好后在设置里点【重新加载题库】。</div>
+  <div class="step"><b>SMB 局域网同步：</b>设置里填电脑共享地址（服务器/共享名/账号/密码/子目录），打开应用自动同步；也可点【立即更新 SMB 题库】手动更新。更新结果会区分“成功 / 无需更新 / 连接失败”。</div>
+  <ul>
+    <li>本地与 SMB 题库会自动合并、按“段+题干+答案”去重。</li>
+    <li>【卸载本地题库】可删除本地 txt，状态会显示“本地无题库”。</li>
+  </ul>
+
+  <h2>五、常见问题</h2>
+  <ul>
+    <li><b>监控已开启但显示“未锁定”？</b>正常。“未锁定”指此刻没在锁屏，等看满时长才会锁。</li>
+    <li><b>电视重启后计时不生效？</b>到电视系统设置里给 txhlock 打开“开机自启动”权限（国产电视常默认禁止）。</li>
+    <li><b>100 寸激光电视显示会变形吗？</b>不会。全屏是按分辨率等比放大，比例正常；若是 4K 屏元素会偏小但可用。</li>
+    <li><b>高版本安卓能装吗？</b>能。此应用兼容 Android 4.3 及以上所有版本。</li>
+  </ul>
+
+  <div class="foot">txhlock · 答题锁屏守护 —— 本指南截图来自小米电视实机，仅供参考。</div>
+</div>
+</body>
+</html>

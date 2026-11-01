@@ -23,6 +23,18 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- 提示文字统一使用：字号 18sp、灰色、统一行距、上下各留 10dp 呼吸间距，全页保持一致 -->
+    <style name="Hint">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/text_dim</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingExtra">6dp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="RowBtn">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">88dp</item>

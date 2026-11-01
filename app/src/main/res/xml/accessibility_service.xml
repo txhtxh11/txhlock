@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  canRequestFilterKeyEvents + flagRequestFilterKeyEvents：
+  Android 4.3(API 18) 起，无障碍服务可以在系统分发按键之前拿到 KeyEvent 并"吞掉"。
+  用它拦遥控器【主页键】——按键根本到不了桌面，屏幕上不会出现 1~2 秒的小米桌面。
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagRequestFilterKeyEvents"
+    android:canRequestFilterKeyEvents="true"
+    android:notificationTimeout="100"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/acc_desc" />

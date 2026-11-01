@@ -45,16 +45,12 @@ public class QuizService extends Service {
     };
 
     // 锁定状态下低频尝试恢复锁屏页（切走如按HOME后尽力弹回，每3秒；系统可能拦截，尽力而为）
+    // 注意：锁屏页已在前台时绝不重复拉起，否则会打断答题反馈和家长密码输入。
     private final Runnable lockRestorer = new Runnable() {
         @Override public void run() {
             if (!running) return;
-            if (prefs != null && prefs.isLocked()) {
-                try {
-                    Intent i = new Intent(QuizService.this, LockScreenActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                } catch (Exception ignored) {
-                }
+            if (prefs != null && prefs.isLocked() && !LockScreenActivity.sForeground) {
+                Keeper.launchLock(QuizService.this);
             }
             handler.postDelayed(this, 3000);
         }
@@ -63,11 +59,23 @@ public class QuizService extends Service {
     @Override public void onCreate() {
         super.onCreate();
         prefs = new Prefs(this);
+        // 开机检测（仅服务启动时一次；tick 内不做，避免误伤正常连续观看的超时锁定）：
+        // 若上次会话起点距今已超过"单次限额"，说明中间隔了长时间关机/隔夜，
+        // 把单次计时起点重置为当前时刻，避免把关机时长算进去导致开机即锁；
+        // 短关机/重启则保留起点（计时续上）。
+        long bootNow = System.currentTimeMillis();
+        long bootStart = prefs.sessionStartMs();
+        if (bootStart != 0 && prefs.singleMinutes() > 0
+                && (bootNow - bootStart) > prefs.singleMinutes() * 60000L) {
+            prefs.setSessionStartMs(bootNow);
+        }
         createChannel();
         startForeground(NOTIF_ID, buildNotification(0));
         running = true;
         handler.post(ticker);
         handler.post(lockRestorer);
+        // 服务哪怕被杀，AlarmManager 看门狗也能把锁屏救回来
+        Keeper.scheduleWatchdog(this);
     }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {

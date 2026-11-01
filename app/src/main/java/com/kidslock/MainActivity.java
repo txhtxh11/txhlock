@@ -3,6 +3,7 @@ package com.kidslock;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -35,8 +36,9 @@ public class MainActivity extends Activity {
     private Prefs prefs;
     private Button btnEnable, btnSingleMinus, btnSinglePlus, btnDailyMinus, btnDailyPlus,
             btnCorrMinus, btnCorrPlus, btnMath, btnPinyin, btnPoetry, btnEnglish, btnCustom,
-            btnReloadQuiz, btnTestLock, btnChangePin, btnSmbSetup, btnSmbSyncNow, btnClearLocal;
-    private TextView tvStatus, tvSingle, tvDaily, tvCorrect, tvQuizStatus, tvSmbStatus;
+            btnReloadQuiz, btnTestLock, btnChangePin, btnSmbSetup, btnSmbSyncNow, btnClearLocal, btnBootLock,
+            btnHomeSetup, btnSysSettings, btnAcc;
+    private TextView tvStatus, tvSingle, tvDaily, tvCorrect, tvQuizStatus, tvSmbStatus, tvHomeStatus, tvAccStatus;
     private QuizEngine engine;
     private boolean parentAuthenticated = false;
     private boolean smbAutoSynced = false;   // 每次打开应用只自动同步一次 SMB
@@ -96,6 +98,9 @@ public class MainActivity extends Activity {
 
     private void bindViews() {
         tvStatus = findViewById(R.id.tvStatus);
+        // 右上角版本号：统一由 AppVer 控制，改版本只改那一个文件
+        TextView tvVer = findViewById(R.id.tvVersion);
+        if (tvVer != null) tvVer.setText(AppVer.LABEL);
         btnEnable = findViewById(R.id.btnEnable);
         btnSingleMinus = findViewById(R.id.btnSingleMinus);
         btnSinglePlus = findViewById(R.id.btnSinglePlus);
@@ -119,6 +124,12 @@ public class MainActivity extends Activity {
         btnSmbSyncNow = findViewById(R.id.btnSmbSyncNow);
         btnClearLocal = findViewById(R.id.btnClearLocal);
         tvSmbStatus = findViewById(R.id.tvSmbStatus);
+        btnBootLock = findViewById(R.id.btnBootLock);
+        btnHomeSetup = findViewById(R.id.btnHomeSetup);
+        btnSysSettings = findViewById(R.id.btnSysSettings);
+        btnAcc = findViewById(R.id.btnAcc);
+        tvAccStatus = findViewById(R.id.tvAccStatus);
+        tvHomeStatus = findViewById(R.id.tvHomeStatus);
     }
 
     private void refreshAll() {
@@ -133,6 +144,77 @@ public class MainActivity extends Activity {
     private void refreshStatus() {
         btnEnable.setText(prefs.isEnabled() ? "已开启（点击停用）" : "已停用（点击开启）");
         tvStatus.setText(prefs.isLocked() ? "当前状态：锁定中" : "当前状态：未锁定");
+        if (btnBootLock != null) {
+            btnBootLock.setText(prefs.lockOnBoot() ? "开机自动锁定：开" : "开机自动锁定：关");
+        }
+        refreshHomeStatus();
+    }
+
+    /** 本应用对系统桌面零改动：这里直接说明"卸载即还原"，并在下方给出还原卸载入口。 */
+    private void refreshHomeStatus() {
+        // 状态提示统一用与页面其它提示相同的灰色（text_dim），靠 ✅/⚠/❌ 符号区分状态
+        int dim = getResources().getColor(R.color.text_dim);
+        if (tvHomeStatus != null) {
+            tvHomeStatus.setText("系统桌面：未做任何修改 —— 本应用只负责「锁屏」，"
+                    + "不接管桌面、不修改系统设置，卸载后小米桌面自动恢复原样");
+            tvHomeStatus.setTextColor(dim);
+        }
+        if (tvAccStatus != null) {
+            if (isAccessibilityOn()) {
+                String s = "无障碍保活：✅ 已开启 —— 开机自动锁屏 + 切走秒回锁屏";
+                if (isKeyFilterActive()) {
+                    s += "\n主页键：✅ 已物理拦截（按下无反应，小米桌面不会出现）";
+                } else {
+                    s += "\n主页键：⚠ 仍靠 1~2 秒抢回 —— 到无障碍设置把 txhlock 关掉再打开一次即可升级";
+                }
+                tvAccStatus.setText(s);
+                tvAccStatus.setTextColor(dim);
+                if (btnAcc != null) btnAcc.setText("管理无障碍保活（可关闭）");
+            } else {
+                tvAccStatus.setText("无障碍保活：❌ 未开启 —— 这是小米电视上最可靠的开机自启方式，点下方按钮开启");
+                tvAccStatus.setTextColor(dim);
+                if (btnAcc != null) btnAcc.setText("开启无障碍保活（推荐）");
+            }
+        }
+    }
+
+    /** 无障碍服务是否已启用。 */
+    private boolean isAccessibilityOn() {
+        try {
+            String s = Settings.Secure.getString(getContentResolver(),
+                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (s == null) return false;
+            String me = getPackageName() + "/" + BootAccessibility.class.getName();
+            String me2 = getPackageName() + "/.BootAccessibility";
+            return s.contains(me) || s.contains(me2);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * 系统当前绑定的本服务，是否已经拿到了"按键过滤"能力。
+     * 这决定了主页键是"按下无反应"还是"先回桌面再被 1~2 秒抢回来"。
+     */
+    private boolean isKeyFilterActive() {
+        try {
+            android.view.accessibility.AccessibilityManager am =
+                    (android.view.accessibility.AccessibilityManager)
+                            getSystemService(Context.ACCESSIBILITY_SERVICE);
+            if (am == null) return false;
+            java.util.List<android.accessibilityservice.AccessibilityServiceInfo> list =
+                    am.getEnabledAccessibilityServiceList(
+                            android.accessibilityservice.AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+            if (list == null) return false;
+            for (android.accessibilityservice.AccessibilityServiceInfo info : list) {
+                if (info == null || info.getResolveInfo() == null) continue;
+                if (!getPackageName().equals(info.getResolveInfo().serviceInfo.packageName)) continue;
+                return (info.flags & android.accessibilityservice.AccessibilityServiceInfo
+                        .FLAG_REQUEST_FILTER_KEY_EVENTS) != 0;
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
     }
 
     private void refreshTypeButtons() {
@@ -314,11 +396,91 @@ public class MainActivity extends Activity {
             doSync(true);
         });
         btnChangePin.setOnClickListener(v -> showChangePin());
+        // 开机自动锁定：开启后"重启电视"等于重新开始答题，不再能靠重启逃过去
+        btnBootLock.setOnClickListener(v -> {
+            boolean v2 = !prefs.lockOnBoot();
+            prefs.setLockOnBoot(v2);
+            refreshStatus();
+            toast(v2 ? "已开启：重启跟随锁定状态（已锁仍锁、未锁续时）" : "已关闭：开机不再锁定");
+        });
+        // 还原并卸载：先关掉无障碍保活，再卸载。本应用从未改动系统桌面，卸载即完全恢复原样。
+        btnHomeSetup.setOnClickListener(v -> showUninstallGuide());
+        // 直接跳到本应用的系统详情页：MIUI 的"自启动/后台运行/权限"开关就在这一页
+        btnSysSettings.setOnClickListener(v -> {
+            try {
+                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + getPackageName())));
+            } catch (Exception e) {
+                try {
+                    startActivity(new Intent(Settings.ACTION_SETTINGS));
+                } catch (Exception e2) {
+                    toast("无法打开系统设置");
+                }
+            }
+        });
+        // 无障碍保活：跳系统无障碍设置页（开 / 关都在这一页，家长手动一次即可）
+        btnAcc.setOnClickListener(v -> {
+            toast(isAccessibilityOn()
+                    ? "已开启。把 txhlock 的开关关掉即可停用保活"
+                    : "找到 txhlock，打开开关即可");
+            try {
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            } catch (Exception e) {
+                toast("请到 设置 → 无障碍 里操作 txhlock");
+            }
+        });
         btnTestLock.setOnClickListener(v -> {
             prefs.setLocked(true);
             startActivity(new Intent(this, LockScreenActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         });
+    }
+
+    /**
+     * 还原并卸载。
+     *
+     * 设计前提：本应用对系统桌面【零改动】——
+     *   · 不声明 CATEGORY_HOME（不参与"谁是桌面"的竞争）
+     *   · 不禁用/替换小米桌面
+     *   · 不修改任何系统设置（无障碍开关也是家长在系统里手动开的，卸载后自然失效）
+     * 因此卸载后，遥控器主页键必然回到小米电视桌面，与安装前完全一致。
+     * 这里只做两件事：① 引导关闭无障碍保活（避免系统里留下一个失效条目）② 调起系统卸载界面。
+     */
+    private void showUninstallGuide() {
+        AlertDialog dlg = new AlertDialog.Builder(this)
+                .setTitle("还原并卸载")
+                .setMessage("本应用没有修改系统桌面，也没有禁用小米桌面的任何功能：\n\n"
+                        + "• 卸载后，主页键立刻回到小米电视桌面，与安装前完全一致\n"
+                        + "• 答题记录、家长密码、题库设置随应用一起删除\n\n"
+                        + "建议顺序：先点「① 关闭无障碍保活」，返回后再点「② 卸载」。")
+                .setPositiveButton("① 关闭无障碍保活", (d, w) -> openAccessibilitySettings())
+                .setNeutralButton("② 卸载", (d, w) -> doUninstall())
+                .setNegativeButton("取消", null)
+                .create();
+        if (dlg.getWindow() != null) {
+            dlg.getWindow().setBackgroundDrawableResource(R.color.panel);
+        }
+        dlg.show();
+    }
+
+    /** 跳到系统无障碍设置页，家长手动关掉 txhlock 的开关即可彻底清理。 */
+    private void openAccessibilitySettings() {
+        try {
+            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            toast("把 txhlock 的开关关掉，返回本页再点「卸载」");
+        } catch (Exception e) {
+            toast("请到 设置 → 无障碍 里关闭 txhlock");
+        }
+    }
+
+    /** 调起系统卸载界面（应用内一键，不需要命令行）。 */
+    private void doUninstall() {
+        try {
+            startActivity(new Intent(Intent.ACTION_DELETE,
+                    Uri.parse("package:" + getPackageName())));
+        } catch (Exception e) {
+            toast("请到 设置 → 应用 → txhlock 里卸载");
+        }
     }
 
     /** 家长门禁：进入设置前必须先验证 PIN（应用内置数字键盘）。 */

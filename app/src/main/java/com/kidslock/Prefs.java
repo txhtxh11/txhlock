@@ -79,6 +79,10 @@ public class Prefs {
     public long lastSmbSync() { return sp.getLong("smb_last_sync", 0); }
     public void setLastSmbSync(long v) { sp.edit().putLong("smb_last_sync", v).apply(); }
 
+    /** 开机是否自动锁定（默认开：重启电视不能跳过答题）。 */
+    public boolean lockOnBoot() { return sp.getBoolean("lock_on_boot", true); }
+    public void setLockOnBoot(boolean v) { sp.edit().putBoolean("lock_on_boot", v).apply(); }
+
     /** 当日额度是否已耗尽（每日上限触发锁屏）。答题不可解锁，仅家长密码可当日豁免。 */
     public boolean isDailyLocked() { return sp.getBoolean("daily_locked", false); }
     public void setDailyLocked(boolean v) { sp.edit().putBoolean("daily_locked", v).apply(); }

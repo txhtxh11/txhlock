@@ -3,33 +3,44 @@ package com.kidslock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.util.Log;
 
-/** 开机自启：恢复计时服务，若处于锁定状态则直接拉起锁屏页（防重启绕过）。 */
+/**
+ * 开机自启（防重启绕过锁屏）。
+ *
+ * 关键点（旧版只有"启动服务 + 若处于锁定就拉起一次"，所以重启照样能绕过）：
+ *   1. 开机即置为锁定状态 —— 重启不再等于"解锁"
+ *   2. 立即拉起一次，再在 4/10/20/40/80 秒补拉 —— 开机器桌面会盖住第一枪
+ *   3. 挂上常驻看门狗 —— 进程被 ROM 清掉也能把锁屏救回来
+ */
 public class BootReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
         Prefs prefs = new Prefs(context);
-        if (!prefs.isEnabled()) return;
+        boolean isBoot = Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
+                || "android.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())
+                || "com.htc.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())
+                || Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction());
+        Log.i("txhlock", "BootReceiver action=" + intent.getAction()
+                + " isBoot=" + isBoot + " enabled=" + prefs.isEnabled()
+                + " lockOnBoot=" + prefs.lockOnBoot());
 
-        // 启动计时服务
-        Intent svc = new Intent(context, QuizService.class);
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                context.startForegroundService(svc);
-            } else {
-                context.startService(svc);
-            }
-        } catch (Exception ignored) {
-        }
+        if (!prefs.isEnabled()) return;      // 家长停用了监控，不做任何事
 
-        // 若处于锁定，立即弹出锁屏页
+        if (!isBoot) return;
+
+        // 1) 重启跟随重启前锁定状态（未锁定→不锁、计时续上；已锁定→仍锁）
+        Keeper.lockOnBoot(context, prefs);
+
+        // 2) 恢复计时服务
+        Keeper.startService(context);
+
+        // 3) 仅当处于锁定状态时才补拉锁屏（应对系统桌面抢占焦点）
         if (prefs.isLocked()) {
-            try {
-                Intent li = new Intent(context, LockScreenActivity.class);
-                li.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(li);
-            } catch (Exception ignored) {
-            }
+            Keeper.launchLock(context);
+            Keeper.scheduleRetries(context);
         }
+
+        // 4) 常驻看门狗（内部会判断锁定状态）
+        Keeper.scheduleWatchdog(context);
     }
 }

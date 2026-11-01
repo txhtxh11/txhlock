@@ -10,13 +10,32 @@
         android:orientation="vertical"
         android:padding="40dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- 标题行：左边标题，右上角版本号 -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="答题锁屏守护 · 家长设置"
-            android:textColor="@color/text_main"
-            android:textSize="34sp"
-            android:textStyle="bold" />
+            android:baselineAligned="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="答题锁屏守护 · 家长设置"
+                android:textColor="@color/text_main"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="TXH txhlock v0.6"
+                android:textColor="@color/text_dim"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvStatus"
@@ -68,12 +87,12 @@
 
         <TextView style="@style/Label" android:text="自定义题库" />
         <TextView
+            style="@style/Hint"
+            android:text="题库路径：/sdcard/Download/txhlock/*.txt（一个文件可多行，一行一题；格式见说明文档）" />
+        <TextView
             android:id="@+id/tvQuizStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="未加载"
-            android:textColor="@color/text_dim"
-            android:textSize="18sp" />
+            style="@style/Hint"
+            android:text="未加载" />
         <Button
             android:id="@+id/btnReloadQuiz"
             style="@style/RowBtn"
@@ -87,11 +106,8 @@
         <TextView style="@style/Label" android:text="局域网 SMB 题库同步（打开应用时自动更新）" />
         <TextView
             android:id="@+id/tvSmbStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SMB 同步未开启"
-            android:textColor="@color/text_dim"
-            android:textSize="18sp" />
+            style="@style/Hint"
+            android:text="SMB 同步未开启" />
         <Button
             android:id="@+id/btnSmbSetup"
             style="@style/RowBtn"
@@ -103,18 +119,42 @@
             android:text="立即更新 SMB 题库" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/Hint"
             android:layout_marginTop="28dp"
-            android:text="提示：家长密码默认 1234（锁屏页按菜单键输入）。自定义题库放 /sdcard/Download/txhlock/*.txt，格式见说明文档。"
-            android:textColor="@color/text_dim"
-            android:textSize="18sp" />
+            android:text="提示：家长密码默认 1234（锁屏页按菜单键输入），可点击下方按钮修改。" />
 
         <Button
             android:id="@+id/btnChangePin"
             style="@style/RowBtn"
             android:layout_marginTop="16dp"
             android:text="修改家长密码" />
+
+        <TextView style="@style/Label" android:text="开机行为（防重启绕过）" />
+        <Button
+            android:id="@+id/btnBootLock"
+            style="@style/RowBtn"
+            android:text="开机自动锁定：开" />
+        <TextView
+            android:id="@+id/tvHomeStatus"
+            style="@style/Hint"
+            android:text="系统桌面：未做任何修改（卸载后自动还原）" />
+        <Button
+            android:id="@+id/btnHomeSetup"
+            style="@style/RowBtn"
+            android:text="还原并卸载（卸载后小米桌面自动恢复）" />
+        <Button
+            android:id="@+id/btnSysSettings"
+            style="@style/RowBtn"
+            android:layout_marginTop="8dp"
+            android:text="打开系统设置：自启动 / 权限" />
+        <TextView
+            android:id="@+id/tvAccStatus"
+            style="@style/Hint"
+            android:text="正在检测无障碍保活状态…" />
+        <Button
+            android:id="@+id/btnAcc"
+            style="@style/RowBtn"
+            android:text="开启无障碍保活（推荐）" />
 
         <Button
             android:id="@+id/btnTestLock"

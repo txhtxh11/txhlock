@@ -69,7 +69,37 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+
+        <!-- 补拉 / 看门狗：对付"开机后被系统桌面盖住"和"进程被 ROM 杀掉" -->
+        <receiver
+            android:name=".KeeperReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.kidslock.action.RETRY_LOCK" />
+                <action android:name="com.kidslock.action.WATCHDOG" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 无障碍保活：小米电视会拦截第三方应用的 BOOT_COMPLETED，
+             但系统会在开机时主动绑定"已启用的无障碍服务"，这条路径更可靠。 -->
+        <service
+            android:name=".BootAccessibility"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service" />
+        </service>
+
+        <!-- 注意：本应用【不再】声明 CATEGORY_HOME，也不再接管系统桌面。
+             原因：接管桌面会改写系统的"默认桌面"记录，卸载后未必能干净还原。
+             现在锁屏靠"无障碍保活"把前台抢回来，对系统桌面零改动，
+             卸载后小米电视桌面 100% 恢复原样。 -->
     </application>
 </manifest>
