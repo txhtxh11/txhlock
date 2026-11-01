@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_dark">#0F141B</color>
+    <color name="panel">#1A222D</color>
+    <color name="primary">#1E5AF0</color>
+    <color name="text_main">#FFFFFF</color>
+    <color name="text_dim">#9AA5B1</color>
+    <color name="option_bg">#262E3A</color>
+    <color name="option_focus">#1E5AF0</color>
+    <color name="option_correct">#1E9E57</color>
+    <color name="option_wrong">#C0392B</color>
+</resources>

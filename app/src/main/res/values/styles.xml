@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.KidsLock" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/bg_dark</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    <style name="Theme.KidsLock.Lock">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- 家长设置界面样式 -->
+    <style name="Label">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">26dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RowBtn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:background">@drawable/bg_option</item>
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="Stepper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="StepBtn">
+        <item name="android:layout_width">140dp</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:background">@drawable/bg_option</item>
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="StepValue">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="TypeBtn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:background">@drawable/bg_option</item>
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+</resources>

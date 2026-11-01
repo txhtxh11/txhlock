@@ -1,0 +1,20 @@
+# ===== 构建产物 =====
+.gradle/
+build/
+app/build/
+*.apk
+*.aab
+
+# ===== 本机环境（含真实 SDK 路径，不提交）=====
+local.properties
+.idea/
+*.iml
+.cxx/
+
+# ===== 签名密钥（绝不提交，防伪造签名）=====
+*.jks
+*.keystore
+
+# ===== 系统文件 =====
+.DS_Store
+Thumbs.db

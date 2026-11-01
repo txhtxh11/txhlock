@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="答题锁屏守护 · 家长设置"
+            android:textColor="@color/text_main"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text=""
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+
+        <TextView style="@style/Label" android:text="监控开关" />
+        <Button
+            android:id="@+id/btnEnable"
+            style="@style/RowBtn"
+            android:text="已开启" />
+
+        <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
+        <LinearLayout style="@style/Stepper">
+            <Button android:id="@+id/btnSingleMinus" style="@style/StepBtn" android:text="-" />
+            <TextView android:id="@+id/tvSingle" style="@style/StepValue" android:text="20" />
+            <Button android:id="@+id/btnSinglePlus" style="@style/StepBtn" android:text="+" />
+        </LinearLayout>
+
+        <TextView style="@style/Label" android:text="每日累计上限（分钟，0=不限）" />
+        <LinearLayout style="@style/Stepper">
+            <Button android:id="@+id/btnDailyMinus" style="@style/StepBtn" android:text="-" />
+            <TextView android:id="@+id/tvDaily" style="@style/StepValue" android:text="0" />
+            <Button android:id="@+id/btnDailyPlus" style="@style/StepBtn" android:text="+" />
+        </LinearLayout>
+
+        <TextView style="@style/Label" android:text="连续答对题数（答对才解锁）" />
+        <LinearLayout style="@style/Stepper">
+            <Button android:id="@+id/btnCorrMinus" style="@style/StepBtn" android:text="-" />
+            <TextView android:id="@+id/tvCorrect" style="@style/StepValue" android:text="3" />
+            <Button android:id="@+id/btnCorrPlus" style="@style/StepBtn" android:text="+" />
+        </LinearLayout>
+
+        <TextView style="@style/Label" android:text="启用题型（可多选）" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button android:id="@+id/btnMath" style="@style/TypeBtn" android:text="口算" />
+            <Button android:id="@+id/btnPinyin" style="@style/TypeBtn" android:text="认字" />
+            <Button android:id="@+id/btnPoetry" style="@style/TypeBtn" android:text="古诗" />
+            <Button android:id="@+id/btnEnglish" style="@style/TypeBtn" android:text="英语" />
+            <Button android:id="@+id/btnCustom" style="@style/TypeBtn" android:text="自定义" />
+        </LinearLayout>
+
+        <TextView style="@style/Label" android:text="自定义题库" />
+        <TextView
+            android:id="@+id/tvQuizStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="未加载"
+            android:textColor="@color/text_dim"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btnReloadQuiz"
+            style="@style/RowBtn"
+            android:text="重新加载题库" />
+        <Button
+            android:id="@+id/btnClearLocal"
+            style="@style/RowBtn"
+            android:layout_marginTop="8dp"
+            android:text="卸载本地题库" />
+
+        <TextView style="@style/Label" android:text="局域网 SMB 题库同步（打开应用时自动更新）" />
+        <TextView
+            android:id="@+id/tvSmbStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SMB 同步未开启"
+            android:textColor="@color/text_dim"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btnSmbSetup"
+            style="@style/RowBtn"
+            android:text="SMB 同步设置" />
+        <Button
+            android:id="@+id/btnSmbSyncNow"
+            style="@style/RowBtn"
+            android:layout_marginTop="8dp"
+            android:text="立即更新 SMB 题库" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="提示：家长密码默认 1234（锁屏页按菜单键输入）。自定义题库放 /sdcard/Download/txhlock/*.txt，格式见说明文档。"
+            android:textColor="@color/text_dim"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnChangePin"
+            style="@style/RowBtn"
+            android:layout_marginTop="16dp"
+            android:text="修改家长密码" />
+
+        <Button
+            android:id="@+id/btnTestLock"
+            style="@style/RowBtn"
+            android:layout_marginTop="20dp"
+            android:text="立即锁定测试" />
+    </LinearLayout>
+</ScrollView>
