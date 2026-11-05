@@ -46,7 +46,7 @@
 > 没电脑：**方式二**，U 盘拷进去点安装。
 
 > **安装包下载地址（2026-11 实测，国内不翻墙可用）**
-> 1. 首选：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/apk/txhlock_v2.0.apk
+> 1. 首选：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0/apk/txhlock_v2.0.apk
 > 2. 备用：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v2.0/txhlock_v2.0.apk
 > 3. 不要用 GitHub 官方直链：`github.com` / `raw.githubusercontent.com` 国内直连会失败
 >
@@ -74,7 +74,7 @@
 帮我把家里的小米电视装上「答题锁屏」，并配置好，让孩子看满时间必须答题才能继续看。
 请直接运行这个安装器（Windows PowerShell，会自动找电视、装应用、开无障碍、保持常亮）：
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/tools/install.ps1 -OutFile \"$env:TEMP\txhlock-install.ps1\"; & powershell -NoProfile -ExecutionPolicy Bypass -File \"$env:TEMP\txhlock-install.ps1\" -NoPause"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0/tools/install.ps1 -OutFile \"$env:TEMP\txhlock-install.ps1\"; & powershell -NoProfile -ExecutionPolicy Bypass -File \"$env:TEMP\txhlock-install.ps1\" -NoPause"
 
 我是小白什么都不懂，需要我配合的地方直接问我，不要用术语。
 电脑和电视连的是同一个 WiFi；电视是小米电视，Android 4.3。
