@@ -78,9 +78,9 @@ public final class Away {
                 p.setLastAliveMs(now);
                 return RESULT_NORMAL;
             }
-            resetAll(p, now);
+            resetSession(p, now);
             Log.i("KidslockDiag", "away CLOCK-ROLLBACK last-now=" + (last - now) / 1000
-                    + "s -> RESET+UNLOCK from 0");
+                    + "s -> 会话清零（保留当日额度）");
             return RESULT_RESET_CLOCK;
         }
 
@@ -95,20 +95,18 @@ public final class Away {
         boolean longAway = thresholdMin > 0 && gap >= thresholdMin * 60000L;
 
         if (crossNight) {
-            // 跨夜：无论离开多久，一律清零（含每日额度/豁免）
-            resetAll(p, now);
-            Log.i("KidslockDiag", "away CROSS-NIGHT gap=" + gap / 1000 + "s -> RESET+UNLOCK from 0");
+            // 跨夜：新的一天，连每日额度/豁免一起清零
+            resetDay(p, now);
+            Log.i("KidslockDiag", "away CROSS-NIGHT gap=" + gap / 1000 + "s -> 清零+解锁（新的一天）");
             return RESULT_RESET_CROSSNIGHT;
         }
 
         if (longAway) {
-            // 长关机：同样彻底清零并解锁。
-            // v1.5 这里留了"每日额度已用完就不放开"的例外，结果家长看到的是
-            // "关机一小时开机还是答题页，而且答题永远解不开（只能输密码）"——
-            // 与"长关机重置清零、开机从零计时"的约定相反，现按约定统一清零。
-            resetAll(p, now);
+            // 长关机：只清"本次连续观看"和锁定状态，**保留今日累计额度**。
+            // 否则孩子只要关机超过阈值，就能把当天已经看过的时长刷掉，每日上限形同虚设。
+            resetSession(p, now);
             Log.i("KidslockDiag", "away LONG gap=" + gap / 1000 + "s >= " + thresholdMin
-                    + "min -> RESET+UNLOCK from 0");
+                    + "min -> 本次计时清零（保留今日额度 " + p.todayWatchedMs() / 60000 + " 分钟）");
             return RESULT_RESET_LONG;
         }
 
@@ -124,10 +122,22 @@ public final class Away {
     }
 
     /**
-     * 彻底清零：单次计时从 now 重新计、解除锁定、当日额度与家长豁免一起清掉。
-     * 长关机 / 跨夜 / 时钟不可信 三种情况共用，保证"重置清零"在三条路径上表现完全一致。
+     * 只清"本次连续观看"：会话从 now 重新计、最后存活时间更新。
+     *
+     * 当日累计额度（todayWatchedMs / dailyLocked / dailyExempt）**保留**：
+     * 长关机只是一次有效休息，不该把今天已经看过的时长洗掉（否则每日上限可被关机绕过）。
+     * 如果当天额度已经用完（dailyLocked），锁屏继续保留，避免靠关机解锁。
      */
-    private static void resetAll(Prefs p, long now) {
+    private static void resetSession(Prefs p, long now) {
+        p.setSessionStartMs(now);
+        p.setLocked(p.isDailyLocked());
+        p.setLastAliveMs(now);
+    }
+
+    /**
+     * 彻底清零：跨夜（新的一天）时使用 —— 单次计时、锁屏、当日额度、豁免全部重置。
+     */
+    private static void resetDay(Prefs p, long now) {
         p.setSessionStartMs(now);
         p.setLocked(false);
         p.setDailyLocked(false);

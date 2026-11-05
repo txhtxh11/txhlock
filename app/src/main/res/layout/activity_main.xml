@@ -126,7 +126,7 @@
                     android:text="+" />
             </LinearLayout>
 
-            <TextView style="@style/Label" android:text="长关机重置阈值（分钟，0=关闭）" />
+            <TextView style="@style/Label" android:text="长关机重置阈值（分钟，0=不限）" />
 
             <LinearLayout style="@style/Stepper">
 
@@ -148,7 +148,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="关机/待机不超过这个时长：计时接着走、锁屏状态保留；超过或跨夜：清零解锁、从 0 计时。" />
+                android:text="关机/待机不超过这个时长：计时接着走、锁屏状态保留；超过：本次计时清零并解锁，但今日已看时长保留（防止靠关机刷每日额度）；跨夜（过零点）才清空当日额度。0=不限，只有跨夜清零。" />
 
             <TextView style="@style/Label" android:text="连续答对题数（答对才解锁）" />
 

@@ -128,10 +128,10 @@ public final class Keeper {
                 // 开机锁屏时把会话起点留着：答对解锁后由 LockScreenActivity 重新计时，
                 // 重启本身不能把已看的时长刷掉。
             }
-        } else {
-            prefs.setLocked(false);
-            prefs.setSessionStartMs(0);
         }
+        // 关：什么都不做，沿用重启前的状态。
+        // 短关机由 Away 判定为"保留锁屏/计时"，这里如果清掉 locked/sessionStart，
+        // 孩子重启一次就能绕过锁屏，所以不能动。
     }
 
     /** 兼容旧调用：按"非真正开机"处理。 */

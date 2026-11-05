@@ -53,6 +53,15 @@ public class QuizService extends Service {
         }
     };
 
+    // 屏幕熄灭时立刻记下时间：离开时长从"熄屏那一刻"算起，而不是上一次心跳（最多差 5 秒）。
+    private final BroadcastReceiver screenOffReceiver = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            if (intent != null && Intent.ACTION_SCREEN_OFF.equals(intent.getAction()) && prefs != null) {
+                prefs.setLastAliveMs(System.currentTimeMillis());
+            }
+        }
+    };
+
     private final Runnable ticker = new Runnable() {
         @Override public void run() {
             if (!running) return;
@@ -108,6 +117,7 @@ public class QuizService extends Service {
         // 注册屏幕点亮广播：待机恢复时再次判定（幂等，重复调用不会重复扣减）
         IntentFilter screenFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         registerReceiver(screenOnReceiver, screenFilter);
+        try { registerReceiver(screenOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF)); } catch (Throwable ignored) {}
         createChannel();
         // 首条通知直接用已记录的今日时长，避免开机瞬间显示"0 分钟"再跳变
         startForeground(NOTIF_ID, buildNotification(prefs.todayWatchedMs() / 60000));
@@ -131,6 +141,7 @@ public class QuizService extends Service {
         handler.removeCallbacks(ticker);
         handler.removeCallbacks(lockRestorer);
         try { unregisterReceiver(screenOnReceiver); } catch (Exception ignored) {}
+        try { unregisterReceiver(screenOffReceiver); } catch (Exception ignored) {}
         super.onDestroy();
     }
 
