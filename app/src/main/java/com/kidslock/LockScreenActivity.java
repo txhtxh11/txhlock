@@ -1,26 +1,31 @@
 package com.kidslock;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * 全屏答题锁屏页。
+ * 全屏答题锁屏页（v2.0 卡片式）。
+ *
  * - 全屏铺满并保持常亮，拦截返回键
- * - 遥控器方向键选答案 + OK 确认；选项编号为 A/B/C/D，数字键 1-4 或字母键 A-D 也可快捷作答
+ * - 遥控器方向键选答案 + OK 确认；数字键 1-4 / 字母键 A-D 也可快捷作答
  * - 连续答对 requiredCorrect 题解锁；答错清零重来
- * - 按【菜单键】进入家长密码通道：应用内置数字键盘（可见输入），不依赖系统输入法
+ * - 按【菜单键】进入家长密码通道（应用内置数字键盘）
  * - 锁屏状态写入持久化，按 HOME 切走会被重新拉起（尽力防绕过）
  */
 public class LockScreenActivity extends Activity {
@@ -30,17 +35,23 @@ public class LockScreenActivity extends Activity {
 
     private Prefs prefs;
     private QuizEngine engine;
-    private TextView tvQuestion, tvProgress, tvHint, tvFeedback;
-    private Button[] optBtns = new Button[4];
-    /** 四个选项的编号：A / B / C / D。 */
-    private static final String[] OPT_LETTERS = {"A", "B", "C", "D"};
-    /** 序号与答案之间的留白（当前为空：A.紧跟答案）。 */
-    private static final String OPT_GAP = "";
+    private TextView tvQuestion, tvProgress, tvType, tvHint, tvFeedback;
+    private LinearLayout dotsRow;
+    private LinearLayout[] optViews = new LinearLayout[4];
+    private TextView[] optTexts = new TextView[4];
+    private TextView[] optLetters = new TextView[4];
+    private final String[] OPT_LETTERS = {"A", "B", "C", "D"};
+
     private QuizQuestion current;
     private int progress = 0;
     private boolean unlocking = false;
-    private boolean answering = false;   // 反馈停留期间防重复作答
+    private boolean answering = false;
+
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    @Override protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Ui.wrap(base));
+    }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,46 +61,48 @@ public class LockScreenActivity extends Activity {
         // 在这里先判定，长关机与跨夜就能当场清零解锁，不会先闪一屏答题再消失。
         Away.resolve(prefs);
         // 只有持久化状态确实"锁定中"才允许显示。
-        // 开机补拉 / 看门狗可能在"离开判定已清零解锁"之后仍然把这个页面拉起来，
-        // 旧版在这里无条件 setLocked(true)，等于把刚解开的锁又锁回去（长关机也逃不掉）。
         if (!prefs.isLocked()) {
             finish();
             return;
         }
         prefs.setLocked(true);
-        engine = new QuizEngine(this, prefs);   // 确认要显示锁屏页了才加载题库（过期拉起不白扫文件）
+        engine = new QuizEngine(this, prefs);
 
         setupFullscreen();
         setContentView(R.layout.activity_lock);
 
-        tvQuestion = findViewById(R.id.tvQuestion);
-        tvProgress = findViewById(R.id.tvProgress);
-        tvHint = findViewById(R.id.tvHint);
-        tvFeedback = findViewById(R.id.tvFeedback);
-        optBtns[0] = findViewById(R.id.opt0);
-        optBtns[1] = findViewById(R.id.opt1);
-        optBtns[2] = findViewById(R.id.opt2);
-        optBtns[3] = findViewById(R.id.opt3);
+        tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+        tvProgress = (TextView) findViewById(R.id.tvProgress);
+        tvType = (TextView) findViewById(R.id.tvType);
+        tvHint = (TextView) findViewById(R.id.tvHint);
+        tvFeedback = (TextView) findViewById(R.id.tvFeedback);
+        dotsRow = (LinearLayout) findViewById(R.id.dots);
+
+        int[] ids = {R.id.opt0, R.id.opt1, R.id.opt2, R.id.opt3};
+        int[] textIds = {R.id.optText0, R.id.optText1, R.id.optText2, R.id.optText3};
+        int[] letterIds = {R.id.optLetter0, R.id.optLetter1, R.id.optLetter2, R.id.optLetter3};
         for (int i = 0; i < 4; i++) {
+            optViews[i] = (LinearLayout) findViewById(ids[i]);
+            optTexts[i] = (TextView) findViewById(textIds[i]);
+            optLetters[i] = (TextView) findViewById(letterIds[i]);
+            Ui.focusScale(optViews[i]);
             final int idx = i;
-            // Material 主题的 Button 默认 textAllCaps=true，会把答案里的拼音（rén）和
-            // 英语单词（apple）强制转成全大写（RÉN / APPLE）。这里关掉，原样照题库显示。
-            // 布局里也加了 android:textAllCaps="false"，双保险（防个别 ROM 主题覆盖）。
-            optBtns[i].setAllCaps(false);
-            optBtns[i].setOnClickListener(v -> onSelect(idx));
+            optViews[i].setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onSelect(idx);
+                }
+            });
         }
+
         showNextQuestion();
         updateProgressUI();
-        optBtns[0].requestFocus();
+        optViews[0].requestFocus();
         handler.post(stateWatcher);
     }
 
     /**
      * 状态巡检：每秒看一眼持久化里的锁屏标记。
-     *
-     * 解决"页面已经在前台，之后才被清零解锁"的漏洞：待机唤醒时系统会先恢复锁屏页，
-     * 计时服务/开机广播稍后才做离开判定；判定把 locked 清成 false 之后，如果没人再检查，
-     * 这个页面就会一直停在答题界面（v1.5 的"跨夜开机还在答题"就是这么来的）。
+     * 解决"页面已经在前台，之后才被清零解锁"的漏洞（待机唤醒时系统会先恢复锁屏页）。
      */
     private final Runnable stateWatcher = new Runnable() {
         @Override public void run() {
@@ -118,27 +131,51 @@ public class LockScreenActivity extends Activity {
     private void showNextQuestion() {
         current = engine.nextQuestion();
         tvQuestion.setText(current.question);
+        tvType.setText(current.subLabel == null ? "答题" : current.subLabel);
+        applyQuestionSize(current.question);
         for (int i = 0; i < 4; i++) {
-            // 选项格式：A.    答案（字母 + 点 + 留白）
-            optBtns[i].setText(OPT_LETTERS[i] + "." + OPT_GAP + current.options[i]);
-            // 纯拉丁内容（拼音、英文单词）换用内置字体：系统 DroidSans 缺 ǎǐǒǔǚ
-            // 这几个带声调的元音，会回退到中文字体、显示成又宽又带间隙的样子。
-            optBtns[i].setTypeface(hasCjk(current.options[i]) ? null : latinTypeface());
+            optViews[i].setBackgroundResource(R.drawable.bg_option);
+            optLetters[i].setBackgroundResource(R.drawable.bg_badge);
+            optLetters[i].setTextColor(Ui.color(this, R.color.accent));
+            optTexts[i].setTextColor(Ui.color(this, R.color.text_main));
+            optTexts[i].setText(current.options[i]);
+            optTexts[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, optionSize(current.options[i]));
+            // 纯拉丁内容（拼音、英文单词）换用内置字体：系统 DroidSans 缺 ǎǐǒǔǚ，
+            // 会回退到中文字体、显示成又宽又带间隙的样子。
+            optTexts[i].setTypeface(hasCjk(current.options[i]) ? null : latinTypeface());
         }
-        optBtns[0].requestFocus();
-        // 文字对齐：全部单行 → 上下居中；只要有任意一项换行 → 四个一起靠上
-        relayoutOptionText();
+        optViews[0].requestFocus();
+        updateHint();
+    }
+
+    /** 题目越长字号越小，保证一屏放得下、不裁字（最多 3 行）。 */
+    private void applyQuestionSize(String q) {
+        int len = q == null ? 0 : q.length();
+        float sp;
+        if (len <= 12) sp = 46;
+        else if (len <= 24) sp = 38;
+        else if (len <= 38) sp = 32;
+        else sp = 26;
+        tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
+    }
+
+    private float optionSize(String s) {
+        int len = s == null ? 0 : s.length();
+        if (len <= 10) return 28;
+        if (len <= 16) return 25;
+        if (len <= 24) return 22;
+        return 19;
     }
 
     /** 拉丁/拼音专用字体（assets/fonts/pinyin.ttf，DejaVu 子集），懒加载；失败则用系统字体。 */
-    private android.graphics.Typeface latinFace;
+    private Typeface latinFace;
     private boolean latinFaceTried;
 
-    private android.graphics.Typeface latinTypeface() {
+    private Typeface latinTypeface() {
         if (!latinFaceTried) {
             latinFaceTried = true;
             try {
-                latinFace = android.graphics.Typeface.createFromAsset(getAssets(), "fonts/pinyin.ttf");
+                latinFace = Typeface.createFromAsset(getAssets(), "fonts/pinyin.ttf");
             } catch (Throwable t) {
                 android.util.Log.w("txhlock", "拼音字体加载失败，用系统字体", t);
                 latinFace = null;
@@ -152,79 +189,127 @@ public class LockScreenActivity extends Activity {
         if (s == null) return false;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (c >= 0x2E80 && c <= 0x9FFF) return true;   // 汉字、部首
-            if (c >= 0xF900 && c <= 0xFAFF) return true;   // 兼容汉字
-            if (c >= 0xFF00 && c <= 0xFFEF) return true;   // 全角符号（、（）等）
+            if (c >= 0x2E80 && c <= 0x9FFF) return true;
+            if (c >= 0xF900 && c <= 0xFAFF) return true;
+            if (c >= 0xFF00 && c <= 0xFFEF) return true;
         }
         return false;
     }
 
-    /** 依据"是否有选项换行"统一切换四个按钮的文字对齐方式。 */
-    private void relayoutOptionText() {
-        optBtns[0].postDelayed(new Runnable() {
-            @Override public void run() {
-                boolean anyWrap = false;
-                for (int i = 0; i < 4; i++) {
-                    android.text.Layout l = optBtns[i].getLayout();
-                    if (l != null && l.getLineCount() > 1) {
-                        anyWrap = true;
-                        break;
-                    }
-                }
-                int gravity = anyWrap
-                        ? (Gravity.TOP | Gravity.CENTER_HORIZONTAL)
-                        : Gravity.CENTER;
-                int padTop = anyWrap ? dp(8) : 0;
-                for (int i = 0; i < 4; i++) {
-                    optBtns[i].setGravity(gravity);
-                    optBtns[i].setPadding(dp(10), padTop, dp(10), 0);
-                }
-            }
-        }, 60);
+    private void updateProgressUI() {
+        int need = Math.max(1, prefs.requiredCorrect());
+        tvProgress.setText("连续答对 " + progress + " / " + need + " 题可解锁");
+        rebuildDots(need);
+        updateHint();
     }
 
-    private int dp(int v) {
+    /** 顶部进度圆点：答对几个亮几个，对称排布。 */
+    private void rebuildDots(int need) {
+        if (dotsRow == null) return;
+        int n = Math.min(need, 10);
+        if (dotsRow.getChildCount() != n) {
+            dotsRow.removeAllViews();
+            for (int i = 0; i < n; i++) {
+                View dot = new View(this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(11), dp(11));
+                lp.leftMargin = dp(i == 0 ? 0 : 7);
+                dot.setLayoutParams(lp);
+                dot.setBackgroundResource(R.drawable.bg_dot);
+                dotsRow.addView(dot);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            dotsRow.getChildAt(i).setBackgroundResource(
+                    i < progress ? R.drawable.bg_dot_on : R.drawable.bg_dot);
+        }
+    }
+
+    private void updateHint() {
+        if (prefs.isDailyLocked()) {
+            tvHint.setText("今日观看时间已用完 · 答对也不能解锁 · 请家长按【菜单键】输入密码");
+            tvHint.setTextColor(Ui.color(this, R.color.warn));
+        } else {
+            tvHint.setText("方向键选择 · OK 确认 · 菜单键输入家长密码");
+            tvHint.setTextColor(Ui.color(this, R.color.text_faint));
+        }
+    }
+
+    private int dp(float v) {
         return (int) (v * getResources().getDisplayMetrics().density + 0.5f);
     }
 
-    private void updateProgressUI() {
-        tvProgress.setText("连续答对 " + progress + " / " + prefs.requiredCorrect() + " 题可解锁");
-    }
-
-    /** 作答：给出明确的"答对/答错 + 正确答案"反馈，短暂停留后再换题，不再无提示穷举。 */
+    /** 作答：高亮选中项 + 明确的"答对/答错 + 正确答案"反馈，短暂停留后再换题。 */
     private void onSelect(int index) {
         if (current == null || answering) return;
         answering = true;
+
         if (index == current.correctIndex) {
             progress++;
+            markOption(index, true);
+            tvFeedback.setText("✓ 答对了");
+            tvFeedback.setTextColor(Ui.color(this, R.color.ok));
             updateProgressUI();
-            tvFeedback.setText("✓ 回答正确");
-            tvFeedback.setTextColor(0xFF4CAF50);   // 绿
             if (progress >= prefs.requiredCorrect()) {
-                tvFeedback.setText("✓ 回答正确，解锁成功！");
-                handler.postDelayed(() -> {
-                    answering = false;
-                    unlock(false);
-                }, 900);
+                if (prefs.isDailyLocked()) {
+                    // 每日额度已用完：答题不能解锁，必须家长密码（当日豁免）
+                    tvFeedback.setText("今日观看时间已用完，请家长输入密码");
+                    tvFeedback.setTextColor(Ui.color(this, R.color.warn));
+                    progress = 0;
+                    updateProgressUI();
+                    handler.postDelayed(new Runnable() {
+                        @Override public void run() {
+                            tvFeedback.setText("");
+                            showNextQuestion();
+                            answering = false;
+                        }
+                    }, 1600);
+                    return;
+                }
+                tvFeedback.setText("✓ 答对了，正在解锁…");
+                handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+                        answering = false;
+                        unlock(false);
+                    }
+                }, 700);
                 return;
             }
-            handler.postDelayed(() -> {
-                tvFeedback.setText("");
-                showNextQuestion();
-                answering = false;
-            }, 700);
+            handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    tvFeedback.setText("");
+                    showNextQuestion();
+                    answering = false;
+                }
+            }, 650);
         } else {
             progress = 0;
+            markOption(index, false);
+            // 同时把正确项标绿，孩子一眼知道答案
+            optViews[current.correctIndex].setBackgroundResource(R.drawable.bg_option_correct);
+            tvFeedback.setText("✗ 正确答案是 " + OPT_LETTERS[current.correctIndex] + "."
+                    + current.options[current.correctIndex]);
+            tvFeedback.setTextColor(Ui.color(this, R.color.danger));
             updateProgressUI();
-            tvFeedback.setText("✗ 回答错误，正确答案是：" + OPT_LETTERS[current.correctIndex] + "."
-                    + OPT_GAP + current.options[current.correctIndex]);
-            tvFeedback.setTextColor(0xFFE53935);   // 红
-            handler.postDelayed(() -> {
-                tvFeedback.setText("");
-                showNextQuestion();
-                answering = false;
-            }, 1600);
+            handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    tvFeedback.setText("");
+                    showNextQuestion();
+                    answering = false;
+                }
+            }, 1700);
         }
+    }
+
+    /** 给选中的选项上色：答对绿框、答错红框。 */
+    private void markOption(int index, boolean correct) {
+        optViews[index].setBackgroundResource(
+                correct ? R.drawable.bg_option_correct : R.drawable.bg_option_wrong);
+        optLetters[index].setBackgroundResource(
+                correct ? R.drawable.bg_option_correct : R.drawable.bg_option_wrong);
+        optTexts[index].setTextColor(Ui.color(this,
+                correct ? R.color.ok : R.color.danger));
+        optLetters[index].setTextColor(Ui.color(this,
+                correct ? R.color.ok : R.color.danger));
     }
 
     /** 解锁。每日额度耗尽时，答题无法解锁，仅家长密码可解（当日豁免）。 */
@@ -236,15 +321,13 @@ public class LockScreenActivity extends Activity {
         unlocking = true;
         if (viaParent && prefs.isDailyLocked()) {
             // 家长用密码解开"每日上限"锁屏 = 当日豁免：今天不再因每日累计上限锁屏。
-            // 旧版这里把 dailyLocked 置回 false，而当日累计时长已经超过上限，
-            // 下一秒 tick 立刻又判定超限并锁上 —— 家长密码等于白输。
             prefs.setDailyExempt(true);
         }
         prefs.setDailyLocked(false);
         prefs.setLocked(false);
         long now = System.currentTimeMillis();
-        prefs.setSessionStartMs(now);    // 解锁后重新从 0 计时
-        prefs.setLastAliveMs(now);       // 心跳对齐，避免解锁瞬间被误判成"离开过"
+        prefs.setSessionStartMs(now);
+        prefs.setLastAliveMs(now);
         // 解锁后立刻放开"锁屏在前台"标记：QuizService 的 lockRestorer、无障碍服务的
         // 抢前台逻辑都以它为闸门，晚放一会儿会在切回原应用的路上再抢一次前台（可见卡顿）。
         sForeground = false;
@@ -276,46 +359,58 @@ public class LockScreenActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 返回键第二道闸门。
+     * Activity.onKeyUp() 在某些 ROM 上仍会补一次 onBackPressed()，只拦截 onKeyDown
+     * 不够保险；这里直接把 onBackPressed 也堵死，避免孩子按返回键退出锁屏页。
+     */
+    @Override public void onBackPressed() {
+        toast("看完题目才能解锁哦");
+    }
+
     /** 家长密码：应用内置数字键盘（可见输入框 + 数字键），遥控器即可输入。 */
     private void showPinPad() {
-        final AlertDialog[] holder = new AlertDialog[1];
+        LinearLayout panel = Ui.dialogPanel(this);
+        TextView title = Ui.text(this, "家长密码", 24, Ui.color(this, R.color.text_main), true);
+        title.setGravity(Gravity.CENTER);
+        panel.addView(title);
+
+        final Dialog dlg = Ui.dialog(this, panel, 520);
         final PinPad[] padRef = new PinPad[1];
-        PinPad pad = new PinPad(this, "家长密码（" + prefs.pin().length() + " 位）", prefs.pin().length(),
-                new PinPad.Listener() {
+        PinPad pad = new PinPad(this, "请输入 " + prefs.pin().length() + " 位家长密码",
+                prefs.pin().length(), new PinPad.Listener() {
             @Override public void onEntered(String s) {
                 if (s.equals(prefs.pin())) {
+                    dlg.dismiss();
                     toast("密码正确，解锁");
-                    holder[0].dismiss();
                     unlock(true);
                 } else {
-                    padRef[0].setTitle("密码错误，请重试");
-                    padRef[0].reset();
+                    padRef[0].showError("密码错误，请重试");
                 }
             }
-            @Override public void onCancelled() {}
+
+            @Override public void onCancelled() {
+                dlg.dismiss();
+            }
         });
         padRef[0] = pad;
-        holder[0] = new AlertDialog.Builder(this)
-                .setView(pad)
-                .setTitle(null)
-                .setCancelable(true)
-                .setNegativeButton("返回", (d, w) -> d.dismiss())
-                .create();
-        if (holder[0].getWindow() != null) holder[0].getWindow().setBackgroundDrawableResource(R.color.panel);
-        holder[0].show();
+        panel.addView(pad, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        dlg.setCancelable(true);
+        dlg.show();
     }
 
     // ---- 防绕过：被切走(如按HOME)后重新拉起 ----
     @Override protected void onResume() {
         super.onResume();
-        // 状态可能已在别处被改掉（例如离开判定判定为长关机/跨夜而清零解锁），
-        // 这时不该继续显示锁屏页。回来时再判定一次，保证"长关机/跨夜必清零"。
+        // 状态可能已在别处被改掉（例如离开判定为长关机/跨夜而清零解锁），回来时再判定一次
         Away.resolve(prefs);
         if (!prefs.isLocked()) {
             finish();
             return;
         }
         sForeground = true;
+        updateHint();
     }
 
     @Override protected void onDestroy() {
@@ -331,9 +426,11 @@ public class LockScreenActivity extends Activity {
     @Override protected void onStop() {
         super.onStop();
         if (!unlocking && prefs.isLocked()) {
-            handler.postDelayed(() -> {
-                if (!unlocking && prefs.isLocked() && !sForeground) {
-                    Keeper.launchLock(this);
+            handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    if (!unlocking && prefs.isLocked() && !sForeground) {
+                        Keeper.launchLock(LockScreenActivity.this);
+                    }
                 }
             }, 300);
         }

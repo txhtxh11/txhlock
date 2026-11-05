@@ -37,6 +37,21 @@ public final class KeyFilter {
         return (info.flags & AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS) != 0;
     }
 
+    /**
+     * 主页键拦截是否「真的生效」：既声明了过滤能力，又确实收到并吞掉过一次 HOME。
+     *
+     * 小米电视上常见「flag 有、事件不来」：只信 flag 会把轮询间隔放宽到 3 秒，
+     * 孩子按主页键就能在桌面上停留好几秒。这里要求真的拦截过一次，才敢放宽。
+     */
+    public static boolean isEffective(Context c) {
+        if (!hasKeyFilter(c)) return false;
+        try {
+            return new Prefs(c).keyFilterSeen();
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
     /** 找到本应用那条服务记录；没绑定返回 null。 */
     private static AccessibilityServiceInfo find(Context c) {
         if (c == null) return null;

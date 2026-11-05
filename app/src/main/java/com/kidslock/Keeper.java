@@ -106,16 +106,31 @@ public final class Keeper {
     }
 
     /**
-     * 开机即锁：把"重启电视"变成"重新开始一局答题"。
-     * 注意：不清 dailyLocked —— 否则孩子重启就能把"今日额度已用完"刷掉。
+     * 开机锁屏策略（v2.0 修正）。
+     *
+     * 旧版这个开关叫「开机自动锁定」，但打开后其实什么都不做 —— 只沿用重启前的锁定状态，
+     * 家长以为能防重启绕过，孩子重启一次就发现根本没锁。现在改成真正的两种行为：
+     *
+     *   开：每次真正开机都先锁一次（重启电视 = 先答题才能看），这是"防重启绕过"的本意；
+     *   关：重启沿用重启前状态（已锁仍锁、未锁续时）。
+     *
+     * @param isRealBoot 只有真正的开机广播才强制锁；覆盖安装（MY_PACKAGE_REPLACED）不算。
      */
-    public static void lockOnBoot(Context c, Prefs prefs) {
-        // 重启跟随重启前锁定状态：
-        //  - "开机自动锁定"开（默认）：已锁定→重启仍锁；未锁定→重启不锁、计时续上（不重置起点）
-        //  - "开机自动锁定"关：重启不锁屏（家长主动关闭重启锁屏）
-        if (!prefs.lockOnBoot()) {
+    public static void lockOnBoot(Context c, Prefs prefs, boolean isRealBoot) {
+        if (prefs.lockOnBoot()) {
+            if (isRealBoot) {
+                prefs.setLocked(true);
+                // 开机锁屏时把会话起点留着：答对解锁后由 LockScreenActivity 重新计时，
+                // 重启本身不能把已看的时长刷掉。
+            }
+        } else {
             prefs.setLocked(false);
             prefs.setSessionStartMs(0);
         }
+    }
+
+    /** 兼容旧调用：按"非真正开机"处理。 */
+    public static void lockOnBoot(Context c, Prefs prefs) {
+        lockOnBoot(c, prefs, false);
     }
 }

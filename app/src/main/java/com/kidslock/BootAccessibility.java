@@ -56,13 +56,11 @@ public class BootAccessibility extends AccessibilityService {
         // 短关机/重启 → 计时续上、锁屏状态保留；长关机/跨夜 → 清零解锁、从零计时。
         int away = Away.resolve(prefs);
         Log.i(TAG, "away resolve=" + away + " locked=" + prefs.isLocked());
-        // 重启跟随重启前锁定状态：
-        //  - "开机自动锁定"开（默认）：已锁定→重启仍锁（防绕过）；未锁定→重启不锁、计时续上（不重置起点）
-        //  - "开机自动锁定"关：重启不锁屏（家长主动关闭重启锁屏）
-        if (!prefs.lockOnBoot()) {
-            prefs.setLocked(false);
-            prefs.setSessionStartMs(0);
-        }
+        // 开机策略：小米电视常常不派发 BOOT_COMPLETED，无障碍服务反而是最早被系统绑定的，
+        // 所以这里也做一次。用"开机 3 分钟内"来判断是开机绑定还是家长手动打开，
+        // 家长手动开无障碍时不会突然弹锁屏。
+        boolean bootish = android.os.SystemClock.elapsedRealtime() < 3L * 60L * 1000L;
+        Keeper.lockOnBoot(this, prefs, bootish);
         Keeper.startService(this);
         Keeper.scheduleWatchdog(this);
         if (prefs.isLocked()) {
@@ -87,6 +85,8 @@ public class BootAccessibility extends AccessibilityService {
 
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.i(TAG, "HOME key swallowed");
+            // 记下"真的拦住过一次"，QuizService 才敢把抢回间隔从 0.8 秒放宽到 3 秒
+            pr.setKeyFilterSeen(true);
             // 万一此刻锁屏不在前台（例如刚到桌面），顺手拉回来
             Keeper.launchLockNow(this);
         }

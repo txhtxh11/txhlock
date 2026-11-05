@@ -1,130 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  锁屏答题页 v2.0：全屏卡片式，左右对称。
+  顶部：标题 + 连续答对进度（圆点）
+  中部：题目卡片（题型标签 + 大字题目 + 反馈）
+  底部：2x2 四个等大选项卡（A/B/C/D 角标 + 答案）
+  遥控器方向键移动焦点，OK 确认；菜单键呼叫家长密码。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_dark"
-    android:padding="48dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="答题解锁才能继续看电视"
-        android:textColor="@color/text_main"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="连续答对 0 / 3 题可解锁"
-        android:textColor="@color/primary"
-        android:textSize="24sp" />
+    android:background="@color/bg_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="44dp"
+        android:paddingRight="44dp"
+        android:paddingTop="26dp"
+        android:paddingBottom="20dp">
+
+        <!-- 头部 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="答题解锁"
+                    android:textColor="@color/text_main"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:includeFontPadding="false"
+                    android:text="连续答对 0 / 3 题可解锁"
+                    android:textColor="@color/text_dim"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <!-- 题目卡片 -->
+        <LinearLayout
+            android:id="@+id/cardQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1.1"
+            android:background="@drawable/bg_sheet"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="14dp">
+
+            <TextView
+                android:id="@+id/tvType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge"
+                android:includeFontPadding="false"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="口算 · 一年级"
+                android:textColor="@color/accent"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="4dp"
+                android:maxLines="3"
+                android:text="题目"
+                android:textColor="@color/text_main"
+                android:textSize="44sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:minHeight="20dp"
+                android:text=""
+                android:textColor="@color/ok"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- 四个选项：2x2 等分 -->
+        <LinearLayout
+            android:id="@+id/options"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1.4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/opt0"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="14dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_option"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:id="@+id/optLetter0"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:background="@drawable/bg_badge"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="A"
+                        android:textColor="@color/accent"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/optText0"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:maxLines="3"
+                        android:text=""
+                        android:textColor="@color/text_main"
+                        android:textSize="26sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/opt1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_option"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:id="@+id/optLetter1"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:background="@drawable/bg_badge"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="B"
+                        android:textColor="@color/accent"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/optText1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:maxLines="3"
+                        android:text=""
+                        android:textColor="@color/text_main"
+                        android:textSize="26sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                android:layout_weight="1"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/opt2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="14dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_option"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:id="@+id/optLetter2"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:background="@drawable/bg_badge"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="C"
+                        android:textColor="@color/accent"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/optText2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:maxLines="3"
+                        android:text=""
+                        android:textColor="@color/text_main"
+                        android:textSize="26sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/opt3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_option"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:id="@+id/optLetter3"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:background="@drawable/bg_badge"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="D"
+                        android:textColor="@color/accent"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/optText3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:maxLines="3"
+                        android:text=""
+                        android:textColor="@color/text_main"
+                        android:textSize="26sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvQuestion"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvHint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
             android:gravity="center"
-            android:maxLines="3"
-            android:text="题目"
-            android:textColor="@color/text_main"
-            android:textSize="48sp"
-            android:textStyle="bold" />
+            android:includeFontPadding="false"
+            android:text="方向键选择 · OK 确认 · 菜单键输入家长密码"
+            android:textColor="@color/text_faint"
+            android:textSize="13sp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvFeedback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:text=""
-        android:textSize="34sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_main" />
-
-    <LinearLayout
-        android:id="@+id/layoutOptions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/opt0"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_margin="12dp"
-            android:background="@drawable/bg_option"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textAllCaps="false"
-            android:textColor="@color/text_main"
-            android:textSize="28sp" />
-
-        <Button
-            android:id="@+id/opt1"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_margin="12dp"
-            android:background="@drawable/bg_option"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textAllCaps="false"
-            android:textColor="@color/text_main"
-            android:textSize="28sp" />
-
-        <Button
-            android:id="@+id/opt2"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_margin="12dp"
-            android:background="@drawable/bg_option"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textAllCaps="false"
-            android:textColor="@color/text_main"
-            android:textSize="28sp" />
-
-        <Button
-            android:id="@+id/opt3"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_margin="12dp"
-            android:background="@drawable/bg_option"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textAllCaps="false"
-            android:textColor="@color/text_main"
-            android:textSize="28sp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvHint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="用方向键选答案，按 OK 确认"
-        android:textColor="@color/text_dim"
-        android:textSize="20sp" />
-</LinearLayout>
+</FrameLayout>

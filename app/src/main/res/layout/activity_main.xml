@@ -1,30 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  家长设置主页 v2.0：一屏放完，不滚动。
+  960x540dp 设计空间（1080p / 4K 电视都会按屏幕宽度自动等比放大）：
+    头部 62dp + 三张数据卡 + 2x2 设置卡片 + 底部两个按钮
+  所有卡片等宽等高，左右边距、卡片间距全应用统一。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
     <LinearLayout
+        android:id="@+id/home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="40dp">
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="20dp">
 
-        <!-- 标题行：左边标题，右上角版本号 -->
+        <!-- 头部：标题 + 守护开关 + 版本号 -->
         <LinearLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="答题锁屏守护 · 家长设置"
-                android:textColor="@color/text_main"
-                android:textSize="34sp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="答题锁屏守护"
+                    android:textColor="@color/text_main"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:includeFontPadding="false"
+                    android:text="家长设置 · 方向键选择 · OK 确认"
+                    android:textColor="@color/text_dim"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvStatusPill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pill_on"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="● 守护中"
+                android:textColor="@color/accent"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -32,181 +77,99 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="TXH txhlock v0.6"
-                android:textColor="@color/text_dim"
-                android:textSize="20sp" />
+                android:includeFontPadding="false"
+                android:text="v2.0"
+                android:textColor="@color/text_faint"
+                android:textSize="13sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=""
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
-
-        <TextView style="@style/Label" android:text="监控开关" />
-        <Button
-            android:id="@+id/btnEnable"
-            style="@style/RowBtn"
-            android:text="已开启" />
-
-        <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
-        <LinearLayout style="@style/Stepper">
-            <Button android:id="@+id/btnSingleMinus" style="@style/StepBtn" android:text="-" />
-            <TextView android:id="@+id/tvSingle" style="@style/StepValue" android:text="20" />
-            <Button android:id="@+id/btnSinglePlus" style="@style/StepBtn" android:text="+" />
-        </LinearLayout>
-
-        <TextView style="@style/Label" android:text="每日累计上限（分钟，0=不限）" />
-        <LinearLayout style="@style/Stepper">
-            <Button android:id="@+id/btnDailyMinus" style="@style/StepBtn" android:text="-" />
-            <TextView android:id="@+id/tvDaily" style="@style/StepValue" android:text="0" />
-            <Button android:id="@+id/btnDailyPlus" style="@style/StepBtn" android:text="+" />
-        </LinearLayout>
-
-        <TextView style="@style/Label" android:text="长关机重置阈值（分钟）" />
-        <LinearLayout style="@style/Stepper">
-            <Button android:id="@+id/btnAwayMinus" style="@style/StepBtn" android:text="-" />
-            <TextView android:id="@+id/tvAway" style="@style/StepValue" android:text="30 分钟" />
-            <Button android:id="@+id/btnAwayPlus" style="@style/StepBtn" android:text="+" />
-        </LinearLayout>
-        <TextView
-            style="@style/Hint"
-            android:text="关机/待机/重启离开不超过此时长：单次计时接着走（离开的时间不算观看），关机前锁着屏开机仍锁着屏；超过此时长或跨夜：清零并解锁，开机从零计时。0=关闭该项（只保留跨夜清零）。" />
-
-        <TextView style="@style/Label" android:text="连续答对题数（答对才解锁）" />
-        <LinearLayout style="@style/Stepper">
-            <Button android:id="@+id/btnCorrMinus" style="@style/StepBtn" android:text="-" />
-            <TextView android:id="@+id/tvCorrect" style="@style/StepValue" android:text="3" />
-            <Button android:id="@+id/btnCorrPlus" style="@style/StepBtn" android:text="+" />
-        </LinearLayout>
-
-        <TextView style="@style/Label" android:text="启用题型（可多选）" />
+        <!-- 三张数据卡：今日已看 / 单次时长 / 连对解锁 -->
         <LinearLayout
+            android:id="@+id/hero"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button android:id="@+id/btnMath" style="@style/TypeBtn" android:text="口算" />
-            <Button android:id="@+id/btnMath2" style="@style/TypeBtn" android:text="数学" />
-            <Button android:id="@+id/btnChinese" style="@style/TypeBtn" android:text="语文" />
-            <Button android:id="@+id/btnEnglish" style="@style/TypeBtn" android:text="英语" />
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_marginTop="14dp"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:orientation="horizontal" />
+
+        <!-- 2x2 设置卡片 -->
         <LinearLayout
+            android:id="@+id/grid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button android:id="@+id/btnPhysics" style="@style/TypeBtn" android:text="物理" />
-            <Button android:id="@+id/btnChemistry" style="@style/TypeBtn" android:text="化学" />
-            <Button android:id="@+id/btnBiology" style="@style/TypeBtn" android:text="生物" />
+            android:layout_height="0dp"
+            android:layout_marginTop="14dp"
+            android:layout_weight="1.55"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/gridRow1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:baselineAligned="false"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/gridRow2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                android:layout_weight="1"
+                android:baselineAligned="false"
+                android:orientation="horizontal" />
         </LinearLayout>
+
+        <!-- 底部：帮助 / 立即锁定测试 -->
         <LinearLayout
+            android:id="@+id/footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
+            android:layout_marginTop="14dp"
+            android:baselineAligned="false"
             android:orientation="horizontal">
-            <Button android:id="@+id/btnHistory" style="@style/TypeBtn" android:text="历史" />
-            <Button android:id="@+id/btnGeography" style="@style/TypeBtn" android:text="地理" />
-            <Button android:id="@+id/btnPolitics" style="@style/TypeBtn" android:text="政治" />
+
+            <TextView
+                android:id="@+id/btnHelp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="14dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_ghost"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="帮助与诊断"
+                android:textColor="@color/text_main"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/btnTestLock"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="立即锁定测试"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button android:id="@+id/btnPinyin" style="@style/TypeBtn" android:text="认字" />
-            <Button android:id="@+id/btnPoetry" style="@style/TypeBtn" android:text="古诗" />
-            <Button android:id="@+id/btnCustom" style="@style/TypeBtn" android:text="自定义" />
-        </LinearLayout>
-
-        <TextView style="@style/Label" android:text="年级（小学一年级 ~ 初中九年级）" />
-        <LinearLayout style="@style/Stepper">
-            <Button android:id="@+id/btnLevelMinus" style="@style/StepBtn" android:text="-" />
-            <TextView android:id="@+id/tvLevel" style="@style/StepValue" android:text="一年级" />
-            <Button android:id="@+id/btnLevelPlus" style="@style/StepBtn" android:text="+" />
-        </LinearLayout>
-        <TextView
-            style="@style/Hint"
-            android:text="选定孩子就读年级：口算按年级自动出题（一年级=10以内加减，七年级起=有理数/乘方/根式）；各学科题库也只出该年级及以下的题，不会超纲。「口算」是自动生成的算术题，「数学」是应用题/几何/单位换算/找规律等文字题。" />
-
-        <TextView style="@style/Label" android:text="自定义题库" />
-        <TextView
-            style="@style/Hint"
-            android:text="应用已内置小学~初中各学科题库，装完即用。内置题库是只读的：没有任何按钮能删除它、也没有任何方式能覆盖它。自建题库放 /sdcard/Download/txhlock/*.txt（或 SMB 目录），只能【新增】题目——与内置题同段落、同题干的会被自动跳过，永远顶不掉内置题。格式：[科目@g年级] 换行 题干|答案|干扰项1;干扰项2;干扰项3。" />
-        <TextView
-            android:id="@+id/tvQuizStatus"
-            style="@style/Hint"
-            android:text="未加载" />
-        <Button
-            android:id="@+id/btnExportQuiz"
-            style="@style/RowBtn"
-            android:text="导出内置题库（查看/照着改）" />
-        <Button
-            android:id="@+id/btnReloadQuiz"
-            style="@style/RowBtn"
-            android:text="重新加载题库" />
-        <Button
-            android:id="@+id/btnClearLocal"
-            style="@style/RowBtn"
-            android:layout_marginTop="8dp"
-            android:text="删除本地题库文件（只删本地，不动内置）" />
-
-        <TextView style="@style/Label" android:text="局域网 SMB 题库同步（打开应用时自动更新）" />
-        <TextView
-            android:id="@+id/tvSmbStatus"
-            style="@style/Hint"
-            android:text="SMB 同步未开启" />
-        <Button
-            android:id="@+id/btnSmbSetup"
-            style="@style/RowBtn"
-            android:text="SMB 同步设置" />
-        <Button
-            android:id="@+id/btnSmbSyncNow"
-            style="@style/RowBtn"
-            android:layout_marginTop="8dp"
-            android:text="立即更新 SMB 题库" />
-
-        <TextView
-            style="@style/Hint"
-            android:layout_marginTop="28dp"
-            android:text="提示：家长密码默认 1234（锁屏页按菜单键输入），可点击下方按钮修改。" />
-
-        <Button
-            android:id="@+id/btnChangePin"
-            style="@style/RowBtn"
-            android:layout_marginTop="16dp"
-            android:text="修改家长密码" />
-
-        <TextView style="@style/Label" android:text="开机行为（防重启绕过）" />
-        <Button
-            android:id="@+id/btnBootLock"
-            style="@style/RowBtn"
-            android:text="开机自动锁定：开" />
-        <TextView
-            android:id="@+id/tvHomeStatus"
-            style="@style/Hint"
-            android:text="系统桌面：未做任何修改（卸载后自动还原）" />
-        <Button
-            android:id="@+id/btnHomeSetup"
-            style="@style/RowBtn"
-            android:text="还原并卸载（卸载后小米桌面自动恢复）" />
-        <Button
-            android:id="@+id/btnSysSettings"
-            style="@style/RowBtn"
-            android:layout_marginTop="8dp"
-            android:text="打开系统设置：自启动 / 权限" />
-        <TextView
-            android:id="@+id/tvAccStatus"
-            style="@style/Hint"
-            android:text="正在检测无障碍保活状态…" />
-        <Button
-            android:id="@+id/btnAcc"
-            style="@style/RowBtn"
-            android:text="开启无障碍保活（推荐）" />
-
-        <Button
-            android:id="@+id/btnTestLock"
-            style="@style/RowBtn"
-            android:layout_marginTop="20dp"
-            android:text="立即锁定测试" />
     </LinearLayout>
-</ScrollView>
+
+    <!-- 弹层容器：详情页 / 确认框 -->
+    <FrameLayout
+        android:id="@+id/sheetLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- 家长密码门禁 -->
+    <FrameLayout
+        android:id="@+id/gateLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+</FrameLayout>

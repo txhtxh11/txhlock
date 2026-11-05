@@ -84,7 +84,9 @@ public class QuizService extends Service {
             if (!running) return;
             long now = SystemClock.elapsedRealtime();
             if (now - lastKeyFilterCheckMs >= KEY_FILTER_RECHECK_MS) {
-                keyFilterOk = KeyFilter.hasKeyFilter(QuizService.this);
+                // 只有「真的拦住过一次主页键」才敢用 3 秒慢轮询；
+                // 小米电视常常 flag 有、事件不来，这时必须保持 0.8 秒快抢。
+                keyFilterOk = KeyFilter.isEffective(QuizService.this);
                 lastKeyFilterCheckMs = now;
             }
             if (prefs != null && prefs.isLocked() && !LockScreenActivity.sForeground) {

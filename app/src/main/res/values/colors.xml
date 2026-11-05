@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_dark">#0F141B</color>
-    <color name="panel">#1A222D</color>
-    <color name="primary">#1E5AF0</color>
-    <color name="text_main">#FFFFFF</color>
-    <color name="text_dim">#9AA5B1</color>
-    <color name="text_warn">#FF8A3D</color>
+    <!-- v2.0 极简深色设计系统：一层背景 + 两层卡片，全应用只用一个强调色 -->
+    <color name="bg_dark">#070A0F</color>
+    <color name="card">#131A24</color>
+    <color name="card_focus">#17243A</color>
+    <color name="card_press">#1B2A44</color>
+    <color name="tile">#1B2432</color>
+    <color name="line">#22304A</color>
+    <color name="accent">#4F8CFF</color>
+    <color name="accent_deep">#2F63C8</color>
+    <color name="accent_soft">#16294A</color>
+
+    <color name="text_main">#F2F5FA</color>
+    <color name="text_dim">#8FA0B8</color>
+    <color name="text_faint">#5C6B80</color>
+    <color name="ok">#35D07F</color>
+    <color name="warn">#FFB020</color>
+    <color name="danger">#FF6B6B</color>
+
+    <!-- 兼容旧代码里引用到的颜色名 -->
+    <color name="panel">#131A24</color>
+    <color name="primary">#4F8CFF</color>
+    <color name="option_bg">#1B2432</color>
+    <color name="option_focus">#4F8CFF</color>
+    <color name="option_correct">#35D07F</color>
+    <color name="option_wrong">#FF6B6B</color>
+    <color name="text_warn">#FFB020</color>
     <color name="text_danger">#FF6B6B</color>
-    <color name="option_bg">#262E3A</color>
-    <color name="option_focus">#1E5AF0</color>
-    <color name="option_correct">#1E9E57</color>
-    <color name="option_wrong">#C0392B</color>
 </resources>

@@ -101,6 +101,17 @@ public class Prefs {
     public long lastKeyHintMs() { return sp.getLong("last_key_hint_ms", 0); }
     public void setLastKeyHintMs(long v) { sp.edit().putLong("last_key_hint_ms", v).apply(); }
 
+    /**
+     * 是否真的收到并吞掉过遥控器主页键。
+     *
+     * 只看 AccessibilityServiceInfo 的 FLAG_REQUEST_FILTER_KEY_EVENTS 是不够的：
+     * 小米电视上这个 flag 会显示为"已开启"，但系统根本不会把 HOME 事件发给第三方服务，
+     * 旧版因此误报"已物理拦截"，实际按下去照样回桌面。现在改成"真收到过一次才算数"，
+     * 没收到过就老老实实按 0.8 秒轮询抢回来。
+     */
+    public boolean keyFilterSeen() { return sp.getBoolean("key_filter_seen", false); }
+    public void setKeyFilterSeen(boolean v) { sp.edit().putBoolean("key_filter_seen", v).apply(); }
+
     // ---- 计时状态 ----
     public long todayWatchedMs() { return sp.getLong("today_watched_ms", 0); }
     public void setTodayWatchedMs(long v) { sp.edit().putLong("today_watched_ms", v).apply(); }

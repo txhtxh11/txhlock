@@ -57,19 +57,24 @@ public class SMBHelper {
             int changed = 0, failed = 0;
             for (String name : remote.keySet()) {
                 File out = new File(cacheDir, name);
+                InputStream in = null;
+                FileOutputStream fos = null;
                 try {
                     SmbFile sf = new SmbFile(base + name);
-                    try (InputStream in = new SmbFileInputStream(sf);
-                         FileOutputStream fos = new FileOutputStream(out)) {
-                        byte[] buf = new byte[8192];
-                        int n;
-                        while ((n = in.read(buf)) > 0) fos.write(buf, 0, n);
-                    }
+                    in = new SmbFileInputStream(sf);
+                    fos = new FileOutputStream(out);
+                    byte[] buf = new byte[8192];
+                    int n;
+                    while ((n = in.read(buf)) > 0) fos.write(buf, 0, n);
+                    fos.flush();
                     changed++;
                     Log.i(TAG, "已拉取: " + name);
-                } catch (Exception e) {
+                } catch (Throwable t) {
                     failed++;
-                    Log.w(TAG, "下载失败: " + name, e);
+                    Log.w(TAG, "下载失败: " + name, t);
+                } finally {
+                    closeQuietly(in);
+                    closeQuietly(fos);
                 }
             }
             // 清理远端已删除的本地缓存
@@ -86,9 +91,20 @@ public class SMBHelper {
                 Log.w(TAG, failed + " 个文件下载失败，保留原清单待重试");
             }
             return changed;
-        } catch (Exception e) {
-            Log.w(TAG, "SMB 同步失败: " + e.getMessage());
+        } catch (Throwable t) {
+            // Android 4.3（API 18）上 jcifs-ng 依赖的标准库类可能不存在（NoClassDefFoundError），
+            // 这里必须兜住 Throwable，否则一次 SMB 同步就能让整个应用进程崩溃。
+            Log.w(TAG, "SMB 同步失败: " + t);
             return -1;
+        }
+    }
+
+    private static void closeQuietly(java.io.Closeable c) {
+        if (c != null) {
+            try {
+                c.close();
+            } catch (Throwable ignored) {
+            }
         }
     }
 

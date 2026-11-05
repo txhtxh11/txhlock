@@ -10,12 +10,12 @@ android {
         applicationId "com.kidslock"
         minSdk 18
         targetSdk 33
-        versionCode 32
-        versionName "1.9.1"
+        versionCode 40
+        versionName "2.0"
     }
 
     signingConfigs {
-        // 复用 Android 调试签名（与电视上已装的 v0.6/0.7 一致），保证可直接覆盖安装、不丢设置
+        // 澶嶇敤 Android 璋冭瘯绛惧悕锛堜笌鐢佃涓婂凡瑁呯殑 v0.6/0.7 涓€鑷达級锛屼繚璇佸彲鐩存帴瑕嗙洊瀹夎銆佷笉涓㈣缃?
         release {
             storeFile file("${System.properties['user.home']}\\.android\\debug.keystore")
             storePassword "android"
@@ -31,7 +31,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
         debug {
-            // 关闭调试包签名，便于 TV 上直接安装 release
+            // 鍏抽棴璋冭瘯鍖呯鍚嶏紝渚夸簬 TV 涓婄洿鎺ュ畨瑁?release
         }
     }
 
@@ -40,14 +40,15 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // 中文字符串资源编码
+    // 涓枃瀛楃涓茶祫婧愮紪鐮?
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 }
 
-// SMB 客户端库（局域网共享题库同步）+ slf4j 空实现（Android 无自带实现）
+// SMB 瀹㈡埛绔簱锛堝眬鍩熺綉鍏变韩棰樺簱鍚屾锛? slf4j 绌哄疄鐜帮紙Android 鏃犺嚜甯﹀疄鐜帮級
 dependencies {
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
     implementation 'org.slf4j:slf4j-nop:1.7.36'
 }
+
