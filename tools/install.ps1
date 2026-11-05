@@ -34,7 +34,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "3.0"
+$script:Version = "3.0.1"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 
@@ -180,7 +180,7 @@ if (-not $apk) {
     Log "  本地没有安装包，正在从网上下载…" "Yellow"
     $dest = Join-Path $env:TEMP "txhlock_v$script:Version.apk"
     $urls = @(
-        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v3.0/apk/txhlock_v$script:Version.apk",
+        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v3.0.1/apk/txhlock_v$script:Version.apk",
         "https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v$script:Version/txhlock_v$script:Version.apk"
     )
     foreach ($u in $urls) {
