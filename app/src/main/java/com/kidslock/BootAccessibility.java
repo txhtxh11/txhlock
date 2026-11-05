@@ -52,6 +52,10 @@ public class BootAccessibility extends AccessibilityService {
         }
         Prefs prefs = p();
         if (!prefs.isEnabled()) return;
+        // 先做离开接续判定（小米电视上这条路径常常比 BOOT_COMPLETED 更早到）：
+        // 短关机/重启 → 计时续上、锁屏状态保留；长关机/跨夜 → 清零解锁、从零计时。
+        int away = Away.resolve(prefs);
+        Log.i(TAG, "away resolve=" + away + " locked=" + prefs.isLocked());
         // 重启跟随重启前锁定状态：
         //  - "开机自动锁定"开（默认）：已锁定→重启仍锁（防绕过）；未锁定→重启不锁、计时续上（不重置起点）
         //  - "开机自动锁定"关：重启不锁屏（家长主动关闭重启锁屏）

@@ -10,13 +10,24 @@ android {
         applicationId "com.kidslock"
         minSdk 18
         targetSdk 33
-        versionCode 15
-        versionName "0.6"
+        versionCode 32
+        versionName "1.9.1"
+    }
+
+    signingConfigs {
+        // 复用 Android 调试签名（与电视上已装的 v0.6/0.7 一致），保证可直接覆盖安装、不丢设置
+        release {
+            storeFile file("${System.properties['user.home']}\\.android\\debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
         debug {

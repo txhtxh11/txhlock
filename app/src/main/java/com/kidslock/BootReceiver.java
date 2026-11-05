@@ -8,10 +8,14 @@ import android.util.Log;
 /**
  * 开机自启（防重启绕过锁屏）。
  *
- * 关键点（旧版只有"启动服务 + 若处于锁定就拉起一次"，所以重启照样能绕过）：
- *   1. 开机即置为锁定状态 —— 重启不再等于"解锁"
- *   2. 立即拉起一次，再在 4/10/20/40/80 秒补拉 —— 开机器桌面会盖住第一枪
- *   3. 挂上常驻看门狗 —— 进程被 ROM 清掉也能把锁屏救回来
+ * 顺序很重要（v1.4 修正）：
+ *   0. 先做"离开接续判定"（{@link Away#resolve}）—— 决定这次开机到底该不该锁。
+ *      旧版把这一步留在服务启动时才做，而这里已经按"重启前的锁定标记"把锁屏页拉起来了，
+ *      于是长关机（本该清零解锁）也会先闪一个锁屏页，甚至因为锁屏页 onCreate 里再置一次
+ *      locked=true 而彻底锁回去。
+ *   1. 再按开机策略处理（家长关了"开机自动锁定"才放开）。
+ *   2. 启动计时服务；只有判定为"仍应锁定"时才拉起锁屏页并补拉。
+ *   3. 挂常驻看门狗。
  */
 public class BootReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
@@ -20,21 +24,27 @@ public class BootReceiver extends BroadcastReceiver {
                 || "android.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())
                 || "com.htc.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())
                 || Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction());
-        Log.i("txhlock", "BootReceiver action=" + intent.getAction()
-                + " isBoot=" + isBoot + " enabled=" + prefs.isEnabled()
-                + " lockOnBoot=" + prefs.lockOnBoot());
 
         if (!prefs.isEnabled()) return;      // 家长停用了监控，不做任何事
-
         if (!isBoot) return;
 
-        // 1) 重启跟随重启前锁定状态（未锁定→不锁、计时续上；已锁定→仍锁）
+        // 0) 离开接续判定：短关机/重启 → 计时续上、锁屏状态保留；长关机/跨夜 → 清零解锁
+        int away = Away.resolve(prefs);
+        Log.i("txhlock", "BootReceiver action=" + intent.getAction() + " away=" + away
+                + " locked=" + prefs.isLocked() + " lockOnBoot=" + prefs.lockOnBoot()
+                // v1.9：顺手记录无障碍的真实状态。
+                // 覆盖安装后小米电视会把服务解绑（settings 里名字还在、却不绑定），
+                // 这两项能立刻区分"真在跑"和"名字还在但人已经不在"。
+                + " accBound=" + KeyFilter.isBound(context)
+                + " keyFilter=" + KeyFilter.hasKeyFilter(context));
+
+        // 1) 开机策略（家长主动关掉"开机自动锁定"时放开）
         Keeper.lockOnBoot(context, prefs);
 
         // 2) 恢复计时服务
         Keeper.startService(context);
 
-        // 3) 仅当处于锁定状态时才补拉锁屏（应对系统桌面抢占焦点）
+        // 3) 仅当判定仍处于锁定状态时才拉起锁屏并补拉（应对系统桌面抢占焦点）
         if (prefs.isLocked()) {
             Keeper.launchLock(context);
             Keeper.scheduleRetries(context);

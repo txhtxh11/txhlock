@@ -66,6 +66,16 @@
             <Button android:id="@+id/btnDailyPlus" style="@style/StepBtn" android:text="+" />
         </LinearLayout>
 
+        <TextView style="@style/Label" android:text="长关机重置阈值（分钟）" />
+        <LinearLayout style="@style/Stepper">
+            <Button android:id="@+id/btnAwayMinus" style="@style/StepBtn" android:text="-" />
+            <TextView android:id="@+id/tvAway" style="@style/StepValue" android:text="30 分钟" />
+            <Button android:id="@+id/btnAwayPlus" style="@style/StepBtn" android:text="+" />
+        </LinearLayout>
+        <TextView
+            style="@style/Hint"
+            android:text="关机/待机/重启离开不超过此时长：单次计时接着走（离开的时间不算观看），关机前锁着屏开机仍锁着屏；超过此时长或跨夜：清零并解锁，开机从零计时。0=关闭该项（只保留跨夜清零）。" />
+
         <TextView style="@style/Label" android:text="连续答对题数（答对才解锁）" />
         <LinearLayout style="@style/Stepper">
             <Button android:id="@+id/btnCorrMinus" style="@style/StepBtn" android:text="-" />
@@ -79,20 +89,57 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button android:id="@+id/btnMath" style="@style/TypeBtn" android:text="口算" />
+            <Button android:id="@+id/btnMath2" style="@style/TypeBtn" android:text="数学" />
+            <Button android:id="@+id/btnChinese" style="@style/TypeBtn" android:text="语文" />
+            <Button android:id="@+id/btnEnglish" style="@style/TypeBtn" android:text="英语" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button android:id="@+id/btnPhysics" style="@style/TypeBtn" android:text="物理" />
+            <Button android:id="@+id/btnChemistry" style="@style/TypeBtn" android:text="化学" />
+            <Button android:id="@+id/btnBiology" style="@style/TypeBtn" android:text="生物" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button android:id="@+id/btnHistory" style="@style/TypeBtn" android:text="历史" />
+            <Button android:id="@+id/btnGeography" style="@style/TypeBtn" android:text="地理" />
+            <Button android:id="@+id/btnPolitics" style="@style/TypeBtn" android:text="政治" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <Button android:id="@+id/btnPinyin" style="@style/TypeBtn" android:text="认字" />
             <Button android:id="@+id/btnPoetry" style="@style/TypeBtn" android:text="古诗" />
-            <Button android:id="@+id/btnEnglish" style="@style/TypeBtn" android:text="英语" />
             <Button android:id="@+id/btnCustom" style="@style/TypeBtn" android:text="自定义" />
         </LinearLayout>
+
+        <TextView style="@style/Label" android:text="年级（小学一年级 ~ 初中九年级）" />
+        <LinearLayout style="@style/Stepper">
+            <Button android:id="@+id/btnLevelMinus" style="@style/StepBtn" android:text="-" />
+            <TextView android:id="@+id/tvLevel" style="@style/StepValue" android:text="一年级" />
+            <Button android:id="@+id/btnLevelPlus" style="@style/StepBtn" android:text="+" />
+        </LinearLayout>
+        <TextView
+            style="@style/Hint"
+            android:text="选定孩子就读年级：口算按年级自动出题（一年级=10以内加减，七年级起=有理数/乘方/根式）；各学科题库也只出该年级及以下的题，不会超纲。「口算」是自动生成的算术题，「数学」是应用题/几何/单位换算/找规律等文字题。" />
 
         <TextView style="@style/Label" android:text="自定义题库" />
         <TextView
             style="@style/Hint"
-            android:text="题库路径：/sdcard/Download/txhlock/*.txt（一个文件可多行，一行一题；格式见说明文档）" />
+            android:text="应用已内置小学~初中各学科题库，装完即用。内置题库是只读的：没有任何按钮能删除它、也没有任何方式能覆盖它。自建题库放 /sdcard/Download/txhlock/*.txt（或 SMB 目录），只能【新增】题目——与内置题同段落、同题干的会被自动跳过，永远顶不掉内置题。格式：[科目@g年级] 换行 题干|答案|干扰项1;干扰项2;干扰项3。" />
         <TextView
             android:id="@+id/tvQuizStatus"
             style="@style/Hint"
             android:text="未加载" />
+        <Button
+            android:id="@+id/btnExportQuiz"
+            style="@style/RowBtn"
+            android:text="导出内置题库（查看/照着改）" />
         <Button
             android:id="@+id/btnReloadQuiz"
             style="@style/RowBtn"
@@ -101,7 +148,7 @@
             android:id="@+id/btnClearLocal"
             style="@style/RowBtn"
             android:layout_marginTop="8dp"
-            android:text="卸载本地题库" />
+            android:text="删除本地题库文件（只删本地，不动内置）" />
 
         <TextView style="@style/Label" android:text="局域网 SMB 题库同步（打开应用时自动更新）" />
         <TextView

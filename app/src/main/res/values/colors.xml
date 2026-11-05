@@ -5,6 +5,8 @@
     <color name="primary">#1E5AF0</color>
     <color name="text_main">#FFFFFF</color>
     <color name="text_dim">#9AA5B1</color>
+    <color name="text_warn">#FF8A3D</color>
+    <color name="text_danger">#FF6B6B</color>
     <color name="option_bg">#262E3A</color>
     <color name="option_focus">#1E5AF0</color>
     <color name="option_correct">#1E9E57</color>

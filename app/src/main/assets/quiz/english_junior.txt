@@ -1,0 +1,101 @@
+# ============================================================
+# 答题锁屏守护 · 内置题库
+# 英语（初中部分，七~九年级）
+# 说明：题干是英文，正确答案与干扰项都用中文释义
+# ============================================================
+
+[english@g7]
+dictionary|字典|日记;报纸;杂志
+subject|科目|物体;主题曲;主语
+favourite subject|最喜欢的科目|最喜欢的食物;最喜欢的运动;最喜欢的颜色
+classmate|同班同学|老师;邻居;笔友
+weekend|周末|工作日;假期;月末
+homework|家庭作业|家务;考试;课程
+delicious food|美味的食物|难吃的食物;便宜的食物;昂贵的食物
+interesting|有趣的|无聊的;危险的;困难的
+difficult|困难的|容易的;有趣的;简单的
+different|不同的|相同的;相似的;相反的
+important|重要的|次要的;无聊的;轻松的
+because|因为|所以;但是;虽然
+but|但是|因为;所以;而且
+always|总是|从不;有时;很少
+usually|通常|从不;偶尔;绝不
+want to do|想要做|做过;正在做;将要做
+like doing|喜欢做|讨厌做;拒绝做;忘记做
+be good at|擅长于|不擅长;讨厌;放弃
+look after|照顾|寻找;等待;追赶
+get up|起床|睡觉;坐下;站起来
+listen to|听|说;读;写
+look at|看|听;说;摸
+go to school|去上学|去上班;回家;去公园
+have breakfast|吃早饭|吃午饭;吃晚饭;睡觉
+play games|玩游戏|做作业;看书;看电视
+watch TV|看电视|看电影;看书;听音乐
+do homework|做作业|玩游戏;看电视;睡觉
+clean the room|打扫房间|洗碗;做饭;洗衣服
+on Monday|在星期一|在星期日;在星期五;在上午
+in the morning|在早上|在下午;在晚上;在中午
+
+[english@g8]
+went|去（go 的过去式）|来;走;跑
+saw|看见（see 的过去式）|说;寻找;坐
+bought|买（buy 的过去式）|卖;带来;拿走
+taught|教（teach 的过去式）|学习;抓住;想到
+thought|想（think 的过去式）|谢谢;穿过;扔
+taller than|比……高|和……一样高;最矮的;最高的
+the tallest|最高的|较高的;最矮的;和……一样高
+more beautiful|更美丽|最美丽;不美丽;美丽地
+as tall as|和……一样高|比……高;比……矮;最高
+look forward to|盼望|回头看;照顾;寻找
+give up|放弃|给予;举起;继续
+take care of|照顾|小心;关心地;拿走
+be interested in|对……感兴趣|对……厌烦;对……负责;对……熟悉
+depend on|依靠|依赖地;独立;离开
+instead of|代替|因为;除了;由于
+although|虽然|因为;所以;并且
+however|然而|因此;而且;否则
+probably|大概|一定;从不;立刻
+suddenly|突然地|缓慢地;安静地;小心地
+successfully|成功地|失败地;努力地;迅速地
+environment|环境|设备;实验;事件
+pollution|污染|人口;政策;位置
+protect|保护|破坏;污染;浪费
+increase|增加|减少;保持不变;取消
+improve|改善|恶化;保持;忽略
+suggestion|建议|问题;答案;结论
+experience|经验、经历|实验;表达;期望
+opportunity|机会|困难;挑战;结果
+challenge|挑战|机会;奖励;任务
+achievement|成就|失败;目标;梦想
+
+[english@g9]
+have done|现在完成时|一般过去时;一般现在时;将来时
+was done|一般过去时的被动语态|主动语态;现在完成时;进行时
+be done|被动语态|主动语态;完成时;进行时
+will do|一般将来时|过去时;现在时;完成时
+am doing|现在进行时|过去进行时;完成时;将来时
+had done|过去完成时|现在完成时;一般过去时;将来完成时
+used to do|过去常常做|现在常做;习惯做;必须做
+be used to doing|习惯于做|过去常做;被用来做;开始做
+not only but also|不但……而且……|要么……要么……;既不……也不……;因为……所以……
+either or|要么……要么……|不但……而且……;既不……也不……;无论……都……
+neither nor|既不……也不……|要么……要么……;不但……而且……;既……又……
+as soon as|一……就……|只要;虽然;除非
+so that|以便、结果|因为;虽然;除非
+unless|除非|如果;因为;虽然
+in order to|为了|因为;结果;尽管
+according to|根据|虽然;除了;由于
+come up with|想出|赶上;超过;放弃
+put off|推迟|穿上;放下;抬起
+turn down|拒绝或调小|调大;翻转;出现
+run out of|用完|跑出去;追上;离开
+look up to|尊敬|查阅;向上看;寻找
+be responsible for|对……负责|对……感兴趣;对……熟悉;对……厌倦
+take pride in|为……感到骄傲|为……担心;为……道歉;为……努力
+make a difference|产生影响|制造不同;做出决定;取得进步
+pay attention to|注意|支付;照顾;放弃
+get along with|与……相处|离开;追赶;超过
+break down|出故障|打破;分解;断开
+give in|屈服|放弃;给出;进入
+carry out|执行|搬走;继续;取出
+figure out|弄明白|算出结果;想出办法;指出

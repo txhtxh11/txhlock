@@ -36,6 +36,8 @@
     </style>
 
     <style name="RowBtn">
+        <!-- 关闭 Material Button 默认的全大写，保证拼音/英文按原样显示 -->
+        <item name="android:textAllCaps">false</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">88dp</item>
         <item name="android:background">@drawable/bg_option</item>
@@ -50,6 +52,8 @@
     </style>
 
     <style name="StepBtn">
+        <!-- 关闭 Material Button 默认的全大写，保证拼音/英文按原样显示 -->
+        <item name="android:textAllCaps">false</item>
         <item name="android:layout_width">140dp</item>
         <item name="android:layout_height">88dp</item>
         <item name="android:background">@drawable/bg_option</item>
@@ -67,6 +71,8 @@
     </style>
 
     <style name="TypeBtn">
+        <!-- 关闭 Material Button 默认的全大写，保证拼音/英文按原样显示 -->
+        <item name="android:textAllCaps">false</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">88dp</item>
         <item name="android:layout_weight">1</item>
