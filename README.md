@@ -73,6 +73,7 @@
 
 第 2 步 准备 adb：这台电脑如果没装 adb，请你下载 Android platform-tools（Windows 版）解压，
 用里面的 adb.exe 去执行，不要让我手动配置什么环境变量。
+（如果下载不下来，可以试 winget install Google.PlatformTools，或者直接告诉我装不上，别自己绕路。）
 
 第 3 步 连接电视：
 adb connect 192.168.1.23:5555
