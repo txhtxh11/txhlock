@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- v2.0 极简深色设计系统：一层背景 + 两层卡片，全应用只用一个强调色 -->
-    <color name="bg_dark">#070A0F</color>
-    <color name="card">#131A24</color>
-    <color name="card_focus">#17243A</color>
-    <color name="card_press">#1B2A44</color>
-    <color name="tile">#1B2432</color>
-    <color name="line">#22304A</color>
-    <color name="accent">#4F8CFF</color>
-    <color name="accent_deep">#2F63C8</color>
-    <color name="accent_soft">#16294A</color>
+    <!--
+      v3.0 设计系统「TXH 控制台」
+      参考的是用户自有工具 esp-homekit 的视觉偏好：
+        · 纯深灰底 + 一层面板，1.5dp 细线，零圆角
+        · 单一强调色：琥珀 #F0A437；选中/聚焦 = 整块填琥珀 + 深色字
+        · 小号等宽数字与标签，信息密度高，像仪表盘
+      不做圆角卡片、不做渐变、不做阴影 —— 和市面上圆角深色 App 明确区分。
+    -->
+    <color name="bg_dark">#191919</color>
+    <color name="card">#232323</color>
+    <color name="card_focus">#F0A437</color>
+    <color name="card_press">#C9862C</color>
+    <color name="tile">#2B2B2B</color>
+    <color name="input_bg">#1D1D1D</color>
+    <color name="line">#3A3A3A</color>
+    <color name="line_soft">#2E2E2E</color>
 
-    <color name="text_main">#F2F5FA</color>
-    <color name="text_dim">#8FA0B8</color>
-    <color name="text_faint">#5C6B80</color>
-    <color name="ok">#35D07F</color>
-    <color name="warn">#FFB020</color>
-    <color name="danger">#FF6B6B</color>
+    <color name="accent">#F0A437</color>
+    <color name="accent_deep">#C9862C</color>
+    <color name="accent_soft">#3A2E17</color>
+    <color name="on_accent">#1C1C1C</color>
+
+    <color name="text_main">#F5F5F5</color>
+    <color name="text_sub">#C9C9C9</color>
+    <color name="text_dim">#909090</color>
+    <color name="text_faint">#5E5E5E</color>
+    <color name="ok">#5FBF7F</color>
+    <color name="warn">#F0A437</color>
+    <color name="danger">#E06060</color>
+    <color name="danger_line">#7A3030</color>
 
     <!-- 兼容旧代码里引用到的颜色名 -->
-    <color name="panel">#131A24</color>
-    <color name="primary">#4F8CFF</color>
-    <color name="option_bg">#1B2432</color>
-    <color name="option_focus">#4F8CFF</color>
-    <color name="option_correct">#35D07F</color>
-    <color name="option_wrong">#FF6B6B</color>
-    <color name="text_warn">#FFB020</color>
-    <color name="text_danger">#FF6B6B</color>
+    <color name="panel">#232323</color>
+    <color name="primary">#F0A437</color>
+    <color name="option_bg">#232323</color>
+    <color name="option_focus">#F0A437</color>
+    <color name="option_correct">#5FBF7F</color>
+    <color name="option_wrong">#E06060</color>
+    <color name="text_warn">#F0A437</color>
+    <color name="text_danger">#E06060</color>
 </resources>

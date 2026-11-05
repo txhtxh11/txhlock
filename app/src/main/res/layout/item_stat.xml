@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 顶部数据卡：一个指标 + 一个数值 + 一行补充说明。整卡可聚焦可点击。 -->
+<!-- 顶部数据块：小号等宽标签 + 大号等宽数字 + 小号单位 + 一行说明，聚焦整块填琥珀。 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,37 +10,60 @@
     android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="14dp"
+    android:paddingTop="12dp"
     android:paddingBottom="12dp">
 
     <TextView
         android:id="@+id/statLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:fontFamily="monospace"
         android:includeFontPadding="false"
         android:singleLine="true"
-        android:textColor="@color/text_dim"
-        android:textSize="14sp" />
+        android:textColor="@color/block_muted"
+        android:textSize="11sp" />
 
-    <TextView
-        android:id="@+id/statValue"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:includeFontPadding="false"
-        android:singleLine="true"
-        android:textColor="@color/text_main"
-        android:textSize="34sp"
-        android:textStyle="bold" />
+        android:baselineAligned="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/statValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:fontFamily="monospace"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/block_text"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/statUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:duplicateParentState="true"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/block_sub"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/statSub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="3dp"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:singleLine="true"
-        android:textColor="@color/text_dim"
-        android:textSize="13sp" />
+        android:textColor="@color/block_sub"
+        android:textSize="12sp" />
 </LinearLayout>

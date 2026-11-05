@@ -65,6 +65,31 @@ public class Prefs {
     public int quizTypes() { return sp.getInt("quiz_types", DEFAULT_TYPES); }
     public void setQuizTypes(int v) { sp.edit().putInt("quiz_types", v).apply(); }
 
+    // ---- 教材版本（v3.0）：题目按「版本 + 年级」取，人教/北师大/苏教/外研/译林/通用 ----
+    public static final String[] EDITIONS = {"rj", "bs", "sj", "wy", "yl", "ty"};
+    public static final String[] EDITION_NAMES = {"人教版", "北师大", "苏教版", "外研版", "译林版", "通用"};
+
+    public String textbook() {
+        String v = sp.getString("textbook", "rj");
+        for (String e : EDITIONS) if (e.equals(v)) return v;
+        return "rj";
+    }
+
+    public void setTextbook(String v) {
+        for (String e : EDITIONS) {
+            if (e.equals(v)) { sp.edit().putString("textbook", v).apply(); return; }
+        }
+    }
+
+    /** 版本代码 → 显示名。 */
+    public static String editionName(String code) {
+        if (code == null) return "通用";
+        for (int i = 0; i < EDITIONS.length; i++) {
+            if (EDITIONS[i].equals(code)) return EDITION_NAMES[i];
+        }
+        return "通用";
+    }
+
     // 注：v1.8 起取消"覆盖内置题"选项。内置题库是只读的，本地 / SMB 题库只能新增题目，
     // 不再有任何开关能让外部题库顶掉内置题，所以原先的 quiz_overwrite 字段已删除。
 

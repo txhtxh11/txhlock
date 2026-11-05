@@ -5,6 +5,8 @@
     <!-- 开机自启：防重启绕过锁屏 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+    <!-- 悬浮层锁屏（v3.0）：盖在桌面之上，主页键切到桌面时也不会露出桌面 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 前台服务保活（长期计时，不声明 shortService 类型） -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />

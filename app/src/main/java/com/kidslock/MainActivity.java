@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
     private LinearLayout home;
     private TextView tvVersion, tvStatusPill;
     private TextView statToday, statTodaySub, statSingle, statSingleSub, statCorrect, statCorrectSub;
+    private TextView statTodayValue, statSingleValue, statCorrectValue;
     private View barFill;
     private LinearLayout cardTime, cardQuiz, cardBank, cardGuard;
     private TextView btnHelp, btnTestLock;
@@ -72,8 +73,7 @@ public class MainActivity extends Activity {
         prefs = new Prefs(this);
         // 当前处于锁定状态：直接进入锁屏答题页（家长也需先解锁）
         if (prefs.isLocked()) {
-            startActivity(new Intent(this, LockScreenActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            Keeper.launchLock(this);
             finish();
             return;
         }
@@ -136,8 +136,8 @@ public class MainActivity extends Activity {
         statToday = (TextView) c1.findViewById(R.id.statLabel);
         statTodaySub = (TextView) c1.findViewById(R.id.statSub);
         statToday.setText("今日已看");
-        ((TextView) c1.findViewById(R.id.statValue)).setText("0 分钟");
-        statToday.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        statTodayValue = (TextView) c1.findViewById(R.id.statValue);
+        ((TextView) c1.findViewById(R.id.statUnit)).setText("分钟");
 
         // 今日卡里加一条进度条：今日已看 / 每日上限
         LinearLayout track = new LinearLayout(this);
@@ -155,8 +155,6 @@ public class MainActivity extends Activity {
         track.addView(barFill);
         c1.addView(track);
 
-        // 今日卡的数值控件单独存起来
-        statToday.setTag(c1.findViewById(R.id.statValue));
         c1.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 openSheet("观看时长", "到点自动锁屏，答对后重新计时", sheetTime());
@@ -167,7 +165,9 @@ public class MainActivity extends Activity {
 
         LinearLayout c2 = (LinearLayout) inf.inflate(R.layout.item_stat, hero, false);
         ((TextView) c2.findViewById(R.id.statLabel)).setText("单次连续观看");
-        statSingle = (TextView) c2.findViewById(R.id.statValue);
+        statSingle = (TextView) c2.findViewById(R.id.statLabel);
+        statSingleValue = (TextView) c2.findViewById(R.id.statValue);
+        ((TextView) c2.findViewById(R.id.statUnit)).setText("分钟");
         statSingleSub = (TextView) c2.findViewById(R.id.statSub);
         c2.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -179,7 +179,9 @@ public class MainActivity extends Activity {
 
         LinearLayout c3 = (LinearLayout) inf.inflate(R.layout.item_stat, hero, false);
         ((TextView) c3.findViewById(R.id.statLabel)).setText("连对解锁");
-        statCorrect = (TextView) c3.findViewById(R.id.statValue);
+        statCorrect = (TextView) c3.findViewById(R.id.statLabel);
+        statCorrectValue = (TextView) c3.findViewById(R.id.statValue);
+        ((TextView) c3.findViewById(R.id.statUnit)).setText("题");
         statCorrectSub = (TextView) c3.findViewById(R.id.statSub);
         c3.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -197,7 +199,9 @@ public class MainActivity extends Activity {
         hero.addView(card, lp);
     }
 
-    /** 2x2 设置卡片。 */
+    /** 2x2 设置方块。 */
+    private int cardNo = 0;
+
     private void buildGrid() {
         LinearLayout row1 = (LinearLayout) findViewById(R.id.gridRow1);
         LinearLayout row2 = (LinearLayout) findViewById(R.id.gridRow2);
@@ -208,7 +212,7 @@ public class MainActivity extends Activity {
         });
         cardQuiz = addCard(row1, "答题规则", "连对 3 题 · 二年级", true, new View.OnClickListener() {
             @Override public void onClick(View v) {
-                openSheet("答题规则", "题数、年级、题型都可以改", sheetQuiz());
+                openSheet("答题规则", "题数、年级、题型、教材版本", sheetQuiz());
             }
         });
         cardBank = addCard(row2, "题库管理", "内置题库 · 958 道题", false, new View.OnClickListener() {
@@ -229,6 +233,8 @@ public class MainActivity extends Activity {
                 .inflate(R.layout.item_card, parent, false);
         ((TextView) card.findViewById(R.id.cardTitle)).setText(title);
         ((TextView) card.findViewById(R.id.cardSub)).setText(sub);
+        ((TextView) card.findViewById(R.id.cardIndex)).setText(
+                String.format(java.util.Locale.US, "%02d", ++cardNo));
         card.setTag(sub);
         card.setOnClickListener(l);
         Ui.focusScale(card);
@@ -268,8 +274,8 @@ public class MainActivity extends Activity {
     private void refreshStatus() {
         boolean on = prefs.isEnabled();
         tvStatusPill.setText(on ? "● 守护中" : "○ 已停用");
-        tvStatusPill.setTextColor(Ui.color(this,
-                on ? R.color.accent : R.color.text_dim));
+        tvStatusPill.setTextColor(getResources().getColorStateList(
+                on ? R.color.pill_on_text : R.color.pill_off_text));
         tvStatusPill.setBackgroundResource(on ? R.drawable.bg_pill_on : R.drawable.bg_pill);
     }
 
@@ -281,7 +287,7 @@ public class MainActivity extends Activity {
             sessionExtra = Math.max(0, System.currentTimeMillis() - start);
         }
         long todayMin = (watched + sessionExtra) / 60000L;
-        ((TextView) statToday.getTag()).setText(todayMin + " 分钟");
+        statTodayValue.setText(String.valueOf(todayMin));
 
         int daily = prefs.dailyMinutes();
         if (daily > 0) {
@@ -292,17 +298,17 @@ public class MainActivity extends Activity {
             Ui.setProgress(barFill, 0f);
         }
 
-        statSingle.setText(prefs.singleMinutes() + " 分钟");
+        statSingleValue.setText(String.valueOf(prefs.singleMinutes()));
         statSingleSub.setText("到点锁屏 · 答对后重新计时");
-        statCorrect.setText(prefs.requiredCorrect() + " 题");
-        statCorrectSub.setText(Prefs.gradeName(prefs.grade()) + " · " + typeCount() + " 类题型");
+        statCorrectValue.setText(String.valueOf(prefs.requiredCorrect()));
+        statCorrectSub.setText(Prefs.gradeName(prefs.grade()) + " · " + Prefs.editionName(prefs.textbook()));
     }
 
     private void refreshCardSubs() {
         String daily = prefs.dailyMinutes() > 0 ? ("每日 " + prefs.dailyMinutes() + " 分钟") : "每日不限";
         setCardSub(cardTime, "单次 " + prefs.singleMinutes() + " 分钟 · " + daily);
         setCardSub(cardQuiz, "连对 " + prefs.requiredCorrect() + " 题 · "
-                + Prefs.gradeName(prefs.grade()) + " · " + typeCount() + " 类题型");
+                + Prefs.gradeName(prefs.grade()) + " · " + Prefs.editionName(prefs.textbook()));
         int total = engine == null ? 0 : engine.questionCount();
         setCardSub(cardBank, total > 0 ? ("已加载 " + total + " 道题 · 内置只读") : "题库未加载 · 请检查权限");
         setCardSub(cardGuard, "家长密码 · 开机先答题：" + (prefs.lockOnBoot() ? "开" : "关"));
@@ -443,15 +449,14 @@ public class MainActivity extends Activity {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 Ui.dp(this, 780), ViewGroup.LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER;
-        lp.topMargin = Ui.dp(this, 26);
-        lp.bottomMargin = Ui.dp(this, 26);
+        lp.topMargin = Ui.dp(this, 14);
+        lp.bottomMargin = Ui.dp(this, 14);
         sheetLayer.addView(card, lp);
 
-        // 焦点：优先给内容里的第一个可聚焦控件，没有就落在"关闭"上
-        final View first = findFirstFocusable(content);
+        // 焦点先落在「关闭」上，保证弹层一打开停在顶部；方向键向下自然进入内容
         card.post(new Runnable() {
             @Override public void run() {
-                if (first != null) first.requestFocus();
+                close.requestFocus();
             }
         });
     }
@@ -468,7 +473,7 @@ public class MainActivity extends Activity {
     private View findFirstFocusable(View v) {
         if (v == null) return null;
         if (v.getVisibility() != View.VISIBLE) return null;
-        if (v.isFocusable() && v instanceof TextView) return v;
+        if (v.isFocusable()) return v;
         if (v instanceof ViewGroup) {
             ViewGroup g = (ViewGroup) v;
             for (int i = 0; i < g.getChildCount(); i++) {
@@ -607,6 +612,51 @@ public class MainActivity extends Activity {
         c.addView(h2[0]);
 
         c.addView(Ui.divider(this));
+        c.addView(Ui.sectionLabel(this, "教材版本（语文/数学/英语按该版本进度出题）"));
+
+        final TextView[] editionChips = new TextView[Prefs.EDITIONS.length];
+        LinearLayout editionGrid = Ui.column(this);
+        for (int start = 0; start < Prefs.EDITIONS.length; start += 3) {
+            LinearLayout row = Ui.row(this);
+            for (int k = 0; k < 3; k++) {
+                int idx = start + k;
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                lp.setMargins(Ui.dp(this, 5), Ui.dp(this, 5), Ui.dp(this, 5), Ui.dp(this, 5));
+                if (idx < Prefs.EDITIONS.length) {
+                    final String code = Prefs.EDITIONS[idx];
+                    final boolean on = code.equals(prefs.textbook());
+                    final TextView chip = Ui.chip(this, Prefs.EDITION_NAMES[idx], on);
+                    editionChips[idx] = chip;
+                    chip.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            prefs.setTextbook(code);
+                            for (int i = 0; i < editionChips.length; i++) {
+                                boolean sel = Prefs.EDITIONS[i].equals(prefs.textbook());
+                                editionChips[i].setBackgroundResource(
+                                        sel ? R.drawable.bg_chip_on : R.drawable.bg_chip);
+                                editionChips[i].setTextColor(getResources().getColorStateList(
+                                        sel ? R.color.block_text : R.color.block_sub));
+                                editionChips[i].setTypeface(android.graphics.Typeface.create(
+                                        "sans-serif", sel ? android.graphics.Typeface.BOLD
+                                                : android.graphics.Typeface.NORMAL));
+                            }
+                            refreshAll();
+                        }
+                    });
+                    row.addView(chip, lp);
+                } else {
+                    View blank = new View(this);
+                    row.addView(blank, lp);
+                }
+            }
+            editionGrid.addView(row);
+        }
+        c.addView(editionGrid);
+        c.addView(Ui.hint(this, "切换版本后，语文/数学/英语会优先抽该版本对应年级的题；"
+                + "该版本某年级题量不足时自动并入低年级，仍不会超纲。口算、认字、古诗不受版本影响。"));
+
+        c.addView(Ui.divider(this));
         c.addView(Ui.sectionLabel(this, "启用题型（可多选）"));
 
         String[] names = {"口算", "认字", "古诗", "英语", "自定义", "数学",
@@ -632,8 +682,8 @@ public class MainActivity extends Activity {
                             boolean nowOn = (prefs.quizTypes() & bit) != 0;
                             chip.setText(nowOn ? "✓ " + name : name);
                             chip.setBackgroundResource(nowOn ? R.drawable.bg_chip_on : R.drawable.bg_chip);
-                            chip.setTextColor(Ui.color(MainActivity.this,
-                                    nowOn ? R.color.text_main : R.color.text_dim));
+                            chip.setTextColor(getResources().getColorStateList(
+                                    nowOn ? R.color.block_text : R.color.block_sub));
                             refreshAll();
                         }
                     });
@@ -766,10 +816,14 @@ public class MainActivity extends Activity {
         boolean bound = KeyFilter.isBound(this);
         boolean filter = KeyFilter.hasKeyFilter(this);
         boolean effective = KeyFilter.isEffective(this);
+        boolean overlay = LockOverlay.canShow(this);
         String accTitle;
         String accSub;
-        if (bound && effective) {
-            accTitle = "无障碍保活：已开启";
+        if (overlay) {
+            accTitle = "锁屏方式：悬浮层（推荐）";
+            accSub = "主页键切到桌面也会被直接盖住，孩子看不到桌面";
+        } else if (bound && effective) {
+            accTitle = "锁屏方式：无障碍拦截";
             accSub = "主页键已物理拦截 · 切走会立即抢回";
         } else if (bound && filter) {
             // 小米电视常见：声明了按键过滤，但系统根本不把 HOME 事件发过来。
@@ -795,6 +849,22 @@ public class MainActivity extends Activity {
             }
         }));
 
+        if (Build.VERSION.SDK_INT >= 23) {
+            final boolean overlayOk = LockOverlay.canShow(this);
+            c.addView(actionRow(overlayOk ? "悬浮层锁屏：已授权" : "悬浮层锁屏：未授权",
+                    overlayOk ? "主页键切到桌面时会直接被盖住，不闪桌面"
+                            : "授权后锁屏改用悬浮层，孩子按主页键看不到桌面",
+                    new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            if (overlayOk) {
+                                toast("已授权。锁屏会优先使用悬浮层");
+                            } else {
+                                openOverlaySettings();
+                            }
+                        }
+                    }));
+        }
+
         c.addView(Ui.divider(this));
         c.addView(Ui.sectionLabel(this, "还原"));
         c.addView(actionRowDanger("还原并卸载", "先关无障碍，再卸载；小米桌面自动恢复",
@@ -817,21 +887,25 @@ public class MainActivity extends Activity {
         c.addView(Ui.sectionLabel(this, "状态诊断"));
         c.addView(diagLine("无障碍服务", KeyFilter.isBound(this) ? "已绑定" : "未开启",
                 KeyFilter.isBound(this)));
-        c.addView(diagLine("主页键拦截", KeyFilter.isEffective(this) ? "已物理拦截"
-                        : (KeyFilter.hasKeyFilter(this) ? "秒级抢回（按主页键验证）" : "未生效"),
-                KeyFilter.isEffective(this)));
+        boolean ov = LockOverlay.canShow(this);
+        c.addView(diagLine("主页键", ov ? "悬浮层覆盖（桌面不出现）"
+                        : (KeyFilter.isEffective(this) ? "已物理拦截"
+                        : (KeyFilter.hasKeyFilter(this) ? "秒级抢回（按主页键验证）" : "未生效")),
+                ov || KeyFilter.isEffective(this)));
         c.addView(diagLine("题库", (engine == null ? 0 : engine.questionCount()) + " 道题已加载",
                 engine != null && engine.questionCount() > 0));
         c.addView(diagLine("守护开关", prefs.isEnabled() ? "开启中" : "已停用", prefs.isEnabled()));
+        c.addView(diagLine("悬浮层权限", LockOverlay.canShow(this) ? "已授权" : "未授权（用 Activity 兜底）",
+                LockOverlay.canShow(this)));
 
         c.addView(Ui.divider(this));
         c.addView(Ui.sectionLabel(this, "主页键防回桌面失效了？"));
         c.addView(Ui.hint(this, "1. 点下面「去修复」，进入系统的无障碍设置；\n"
                 + "2. 找到 txhlock（答题锁屏），把开关关掉，再重新打开；\n"
                 + "3. 回到本页看状态：\n"
-                + "   ·「已物理拦截」= 最好，按主页键桌面完全不出现；\n"
-                + "   ·「秒级抢回」= 也正常，这台电视的固件不把主页键事件发给应用，\n"
-                + "     锁屏会在 0.8 秒内把桌面盖回去，孩子最多看到闪一下。\n"
+                + "   ·「悬浮层覆盖」= 最好，主页键切到桌面也会被直接盖住；\n"
+                + "   ·「已物理拦截」= 无障碍拦截，桌面同样不出现；\n"
+                + "   ·「秒级抢回」= 兜底方案，0.8 秒内把桌面盖回去。\n"
                 + "覆盖安装后小米电视会解绑无障碍服务，这是最常见的失效原因。"));
         c.addView(actionRow("去修复主页键拦截", "打开系统无障碍设置", new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -907,29 +981,29 @@ public class MainActivity extends Activity {
         if (t instanceof TextView) ((TextView) t).setText(text);
     }
 
-    /** 一行可点的设置项。 */
+    /** 一行可点的设置项：整行聚焦时填琥珀，文字自动变深色。 */
     private LinearLayout actionRow(String title, String sub, View.OnClickListener l) {
         LinearLayout box = Ui.row(this);
         box.setBackgroundResource(R.drawable.bg_ghost);
         box.setFocusable(true);
         box.setClickable(true);
-        box.setPadding(Ui.dp(this, 18), Ui.dp(this, 10), Ui.dp(this, 18), Ui.dp(this, 10));
+        box.setPadding(Ui.dp(this, 16), Ui.dp(this, 8), Ui.dp(this, 16), Ui.dp(this, 8));
         box.setOnClickListener(l);
         Ui.focusScale(box);
 
         LinearLayout texts = Ui.column(this);
-        texts.addView(Ui.text(this, title, 17, Ui.color(this, R.color.text_main), true));
+        texts.addView(Ui.blockText(this, title, 17, R.color.block_text, true));
         if (sub != null && sub.length() > 0) {
-            TextView s = Ui.text(this, sub, 12, Ui.color(this, R.color.text_dim), false);
+            TextView s = Ui.blockText(this, sub, 12, R.color.block_sub, false);
             s.setPadding(0, Ui.dp(this, 3), 0, 0);
             texts.addView(s);
         }
         box.addView(texts, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        box.addView(Ui.text(this, "›", 26, Ui.color(this, R.color.text_faint), false));
+        box.addView(Ui.blockMono(this, "›", 22, R.color.block_muted, false));
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.topMargin = Ui.dp(this, 6);
+        lp.topMargin = Ui.dp(this, 4);
         box.setLayoutParams(lp);
         return box;
     }
@@ -979,8 +1053,7 @@ public class MainActivity extends Activity {
                 + " 题后才会解开。\n（这是测试功能，不会增加今日观看时长）", "锁定", new Runnable() {
             @Override public void run() {
                 prefs.setLocked(true);
-                startActivity(new Intent(MainActivity.this, LockScreenActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                Keeper.launchLockNow(MainActivity.this);
             }
         });
     }
@@ -1037,6 +1110,22 @@ public class MainActivity extends Activity {
             toast("找到 txhlock，把开关关掉再打开一次");
         } catch (Exception e) {
             toast("请到 设置 → 无障碍 里操作 txhlock");
+        }
+    }
+
+    /** 悬浮窗权限页（Android 6.0+）。 */
+    private void openOverlaySettings() {
+        if (Build.VERSION.SDK_INT < 23) return;
+        try {
+            startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName())));
+            toast("打开「允许显示在其他应用上层」后返回");
+        } catch (Exception e) {
+            try {
+                startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+            } catch (Exception e2) {
+                toast("请到 设置 → 应用 → 特殊权限 → 悬浮窗 里授权");
+            }
         }
     }
 

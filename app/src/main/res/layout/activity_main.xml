@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  家长设置主页 v2.0：一屏放完，不滚动。
-  960x540dp 设计空间（1080p / 4K 电视都会按屏幕宽度自动等比放大）：
-    头部 62dp + 三张数据卡 + 2x2 设置卡片 + 底部两个按钮
-  所有卡片等宽等高，左右边距、卡片间距全应用统一。
+  v3.0 家长控制台主页：一屏放完的方块仪表盘。
+  设计语言：零圆角、1.5dp 细线、琥珀强调、等宽数字、无阴影无渐变。
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
@@ -21,13 +19,19 @@
         android:paddingTop="22dp"
         android:paddingBottom="20dp">
 
-        <!-- 头部：标题 + 守护开关 + 版本号 -->
+        <!-- 头部：琥珀方块 + 标题 + 状态开关 + 版本 -->
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <View
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@color/accent" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -39,19 +43,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="答题锁屏守护"
+                    android:text="答题锁屏"
                     android:textColor="@color/text_main"
-                    android:textSize="28sp"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
+                    android:fontFamily="monospace"
                     android:includeFontPadding="false"
-                    android:text="家长设置 · 方向键选择 · OK 确认"
+                    android:text="TXH-LOCK / 家长控制台 / 方向键选择 · OK 确认"
                     android:textColor="@color/text_dim"
-                    android:textSize="13sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <TextView
@@ -63,27 +68,34 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="9dp"
-                android:paddingBottom="9dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="● 守护中"
                 android:textColor="@color/accent"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvVersion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="14dp"
+                android:fontFamily="monospace"
                 android:includeFontPadding="false"
-                android:text="v2.0"
+                android:text="v3.0"
                 android:textColor="@color/text_faint"
-                android:textSize="13sp" />
+                android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- 三张数据卡：今日已看 / 单次时长 / 连对解锁 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="14dp"
+            android:background="@color/line" />
+
+        <!-- 三张数据块 -->
         <LinearLayout
             android:id="@+id/hero"
             android:layout_width="match_parent"
@@ -93,7 +105,7 @@
             android:baselineAligned="false"
             android:orientation="horizontal" />
 
-        <!-- 2x2 设置卡片 -->
+        <!-- 2x2 设置方块 -->
         <LinearLayout
             android:id="@+id/grid"
             android:layout_width="match_parent"
@@ -124,7 +136,7 @@
         <LinearLayout
             android:id="@+id/footer"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="54dp"
             android:layout_marginTop="14dp"
             android:baselineAligned="false"
             android:orientation="horizontal">
@@ -137,11 +149,12 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_ghost"
                 android:clickable="true"
+                android:duplicateParentState="false"
                 android:focusable="true"
                 android:gravity="center"
-                android:text="帮助与诊断"
-                android:textColor="@color/text_main"
-                android:textSize="18sp" />
+                android:text="帮助 / 诊断"
+                android:textColor="@color/text_sub"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/btnTestLock"
@@ -153,20 +166,18 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:text="立即锁定测试"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textColor="@color/on_accent"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- 弹层容器：详情页 / 确认框 -->
     <FrameLayout
         android:id="@+id/sheetLayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <!-- 家长密码门禁 -->
     <FrameLayout
         android:id="@+id/gateLayer"
         android:layout_width="match_parent"

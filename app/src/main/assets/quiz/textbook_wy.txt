@@ -1,0 +1,210 @@
+# txhlock v3.0 教材同步题库 · wy
+# 格式：[科目@版本@g年级] 换行 题干|答案|干扰1;干扰2;干扰3
+# 题目为按知识点原创生成，不含教材原文。
+
+[english@wy@g3]
+red 的意思是？|红色|男孩;家庭;热的
+blue 的意思是？|蓝色|头;晴朗的;二
+green 的意思是？|绿色|一;钢笔;猴子
+yellow 的意思是？|黄色|家庭;梨;棕色
+black 的意思是？|黑色|棕色;猫;猴子
+white 的意思是？|白色|脚;红色;耳朵
+orange 的意思是？|橙色|下雨的;三;四
+brown 的意思是？|棕色|白色;脚;熊猫
+cat 的意思是？|猫|眼睛;书;男孩
+dog 的意思是？|狗|女孩;绿色;老师
+bird 的意思是？|鸟|三;耳朵;脸
+fish 的意思是？|鱼|猴子;四;熊猫
+monkey 的意思是？|猴子|老师;梨;脸
+panda 的意思是？|熊猫|尺子;红色;女孩
+rabbit 的意思是？|兔子|脸;尺子;学生
+duck 的意思是？|鸭子|蓝色;二;热的
+apple 的意思是？|苹果|铅笔;爸爸;晴朗的
+banana 的意思是？|香蕉|钢笔;晴朗的;脸
+pear 的意思是？|梨|熊猫;热的;脚
+grape 的意思是？|葡萄|家庭;梨;脸
+book 的意思是？|书|下雨的;香蕉;手
+pen 的意思是？|钢笔|学校;书;爸爸
+pencil 的意思是？|铅笔|鸭子;头;女孩
+ruler 的意思是？|尺子|香蕉;脚;蓝色
+school 的意思是？|学校|头;老师;葡萄
+teacher 的意思是？|老师|眼睛;鸭子;熊猫
+student 的意思是？|学生|手;梨;家庭
+boy 的意思是？|男孩|热的;家庭;熊猫
+girl 的意思是？|女孩|鸟;白色;绿色
+mother 的意思是？|妈妈|红色;鼻子;男孩
+father 的意思是？|爸爸|鸟;二;钢笔
+family 的意思是？|家庭|手;狗;头
+hand 的意思是？|手|一;蓝色;钢笔
+foot 的意思是？|脚|橙色;晴朗的;下雨的
+head 的意思是？|头|晴朗的;老师;黑色
+eye 的意思是？|眼睛|白色;绿色;苹果
+ear 的意思是？|耳朵|晴朗的;猴子;一
+nose 的意思是？|鼻子|铅笔;四;下雨的
+mouth 的意思是？|嘴|苹果;脚;一
+face 的意思是？|脸|四;红色;白色
+one 的意思是？|一|头;铅笔;棕色
+two 的意思是？|二|嘴;鱼;棕色
+three 的意思是？|三|学校;冷的;书
+four 的意思是？|四|手;脚;妈妈
+five 的意思是？|五|老师;冷的;棕色
+hot 的意思是？|热的|狗;耳朵;眼睛
+cold 的意思是？|冷的|妈妈;鸟;橙色
+sunny 的意思是？|晴朗的|学生;鸟;黄色
+rainy 的意思是？|下雨的|狗;头;鸟
+
+[english@wy@g4]
+classroom 的意思是？|教室|沙发;风扇;篮球
+window 的意思是？|窗户|书房;卧室;面条
+door 的意思是？|门|天气;汤;风扇
+picture 的意思是？|图画|窗户;汤;夹克
+blackboard 的意思是？|黑板|鸡肉;牛奶;窗户
+computer 的意思是？|电脑|排球;面包;毛衣
+fan 的意思是？|风扇|图画;面条;灯
+light 的意思是？|灯|衬衫;书房;卧室
+kitchen 的意思是？|厨房|多云的;黑板;果汁
+bedroom 的意思是？|卧室|电脑;鸡蛋;帽子
+bathroom 的意思是？|浴室|厨房;牛肉;鸡蛋
+study 的意思是？|书房|天气;温暖的;教室
+phone 的意思是？|电话|灯;面包;多云的
+bed 的意思是？|床|连衣裙;电话;水
+sofa 的意思是？|沙发|牛奶;衬衫;有风的
+fridge 的意思是？|冰箱|鞋子;鸡蛋;凉爽的
+chicken 的意思是？|鸡肉|面条;教室;浴室
+beef 的意思是？|牛肉|门;牛奶;冰箱
+soup 的意思是？|汤|图画;天气;面条
+vegetable 的意思是？|蔬菜|天气;牛奶;黑板
+noodles 的意思是？|面条|浴室;凉爽的;衬衫
+rice 的意思是？|米饭|面条;果汁;凉爽的
+bread 的意思是？|面包|黑板;篮球;风扇
+milk 的意思是？|牛奶|汤;有风的;衬衫
+water 的意思是？|水|浴室;牛奶;鸡蛋
+juice 的意思是？|果汁|米饭;鸡肉;厨房
+egg 的意思是？|鸡蛋|电话;牛肉;教室
+shirt 的意思是？|衬衫|连衣裙;风扇;沙发
+skirt 的意思是？|短裙|牛奶;浴室;教室
+dress 的意思是？|连衣裙|窗户;床;米饭
+sweater 的意思是？|毛衣|有风的;窗户;凉爽的
+jacket 的意思是？|夹克|灯;天气;多云的
+socks 的意思是？|袜子|床;夹克;图画
+shoes 的意思是？|鞋子|排球;图画;毛衣
+hat 的意思是？|帽子|连衣裙;厨房;有风的
+weather 的意思是？|天气|米饭;面条;电脑
+warm 的意思是？|温暖的|牛肉;衬衫;凉爽的
+cool 的意思是？|凉爽的|汤;浴室;水
+windy 的意思是？|有风的|门;沙发;灯
+cloudy 的意思是？|多云的|衬衫;篮球;教室
+football 的意思是？|足球|帽子;浴室;鸡肉
+basketball 的意思是？|篮球|衬衫;凉爽的;温暖的
+volleyball 的意思是？|排球|门;沙发;黑板
+
+[english@wy@g5]
+Monday 的意思是？|星期一|三明治;健康的;茶
+Tuesday 的意思是？|星期二|村庄;晚餐;桥
+Wednesday 的意思是？|星期三|午餐;甜的;风
+Thursday 的意思是？|星期四|晚餐;风;健康的
+Friday 的意思是？|星期五|沙拉;音乐;星期二
+Saturday 的意思是？|星期六|数学;花;早餐
+Sunday 的意思是？|星期日|云;草;森林
+Chinese 的意思是？|语文|雪;太阳;音乐
+maths 的意思是？|数学|汉堡包;星期二;星期五
+English 的意思是？|英语|星期一;晚餐;语文
+music 的意思是？|音乐|星期五;美术;雪
+art 的意思是？|美术|草;小山;美味的
+science 的意思是？|科学|太阳;村庄;星期六
+breakfast 的意思是？|早餐|冰淇淋;雪;午餐
+lunch 的意思是？|午餐|美术;星期日;甜的
+dinner 的意思是？|晚餐|天空;科学;风
+sandwich 的意思是？|三明治|科学;树;数学
+salad 的意思是？|沙拉|午餐;风;美术
+hamburger 的意思是？|汉堡包|三明治;新鲜的;茶
+ice cream 的意思是？|冰淇淋|雪;午餐;星期一
+tea 的意思是？|茶|山;树;沙拉
+fresh 的意思是？|新鲜的|风;沙拉;云
+healthy 的意思是？|健康的|晚餐;早餐;雨
+delicious 的意思是？|美味的|草;晚餐;甜的
+sweet 的意思是？|甜的|雨;草;天空
+village 的意思是？|村庄|天空;科学;数学
+river 的意思是？|河流|科学;花;新鲜的
+lake 的意思是？|湖泊|太阳;桥;星期四
+forest 的意思是？|森林|太阳;晚餐;雨
+park 的意思是？|公园|风;森林;音乐
+hill 的意思是？|小山|美术;英语;星期一
+bridge 的意思是？|桥|太阳;星期二;雪
+tree 的意思是？|树|新鲜的;花;午餐
+flower 的意思是？|花|桥;星期日;风
+grass 的意思是？|草|数学;小山;星期五
+mountain 的意思是？|山|健康的;星期二;茶
+sky 的意思是？|天空|沙拉;晚餐;星期二
+cloud 的意思是？|云|美术;汉堡包;湖泊
+rain 的意思是？|雨|冰淇淋;云;风
+snow 的意思是？|雪|星期五;美味的;星期四
+wind 的意思是？|风|河流;云;小山
+sun 的意思是？|太阳|星期四;新鲜的;雨
+
+[english@wy@g6]
+bus 的意思是？|公共汽车|跳舞;男演员;唱歌
+train 的意思是？|火车|伤心的;害怕的;画画
+plane 的意思是？|飞机|疲劳的;画家;高兴的
+ship 的意思是？|轮船|旅行;出租车;飞机
+subway 的意思是？|地铁|医生;歌手;画家
+taxi 的意思是？|出租车|月亮;兴奋的;自行车
+bike 的意思是？|自行车|飞机;未来;爱好
+traffic 的意思是？|交通|疲劳的;伤心的;唱歌
+hobby 的意思是？|爱好|兴奋的;高兴的;火车
+dancing 的意思是？|跳舞|爱好;歌手;高兴的
+singing 的意思是？|唱歌|护士;害怕的;司机
+swimming 的意思是？|游泳|农民;害怕的;邮递员
+drawing 的意思是？|画画|司机;未来;歌手
+reading 的意思是？|阅读|旅行;未来;护士
+doctor 的意思是？|医生|游泳;月亮;唱歌
+nurse 的意思是？|护士|伤心的;唱歌;医生
+driver 的意思是？|司机|公共汽车;邮递员;轮船
+farmer 的意思是？|农民|旅行;阅读;公共汽车
+singer 的意思是？|歌手|司机;跳舞;飞机
+writer 的意思是？|作家|轮船;火车;男演员
+actor 的意思是？|男演员|担心的;唱歌;未来
+artist 的意思是？|画家|司机;害怕的;警察
+policeman 的意思是？|警察|自行车;作家;兴奋的
+postman 的意思是？|邮递员|护士;歌手;地铁
+angry 的意思是？|生气的|唱歌;月亮;画画
+sad 的意思是？|伤心的|护士;公共汽车;疲劳的
+happy 的意思是？|高兴的|游泳;轮船;火车
+worried 的意思是？|担心的|男演员;未来;火车
+afraid 的意思是？|害怕的|画画;自行车;交通
+tired 的意思是？|疲劳的|游泳;男演员;公共汽车
+excited 的意思是？|兴奋的|唱歌;火车;农民
+future 的意思是？|未来|医生;轮船;公共汽车
+moon 的意思是？|月亮|宇宙飞船;飞机;作家
+spaceship 的意思是？|宇宙飞船|出租车;旅行;火车
+travel 的意思是？|旅行|生气的;医生;地铁
+
+[english@wy@g7]
+He ___ to school every day.|goes|go;going;went
+I ___ my homework yesterday.|did|do;does;doing
+There ___ some milk in the glass.|is|are;be;am
+She is good ___ English.|at|in;on;for
+Look! The children ___ football.|are playing|play;played;plays
+This is ___ book. (我的)|my|I;me;mine
+___ do you go to school? — By bike.|How|What;Where;When
+Tom is ___ than Jim.|taller|tall;tallest;more tall
+
+[english@wy@g8]
+I have ___ here for two years.|been|be;am;was
+If it ___ tomorrow, we will stay home.|rains|rain;will rain;rained
+The book ___ by Lu Xun.|was written|wrote;is writing;writes
+She asked me ___ I could help her.|if|that;what;which
+He is used to ___ early.|getting up|get up;got up;gets up
+Neither Tom nor his friends ___ coming.|are|is;am;be
+This is the boy ___ won the game.|who|which;whom;whose
+I'd like ___ a cup of tea.|to have|have;having;had
+
+[english@wy@g9]
+By the time I got there, the film ___.|had begun|began;has begun;begins
+He suggested ___ a walk after dinner.|taking|take;to take;took
+___ hard, and you will succeed.|Work|Working;To work;Worked
+The girl ___ is singing is my sister.|who|which;whom;whose
+I wonder ___ he will come tomorrow.|whether|that;what;which
+It's important ___ English well.|to learn|learn;learning;learned
+The population of China ___ large.|is|are;be;were
+He runs ___ than his brother.|faster|fast;fastest;more fast

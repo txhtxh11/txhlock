@@ -3,162 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>txhlock 答题锁屏 · 电视使用指南 v2.0</title>
+<title>txhlock 答题锁屏 · 电视使用指南 v3.0</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#0b0f17; color:#e8ecf3; font-family:"Microsoft YaHei","PingFang SC",sans-serif; line-height:1.75; padding-bottom:60px; }
+  body { background:#191919; color:#f5f5f5; font-family:"Microsoft YaHei","PingFang SC",sans-serif; line-height:1.75; padding-bottom:60px; }
   .wrap { max-width:960px; margin:0 auto; padding:32px 24px; }
   h1 { font-size:30px; color:#fff; margin-bottom:6px; }
-  .sub { color:#9aa7bd; margin-bottom:10px; font-size:15px; }
-  .verline { color:#7f8ea6; font-size:13px; margin-bottom:26px; border-bottom:1px solid #223047; padding-bottom:14px; }
+  .sub { color:#c9c9c9; margin-bottom:10px; font-size:15px; }
+  .verline { color:#909090; font-size:13px; margin-bottom:26px; border-bottom:1px solid rgba(255,255,255,.16); padding-bottom:14px; }
   .verline .tag { margin-right:8px; }
-  h2 { font-size:22px; color:#6fb3ff; margin:38px 0 10px; padding-left:12px; border-left:4px solid #6fb3ff; }
-  h3 { font-size:17px; color:#cfe2ff; margin:20px 0 6px; }
-  p { color:#dfe6f0; margin:9px 0; font-size:15px; }
-  .imgbox { margin:16px 0; background:#141b26; border:1px solid #25324a; border-radius:12px; padding:10px; text-align:center; }
-  .imgbox img { max-width:100%; border-radius:8px; display:block; margin:0 auto; }
-  .cap { color:#93a2b8; font-size:13px; margin-top:8px; }
-  .step { background:#121a26; border:1px solid #25324a; border-radius:10px; padding:14px 16px; margin:12px 0; font-size:15px; }
-  .step b { color:#ffcf7a; }
+  h2 { font-size:22px; color:#F0A437; margin:38px 0 10px; padding-left:12px; border-left:4px solid #F0A437; }
+  h3 { font-size:17px; color:#f5f5f5; margin:20px 0 6px; }
+  p { color:#e6e6e6; margin:9px 0; font-size:15px; }
+  .imgbox { margin:16px 0; background:#232323; border:1.5px solid #3A3A3A; padding:10px; text-align:center; }
+  .imgbox img { max-width:100%; display:block; margin:0 auto; }
+  .cap { color:#909090; font-size:13px; margin-top:8px; }
+  .step { background:#1d1d1d; border:1.5px solid #3A3A3A; padding:14px 16px; margin:12px 0; font-size:15px; }
+  .step b { color:#F0A437; }
   table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
-  th,td { border:1px solid #2a3547; padding:9px 12px; text-align:left; vertical-align:top; }
+  th,td { border:1px solid #3A3A3A; padding:9px 12px; text-align:left; vertical-align:top; }
   td:first-child, th:first-child { white-space:nowrap; }
-  th { background:#172132; color:#9ecbff; }
-  td { background:#0f1723; color:#dfe6f0; }
-  .note { background:#2a2415; border:1px solid #5a4a1f; color:#ffe1a1; padding:12px 16px; border-radius:10px; margin:14px 0; font-size:14px; }
-  .ok { background:#12261c; border:1px solid #27593c; color:#a9e6c2; padding:12px 16px; border-radius:10px; margin:14px 0; font-size:14px; }
-  .warn { background:#2a1618; border:1px solid #6b2b2f; color:#ffc0c0; padding:12px 16px; border-radius:10px; margin:14px 0; font-size:14px; }
+  th { background:#2B2B2B; color:#F0A437; }
+  td { background:#1d1d1d; color:#e6e6e6; }
+  .note { background:#2a2415; border:1.5px solid #5a4a1f; color:#ffe1a1; padding:12px 16px; margin:14px 0; font-size:14px; }
+  .ok { background:#12261c; border:1.5px solid #27593c; color:#a9e6c2; padding:12px 16px; margin:14px 0; font-size:14px; }
+  .warn { background:#2a1618; border:1.5px solid #6b2b2f; color:#ffc0c0; padding:12px 16px; margin:14px 0; font-size:14px; }
   ul, ol { padding-left:22px; margin:8px 0; }
-  li { margin:6px 0; color:#dfe6f0; font-size:15px; }
-  .foot { color:#7a8699; font-size:12px; margin-top:40px; text-align:center; }
-  .tag { display:inline-block; background:#2d6bb3; color:#fff; border-radius:6px; padding:2px 10px; font-size:13px; margin-right:6px; }
-  .tag.new { background:#b3552d; }
-  code { background:#151e2b; color:#ffd08a; padding:1px 6px; border-radius:4px; font-size:13px; }
+  li { margin:6px 0; color:#e6e6e6; font-size:15px; }
+  .foot { color:#7a7a7a; font-size:12px; margin-top:40px; text-align:center; }
+  .tag { display:inline-block; background:#F0A437; color:#1c1c1c; padding:2px 10px; font-size:13px; font-weight:700; margin-right:6px; }
+  .tag.gray { background:#3A3A3A; color:#e6e6e6; }
+  code { background:#141414; color:#F0A437; padding:1px 6px; font-size:13px; font-family:ui-monospace,Consolas,monospace; }
   h2, h3 { page-break-after: avoid; }
   .imgbox, .step, .note, .ok, .warn { page-break-inside: avoid; }
   tr { page-break-inside: avoid; }
-  table.keep { page-break-inside: avoid; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>txhlock 答题锁屏 · 电视使用指南</h1>
-  <div class="sub">给家长看的图文操作说明 —— 孩子看一段时间电视，必须先答对题才能继续看。</div>
-  <div class="verline"><span class="tag new">v2.0</span><span class="tag">versionCode 40</span>更新日期 2026-11-05 · 适用 Android 4.3 及以上电视（小米电视 2 实机验证）</div>
+  <div class="sub">看满时间 → 全屏锁屏 → 遥控器答对题才能继续看。家长可用密码直接解锁。</div>
+  <div class="verline"><span class="tag">v3.0</span><span class="tag gray">versionCode 41</span>更新日期 2026-11-06 · 适用 Android 4.3 及以上电视（小米电视 2 实机验证）</div>
 
-  <h2>v2.0 改了什么</h2>
+  <h2>v3.0 改了什么</h2>
   <table>
     <tr><th>变化</th><th>说明</th></tr>
-    <tr><td><b>卡片式界面</b></td><td>家长设置从“一条长列表”改成<b>一屏放完的卡片仪表盘</b>：上面三张数据卡（今日已看 / 单次时长 / 连对解锁），下面四张设置卡，底部两个按钮。左右对称、间距统一、遥控器选中会放大并出现蓝色描边</td></tr>
-    <tr><td><b>弹层式设置</b></td><td>点任意卡片，从中间弹出该页设置，改完按返回键关闭，焦点自动回到刚才那张卡 —— 不需要再滚一长串列表</td></tr>
-    <tr><td><b>锁屏页重做</b></td><td>顶部进度圆点 + 中间题目卡片 + 下面 2×2 四个大选项；题目/选项过长自动缩小字号，不再裁字</td></tr>
-    <tr><td><b>Android 4.3 全兼容</b></td><td>修掉了 4.3 上会退化/崩溃的主题与系统库问题；4K 电视按屏幕宽度自动等比放大，不会缩成一小块</td></tr>
-    <tr><td><b>一句话自动安装</b></td><td>新增一键安装器：自动找 adb、扫描局域网找电视、安装、开无障碍、保持常亮；豆包 Agent 一句话即可全自动完成</td></tr>
-    <tr><td><b>逻辑修复</b></td><td>每日上限耗尽时答对不再“假解锁”；返回键双保险；家长验证 8 分钟内免重复输入；权限页不再每次启动强跳</td></tr>
-    <tr><td><b>主页键状态如实显示</b></td><td>真收到并吞掉过主页键才显示「已物理拦截」；部分小米固件不派发 HOME 事件时显示「秒级抢回」，并按 0.8 秒节奏抢回</td></tr>
+    <tr><td><b>悬浮层锁屏</b></td><td>锁屏改成盖在所有应用之上的系统悬浮层：孩子按遥控器<b>主页键，桌面完全不出现</b>，不是"闪一下再抢回"。没有悬浮窗权限时自动退回原来的 Activity 锁屏。</td></tr>
+    <tr><td><b>控制台界面</b></td><td>零圆角、1.5dp 细线、单一琥珀强调色、等宽数字。选中/聚焦时整块填琥珀、文字变黑，隔着 3 米也看得清。</td></tr>
+    <tr><td><b>教材同步题库</b></td><td>新增人教版 / 北师大版 / 苏教版 / 外研版 / 译林版题库，共 1113 道；按「版本 + 年级」优先出题，内置题量 2000+。</td></tr>
+    <tr><td><b>诊断如实显示</b></td><td>「悬浮层覆盖 / 已物理拦截 / 秒级抢回」三档，不再虚报"已拦截"。</td></tr>
+    <tr><td><b>一句话安装</b></td><td>安装器自动找 adb、扫局域网找电视、装应用、开无障碍、授权悬浮层、保持常亮。</td></tr>
   </table>
 
-  <h2>一、安装与升级</h2>
+  <h2>一、安装</h2>
 
-  <h3>方式一：一键安装器（推荐）</h3>
+  <h3>方式 A：双击一键安装器（推荐）</h3>
   <div class="step">
     <ol>
-      <li>把交付目录里的 <b>安装器</b> 文件夹拷到电脑（和电视连同一个路由器/WiFi）。</li>
-      <li>双击 <b>一键安装.bat</b>。它会自动：找 adb → 扫描局域网找电视 → 安装 APK → 打开无障碍 → 设置常亮 → 启动应用。</li>
-      <li>如果提示找不到电视：按窗口里的 4 步在电视上打开 ADB 调试，它会自己继续等。</li>
+      <li>把 <b>安装器</b> 文件夹拷到电脑（电脑和电视同一个路由器）。</li>
+      <li>双击 <b>一键安装.bat</b>，等它显示「安装完成」。</li>
+      <li>如果提示找不到电视：按窗口里的 4 步在电视上打开 ADB 调试，它会继续等。</li>
     </ol>
   </div>
   <div class="step"><b>电视上开 ADB 的 4 步（只做一次）：</b>
     <ol>
-      <li>遥控器按「设置」→ 进「关于」。</li>
-      <li>选中「产品型号」，连按 5~7 次 OK，直到提示「已进入开发者模式」。</li>
-      <li>返回「设置」→「开发者选项」→ 打开「ADB 调试 / USB 调试」。</li>
-      <li>电视弹出「允许 USB 调试吗」→ 选「始终允许」→ 确定。</li>
+      <li>设置 → 关于 → 选中「产品型号」连按 5~7 次，提示「已进入开发者模式」。</li>
+      <li>返回 设置 → 开发者选项 → 打开「ADB 调试 / USB 调试」。</li>
+      <li>电视弹出「允许 USB 调试吗」→ 选「始终允许」。</li>
+      <li>回到电脑，等安装器自动继续。</li>
     </ol>
   </div>
 
-  <h3>方式二：让豆包全自动装</h3>
-  <div class="step">电脑打开<b>豆包电脑版 → Agent 模式</b>，把 <code>发给豆包的提示词.txt</code> 整段发过去。它会自己下载安装器、找电视、装好并配置；找不到电视时一步一步告诉你遥控器点哪里。</div>
+  <h3>方式 B：让豆包全自动装</h3>
+  <div class="step">电脑打开豆包电脑版 → Agent 模式，把 <code>发给豆包的提示词.txt</code> 整段发过去。</div>
 
-  <h3>方式三：U 盘安装（不用电脑）</h3>
-  <div class="step">
-    <ol>
-      <li>把 <code>txhlock_v2.0.apk</code> 拷到 U 盘，插到电视。</li>
-      <li>电视打开文件管理器 → 找到 APK → 安装（提示未知来源时到 设置 → 安全 里允许一次）。</li>
-      <li>装好桌面出现 <b>答题锁屏</b> 图标；U 盘方式需手动到 设置 → 无障碍 打开「答题锁屏」。</li>
-    </ol>
-  </div>
-  <div class="ok"><b>升级：</b>直接覆盖安装即可（同一调试签名），<b>设置、家长密码、题库全部保留</b>。</div>
-  <div class="warn"><b>升级后必做一次：</b>到 <b>设置 → 无障碍</b> 找到「答题锁屏」，把开关<b>关掉、再打开一次</b>。小米电视覆盖安装后会保留服务名字却不再绑定它 —— 表现就是“设置页看着已开启，主页键却能回桌面”。</div>
+  <h3>方式 C：U 盘</h3>
+  <div class="step">把 <code>txhlock_v3.0.apk</code> 拷进 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「显示在其他应用上层」。</div>
 
-  <h2>二、家长设置（新界面）</h2>
-  <p>打开应用，先输入家长密码（默认 <b>1234</b>）。键盘是应用内置的，遥控器方向键移动、OK 输入。</p>
-  <div class="imgbox"><img src="截图/v2.0-家长验证.png" alt="家长验证"><div class="cap">图1 · 家长验证：方向键选数字，选中键变蓝，输满 4 位自动校验</div></div>
-  <p>密码正确后进入卡片式主页：</p>
-  <div class="imgbox"><img src="截图/v2.0-家长设置.png" alt="家长设置主页"><div class="cap">图2 · 一屏放完：顶部守护开关 + 三张数据卡 + 四张设置卡 + 底部两个按钮</div></div>
-  <div class="step"><b>遥控器怎么用：</b>方向键移动焦点（卡片放大 + 蓝色描边），按 <b>OK</b> 进入；弹层里按<b>返回键</b>关闭。所有改动即时保存，没有“保存”按钮。</div>
+  <div class="ok"><b>升级：</b>覆盖安装即可，设置/密码/题库都保留。升级后如果主页键失效，按「帮助/诊断」里的「去修复」把无障碍关一次再开。</div>
 
+  <h3>装完必做 4 件事</h3>
   <table>
-    <tr><th>卡片</th><th>能改什么</th></tr>
-    <tr><td>观看时长</td><td>单次连续观看（5~120 分钟）、每日累计上限（0=不限）、关机/待机重置阈值（0=关闭）</td></tr>
-    <tr><td>答题规则</td><td>连续答对题数（1~10）、孩子年级（1~9）、13 个题型多选</td></tr>
-    <tr><td>题库管理</td><td>已加载题数、SMB 同步、重新加载、导出内置题库、删除本地题库</td></tr>
-    <tr><td>家长与防绕过</td><td>修改密码、开机先答题、无障碍保活状态、打开系统设置、还原并卸载</td></tr>
-    <tr><td>帮助与诊断</td><td>主页键拦截状态、修复步骤、遥控器操作说明、题库/守护状态</td></tr>
-    <tr><td>右上角「● 守护中」</td><td>点一下可停用/开启监控</td></tr>
+    <tr><th>#</th><th>做什么</th><th>在哪</th></tr>
+    <tr><td>1</td><td>打开「自启动」</td><td>设置 → 应用 → 答题锁屏 → 自启动</td></tr>
+    <tr><td>2</td><td>打开「无障碍」</td><td>设置 → 无障碍 → 答题锁屏</td></tr>
+    <tr><td>3</td><td>允许「悬浮层」</td><td>设置 → 应用 → 答题锁屏 → 显示在其他应用上层（4.3 安装即授权）</td></tr>
+    <tr><td>4</td><td>关掉「ADB 调试」</td><td>设置 → 开发者选项 → ADB 调试</td></tr>
   </table>
 
-  <div class="imgbox"><img src="截图/v2.0-观看时长.png" alt="观看时长"><div class="cap">图3 · 观看时长弹层：加减即保存；下面还有每日上限与关机重置</div></div>
-  <div class="imgbox"><img src="截图/v2.0-答题规则.png" alt="答题规则"><div class="cap">图4 · 答题规则弹层：连对题数、年级、题型（✓ 表示启用，再点取消）</div></div>
+  <h2>二、家长控制台</h2>
+  <p>打开应用（桌面图标「答题锁屏」），先输家长密码（默认 <b>1234</b>）。</p>
+  <div class="imgbox"><img src="截图/v3.0-家长验证.png" alt="家长验证"><div class="cap">图1 · 家长验证：方向键选数字，选中的键整块填琥珀，输满 4 位自动校验</div></div>
+  <p>密码正确后进入控制台：</p>
+  <div class="imgbox"><img src="截图/v3.0-家长设置.png" alt="家长设置"><div class="cap">图2 · 一屏放完：三张数据块 + 四张设置块 + 底部两个按钮</div></div>
+  <div class="step"><b>遥控器：</b>方向键移动，选中的方块整块填琥珀、文字变黑；OK 进入；返回键关闭弹层。</div>
 
-  <h3>「开机先答题」是什么意思</h3>
-  <p><b>开</b>（默认）：每次电视真正开机都先锁一次，必须答题才能看 —— 孩子靠重启电视绕不过去。<br>
-     <b>关</b>：重启沿用重启前的状态（重启前锁着就还锁着，没锁就接着计时）。</p>
+  <table>
+    <tr><th>方块</th><th>能改什么</th></tr>
+    <tr><td>今日已看</td><td>今日累计观看分钟数（点开可调时长）</td></tr>
+    <tr><td>单次连续观看</td><td>5~120 分钟，到点锁屏，答对后重新计时</td></tr>
+    <tr><td>连对解锁</td><td>连续答对几题才能解锁</td></tr>
+    <tr><td>观看时长</td><td>单次 / 每日上限 / 关机重置阈值</td></tr>
+    <tr><td>答题规则</td><td>连对题数、年级、<b>教材版本</b>、13 个题型多选</td></tr>
+    <tr><td>题库管理</td><td>题量统计、SMB 同步、重新加载、导出、删除本地题库</td></tr>
+    <tr><td>家长与防绕过</td><td>改密码、开机先答题、锁屏方式/悬浮层权限、系统设置、卸载</td></tr>
+  </table>
 
-  <h2>三、孩子怎么用（看电视流程）</h2>
-  <p>看满「单次连续观看」的时长，电视自动弹出全屏答题锁屏：</p>
-  <div class="imgbox"><img src="截图/v2.0-锁屏答题.png" alt="锁屏答题"><div class="cap">图5 · 锁屏页：顶部进度圆点、中间题目卡、下面 2×2 四个选项</div></div>
+  <div class="imgbox"><img src="截图/v3.0-答题规则.png" alt="答题规则"><div class="cap">图3 · 答题规则：连对题数、年级、教材版本（人教版/北师大/苏教版/外研版/译林版/通用）</div></div>
+
+  <h2>三、锁屏与答题</h2>
+  <p>看满设定时长，屏幕会被悬浮层锁屏盖住：</p>
+  <div class="imgbox"><img src="截图/v3.0-锁屏答题.png" alt="锁屏答题"><div class="cap">图4 · 顶部进度段、中间题目方块、下面 2×2 选项；选中的选项整块填琥珀</div></div>
   <ul>
-    <li>方向键选答案，按 <b>OK</b> 确认；有数字键的遥控器也可按 <b>1~4</b> 直接作答。</li>
-    <li><b>答对</b>：绿框 +「✓ 答对了」，顶部进度圆点点亮一颗。</li>
-    <li><b>答错</b>：红框标出你选的，同时把正确项标绿并显示「✗ 正确答案是 B.xxx」，进度清零重来。</li>
-    <li>连对满设定题数 → 自动解锁，回到原来的画面继续看。</li>
+    <li>方向键选答案，OK 确认；数字键 1~4 也能直接作答。</li>
+    <li>答对：绿框 +「✓ 答对了」，顶部进度点亮一段。</li>
+    <li>答错：红框 + 正确答案，并把正确项标绿，进度清零。</li>
+    <li><b>锁屏时按主页键、返回键都没有反应</b>，桌面不会出现。</li>
+    <li>家长随时可按【菜单键】→ 输密码解锁。</li>
   </ul>
-  <div class="imgbox"><img src="截图/v2.0-家长密码.png" alt="家长密码"><div class="cap">图6 · 家长随时可解锁：锁屏页按【菜单键】→ 输入家长密码</div></div>
-  <div class="note">每日额度已用完时，孩子答题<b>无法</b>解锁，会提示「今日观看时间已用完，请家长输入密码」；家长输密码后可当日豁免。</div>
+  <div class="note">每日上限用完时，孩子答题无法解锁，会提示「今日观看时间已用完，请家长输入密码」；家长输密码后可当日豁免。</div>
 
-  <h2>四、题库（内置 958 题，装完即用）</h2>
-  <div class="step">应用已内置 <b>小学 1~6 年级 + 初中 7~9 年级，共 958 道题 / 42 个知识段</b>，覆盖语数英 + 物化生史地政。装完就能做题，<b>不需要联网、不需要放任何文件</b>。</div>
-  <h3>自建题库（可选）</h3>
-  <div class="step">在电视 <b>/sdcard/Download/txhlock/</b> 放 .txt，一行一题：<br>
-    <b>[科目@g年级]</b> 段名（如 <code>[chinese@g2]</code>）<br>
-    <b>题干|答案|干扰项1;干扰项2;干扰项3</b><br>
-    放好后在「题库管理」里点【重新加载题库】即可。</div>
-  <div class="step"><b>内置题库只读：</b>没有删除/覆盖入口。本地与 SMB 题库只能<b>加题</b>，同段落同题干自动跳过 —— 永远顶不掉内置题。</div>
-  <div class="note"><b>Android 4.3 的 SMB：</b>4.3 系统较老，SMB 组件可能不可用，界面会给出提示。更稳的做法是用 U 盘把 txt 放进 <b>/sdcard/Download/txhlock/</b>。</div>
-
-  <h2>五、主页键拦截：三档状态</h2>
-  <div class="imgbox"><img src="截图/v2.0-帮助诊断.png" alt="帮助与诊断"><div class="cap">图7 · 「帮助与诊断」页会如实显示当前状态与修复步骤</div></div>
+  <h2>四、教材同步题库</h2>
   <table>
-    <tr><th>显示</th><th>意思</th><th>要修吗</th></tr>
-    <tr><td>✅ 已物理拦截</td><td>主页键在系统分发前被吞掉，桌面完全不出现</td><td>不用</td></tr>
-    <tr><td>⚠ 秒级抢回</td><td>这台电视固件不把 HOME 事件发给应用，锁屏 0.8 秒内盖回来</td><td>通常不用</td></tr>
-    <tr><td>❌ 未生效</td><td>无障碍服务被系统解绑了</td><td>要修</td></tr>
+    <tr><th>版本</th><th>科目</th><th>年级</th><th>题量</th></tr>
+    <tr><td>人教版</td><td>语文 / 数学 / 英语</td><td>1-9 / 1-9 / 3-9</td><td>501</td></tr>
+    <tr><td>北师大版</td><td>数学</td><td>1-6</td><td>96</td></tr>
+    <tr><td>苏教版</td><td>语文 / 数学</td><td>1-6</td><td>178</td></tr>
+    <tr><td>外研版</td><td>英语</td><td>3-9</td><td>193</td></tr>
+    <tr><td>译林版</td><td>英语</td><td>3-6</td><td>169</td></tr>
+    <tr><td>通用</td><td>原有题库</td><td>1-9</td><td>958</td></tr>
   </table>
-  <div class="step"><b>修复：</b>「帮助与诊断」→【去修复主页键拦截】→ 在系统无障碍页把「答题锁屏」<b>关掉再打开</b> → 返回看状态。</div>
+  <div class="step">在「答题规则 → 教材版本」切换；切换后语文/数学/英语优先抽该版本对应年级的题，题量不足自动并入低年级，不会超纲。口算/认字/古诗不受版本影响。</div>
+  <div class="note"><b>自建题库：</b>把 txt 放到电视 <code>/sdcard/Download/txhlock/</code>，格式 <code>[科目@版本@g年级]</code> 换行 <code>题干|答案|干扰1;干扰2;干扰3</code>，然后点「重新加载题库」。</div>
 
-  <h2>六、常见问题</h2>
+  <h2>五、常见问题</h2>
   <ul>
-    <li><b>装完提示「签名不同，不能覆盖」？</b>电视上装过别的签名版本。为不丢设置，安装器不会自动卸载；请先在电视上卸载旧版，再重装。</li>
-    <li><b>找不到电视？</b>确认电脑和电视同一个路由器；确认 ADB 调试已打开；也可以直接指定 IP：<code>一键安装.bat -TvIp 192.168.50.139</code>。</li>
-    <li><b>监控已开启但显示“未锁定”？</b>正常，指此刻没在锁屏，等看满时长才会锁。</li>
-    <li><b>重启电视能绕过吗？</b>「开机先答题」开着时不能：每次真正开机都先锁一次。</li>
-    <li><b>怎么确认装的是新版？</b>家长设置右上角显示 <b>v2.0</b>；系统应用信息里 versionCode 是 <b>40</b>。</li>
-    <li><b>4K 电视字会很小吗？</b>不会。v2.0 会按屏幕宽度把界面等比放大到合适大小。</li>
+    <li><b>主页键还能回桌面？</b>先看「帮助/诊断」的主页键状态：显示「悬浮层覆盖」最好；显示「秒级抢回」说明缺悬浮窗权限，到系统里允许「显示在其他应用上层」即可。</li>
+    <li><b>提示签名冲突？</b>电视上装过别的签名版本。为不丢设置，安装器不会自动卸载；请先在电视上卸载旧版再装。</li>
+    <li><b>找不到电视？</b>确认同一路由器、ADB 已打开；也可以 <code>一键安装.bat -TvIp 192.168.50.139</code> 指定 IP。</li>
+    <li><b>怎么确认版本？</b>控制台右上角显示 <b>v3.0</b>；系统应用信息里 versionCode 是 <b>41</b>。</li>
+    <li><b>4K 电视字会小吗？</b>不会，v3.0 按屏幕宽度把整个界面等比放大。</li>
     <li><b>卸载后桌面会乱吗？</b>不会。本应用不接管桌面、不改系统设置；先到无障碍关掉它，再卸载即可完全恢复。</li>
   </ul>
 
-  <div class="foot">txhlock · 答题锁屏守护 v2.0（versionCode 40）· 内置 958 道小学 + 初中多学科题库（只读）<br>本指南截图来自小米电视 2（Android 4.3，1920×1080）实机，仅供参考</div>
+  <div class="foot">txhlock · 答题锁屏守护 v3.0（versionCode 41）· 内置 2000+ 道题（通用 + 教材同步）<br>截图来自小米电视 2（Android 4.3，1920×1080）实机</div>
 </div>
 </body>
 </html>

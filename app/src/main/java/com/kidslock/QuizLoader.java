@@ -234,12 +234,32 @@ public class QuizLoader {
      * 都没有则返回 null —— 调用方应跳过这个题型（不出超纲题）。
      */
     public List<String[]> getForGrade(String subject, int grade) {
+        return getForGrade(subject, null, grade);
+    }
+
+    /**
+     * 按「科目 + 教材版本 + 年级」取题（v3.0）。
+     * 段名格式：subject@edition@gN，例如 math@rj@g3 = 人教版三年级数学。
+     * 查找顺序：该版本该年级 → 更低年级补足 → 该版本无题时退回通用版本。
+     *
+     * @param edition 教材版本代码（rj/bs/sj/wy/yl）；null 或空 = 通用
+     */
+    public List<String[]> getForGrade(String subject, String edition, int grade) {
         List<String[]> out = new ArrayList<>();
         int top = Math.max(1, Math.min(9, grade));
-        for (int g = top; g >= 1; g--) {
-            List<String[]> l = pool.get(subject + "@g" + g);
-            if (l != null) out.addAll(l);
-            if (out.size() >= MIN_GRADE_POOL) break;
+        if (edition != null && edition.length() > 0) {
+            for (int g = top; g >= 1; g--) {
+                List<String[]> l = pool.get(subject + "@" + edition + "@g" + g);
+                if (l != null) out.addAll(l);
+                if (out.size() >= MIN_GRADE_POOL) break;
+            }
+        }
+        if (out.isEmpty()) {
+            for (int g = top; g >= 1; g--) {
+                List<String[]> l = pool.get(subject + "@g" + g);
+                if (l != null) out.addAll(l);
+                if (out.size() >= MIN_GRADE_POOL) break;
+            }
         }
         if (out.isEmpty()) {
             List<String[]> l = pool.get(subject);

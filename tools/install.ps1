@@ -34,7 +34,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "2.0"
+$script:Version = "3.0"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 
@@ -180,7 +180,7 @@ if (-not $apk) {
     Log "  本地没有安装包，正在从网上下载…" "Yellow"
     $dest = Join-Path $env:TEMP "txhlock_v$script:Version.apk"
     $urls = @(
-        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0/apk/txhlock_v$script:Version.apk",
+        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v3.0/apk/txhlock_v$script:Version.apk",
         "https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v$script:Version/txhlock_v$script:Version.apk"
     )
     foreach ($u in $urls) {
@@ -427,6 +427,25 @@ try {
 } catch {
     Log "  ! 无障碍设置失败：$($_.Exception.Message)" "Yellow"
 }
+
+# 5.1.5 悬浮层权限（Android 6+ 需要在系统里授权；4.3 安装即授予）
+try {
+    $sdkNum = 0
+    [int]::TryParse($sdk.Trim(), [ref]$sdkNum) | Out-Null
+    if ($sdkNum -gt 0 -and $sdkNum -lt 23) {
+        Log "  ✓ 悬浮层权限：Android 4.3~5.1 安装即授权，无需额外操作" "Green"
+    } else {
+        & $adb -s $target shell "appops set com.kidslock SYSTEM_ALERT_WINDOW allow" 2>&1 | Out-Null
+        Start-Sleep -Milliseconds 500
+        $op = (& $adb -s $target shell "appops get com.kidslock SYSTEM_ALERT_WINDOW" 2>$null | Out-String)
+        if ($op -match "allow") {
+            Log "  ✓ 悬浮层权限：已授权（主页键切桌面会被直接盖住）" "Green"
+        } else {
+            Log "  · 悬浮层权限：请在电视上手动允许「显示在其他应用上层」" "Yellow"
+            Log "    设置 → 应用 → 答题锁屏 → 特殊权限 / 悬浮窗" "White"
+        }
+    }
+} catch { }
 
 # 5.2 电视保持常亮（装好后不黑屏，ADB 也不会因为待机掉线）
 try {

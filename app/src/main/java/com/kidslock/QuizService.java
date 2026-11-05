@@ -86,10 +86,12 @@ public class QuizService extends Service {
             if (now - lastKeyFilterCheckMs >= KEY_FILTER_RECHECK_MS) {
                 // 只有「真的拦住过一次主页键」才敢用 3 秒慢轮询；
                 // 小米电视常常 flag 有、事件不来，这时必须保持 0.8 秒快抢。
-                keyFilterOk = KeyFilter.isEffective(QuizService.this);
+                keyFilterOk = KeyFilter.isEffective(QuizService.this)
+                        || LockOverlay.canShow(QuizService.this);
                 lastKeyFilterCheckMs = now;
             }
-            if (prefs != null && prefs.isLocked() && !LockScreenActivity.sForeground) {
+            if (prefs != null && prefs.isLocked() && !LockScreenActivity.sForeground
+                    && !LockOverlay.isShowing()) {
                 // 用 launchLockNow 而不是 launchLock：后者有 1.5 秒节流，会把 0.8 秒的节奏拖慢
                 Keeper.launchLockNow(QuizService.this);
             }

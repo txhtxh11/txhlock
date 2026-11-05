@@ -285,7 +285,8 @@ public class QuizEngine {
      */
     private QuizQuestion subjectQuestion(String subject, String[][] builtin, String label, String askLabel, int grade) {
         List<String[]> pool = new ArrayList<>();
-        List<String[]> graded = loader.getForGrade(subject, grade);
+        String edition = prefs.textbook();
+        List<String[]> graded = loader.getForGrade(subject, edition, grade);
         if (graded != null) pool.addAll(graded);
         if (builtin != null) {
             for (int i = 0; i < builtin.length; i++) {
@@ -299,7 +300,9 @@ public class QuizEngine {
         String[] item = pool.get(rnd.nextInt(pool.size()));
         QuizQuestion q = new QuizQuestion();
         q.type = subject;
-        q.subLabel = label + "·" + stageName(grade);
+        q.subLabel = ("ty".equals(edition) || edition == null)
+                ? (label + "·" + stageName(grade))
+                : (label + "·" + Prefs.editionName(edition) + "·" + stageName(grade));
         q.question = item[0] + "（选" + askLabel + "）";
         fillOptions(q, pool, item);
         return q;

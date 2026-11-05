@@ -59,6 +59,11 @@ public final class Keeper {
     }
 
     private static void startLockActivity(Context c) {
+        // 优先用系统悬浮层：桌面被主页键切到前台时，它仍然盖在最上面，孩子看不到桌面
+        try {
+            if (!LockOverlay.isShowing() && LockOverlay.show(c)) return;
+        } catch (Throwable ignored) {
+        }
         try {
             Intent i = new Intent(c, LockScreenActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
