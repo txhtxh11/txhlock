@@ -38,6 +38,14 @@
 > 推荐 **方式一**：在电脑上让豆包（Agent 模式）自己下载、自己连电视、自己装好——3 步，不用 U 盘、不用装工具、不用懂命令行。
 > 手边没电脑、或不想折腾，直接用 **方式二：U 盘安装**，那个不用电脑也不用联网。
 
+> **安装包下载地址（2026-11 实测，国内不翻墙可用）**
+> 1. 首选：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/apk/txhlock_v1.9.1.apk
+>    （jsDelivr 的 4 个 CDN 节点实测全部 200，速度约 150-200KB/s，1.75MB 十秒左右）
+> 2. 备用：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.1/txhlock_v1.9.1.apk
+> 3. 不要用 GitHub 官方直链：`github.com` 和 `raw.githubusercontent.com` **国内直连会直接连接失败**，这个仓库地址本身在国内也打不开，只是留着给能翻墙的人看源码
+>
+> 文件大小 **1,751,611 字节**，MD5 `383aaa59b6044115acd279eff61dfb89`。两个链接下载的包 md5 完全一致。
+
 ### 方式一（推荐 · 小白首选）：让电脑上的豆包帮你装
 
 **先确认这 3 条**
@@ -70,7 +78,7 @@
 #### 第 3 步：把这一句话发给它（就一句，不用改）
 
 ```text
-帮我把我家电视装上这个应用（小孩看的答题锁屏）：https://github.com/txhtxh11/txhlock 我是小白什么都不懂，需要我配合的地方你直接问我，装完告诉我成功没有。
+帮我把我家电视装上这个应用（小孩看的答题锁屏），安装包直接从这个链接下载：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/apk/txhlock_v1.9.1.apk 我是小白什么都不懂，需要我配合的地方你直接问我，装完告诉我成功没有。
 ```
 
 就这一句。剩下的交给它：它会自己找电视、自己装 adb，**不懂的地方会来问你，你照实回答就行。**
@@ -79,6 +87,7 @@
 
 ```text
 补充说明（如果豆包还需要更多信息，可以一起发）：
+- 如果上面那个安装包链接下不动或很慢，换成这个（一样能下，国内不翻墙可用）：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.1/txhlock_v1.9.1.apk
 - 电视是小米电视，跟这台电脑连同一个 WiFi
 - 我不知道电视的 IP：你可以自己扫描局域网里开着 5555 端口的设备，那就是电视；扫到多台先问我是哪台
 - 电脑上不一定装了 adb，没有你自己装（下载不来找 winget install Google.PlatformTools）
