@@ -317,13 +317,13 @@ public class QuizPanel {
         pinLayer.setClickable(true);
         pinLayer.setFocusable(true);
 
-        LinearLayout card = Ui.dialogPanel(ctx);
-        TextView title = Ui.text(ctx, "家长密码", 24, Ui.color(ctx, R.color.text_main), true);
+        LinearLayout card = Ui.pinPanel(ctx);
+        TextView title = Ui.text(ctx, "家长密码（" + prefs.pin().length() + " 位）", 26, 0xFFDDDDDD, true);
         title.setGravity(Gravity.CENTER);
         card.addView(title);
 
         final PinPad[] padRef = new PinPad[1];
-        PinPad pad = new PinPad(ctx, "请输入 " + prefs.pin().length() + " 位家长密码",
+        PinPad pad = new PinPad(ctx, "",
                 prefs.pin().length(), new PinPad.Listener() {
             @Override public void onEntered(String s) {
                 if (s.equals(prefs.pin())) {

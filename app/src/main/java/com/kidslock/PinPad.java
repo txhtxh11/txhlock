@@ -76,7 +76,7 @@ public class PinPad extends LinearLayout {
 
         statusView = new TextView(c);
         statusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        statusView.setTextColor(Ui.color(c, R.color.text_dim));
+        statusView.setTextColor(0xFFDDDDDD);
         statusView.setGravity(Gravity.CENTER);
         statusView.setIncludeFontPadding(false);
         statusView.setMinHeight(Ui.dp(c, 20));
@@ -168,8 +168,8 @@ public class PinPad extends LinearLayout {
                 b.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
                 b.setGravity(Gravity.CENTER);
                 b.setIncludeFontPadding(false);
-                TableRow.LayoutParams lp = new TableRow.LayoutParams(0, Ui.dp(c, 50), 1f);
-                lp.setMargins(Ui.dp(c, 4), Ui.dp(c, 4), Ui.dp(c, 4), Ui.dp(c, 4));
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(0, Ui.dp(c, 56), 1f);
+                lp.setMargins(Ui.dp(c, 6), Ui.dp(c, 6), Ui.dp(c, 6), Ui.dp(c, 6));
                 b.setLayoutParams(lp);
                 b.setClickable(true);
                 b.setOnClickListener(new OnClickListener() {

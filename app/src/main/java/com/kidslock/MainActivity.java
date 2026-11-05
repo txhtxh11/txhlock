@@ -489,18 +489,13 @@ public class MainActivity extends Activity {
         gateLayer.setClickable(true);
         gateLayer.setFocusable(true);
 
-        LinearLayout card = Ui.dialogPanel(this);
-        TextView title = Ui.text(this, "家长验证", 26, Ui.color(this, R.color.text_main), true);
+        LinearLayout card = Ui.pinPanel(this);
+        TextView title = Ui.text(this, "家长密码（" + prefs.pin().length() + " 位）", 26, 0xFFDDDDDD, true);
         title.setGravity(Gravity.CENTER);
         card.addView(title);
-        TextView sub = Ui.text(this, "输入家长密码后进入设置（默认 1234）", 18,
-                Ui.color(this, R.color.text_dim), false);
-        sub.setGravity(Gravity.CENTER);
-        sub.setPadding(0, Ui.dp(this, 6), 0, Ui.dp(this, 8));
-        card.addView(sub);
 
         final PinPad[] padRef = new PinPad[1];
-        PinPad pad = new PinPad(this, "请输入 " + prefs.pin().length() + " 位家长密码",
+        PinPad pad = new PinPad(this, "",
                 prefs.pin().length(), new PinPad.Listener() {
             @Override public void onEntered(String s) {
                 if (s.equals(prefs.pin())) {
@@ -567,7 +562,7 @@ public class MainActivity extends Activity {
         final int[] stage = {0};
         final String[] newPin = {""};
 
-        LinearLayout panel = Ui.dialogPanel(this);
+        LinearLayout panel = Ui.pinPanel(this);
         TextView title = Ui.text(this, "修改家长密码", 24, Ui.color(this, R.color.text_main), true);
         title.setGravity(Gravity.CENTER);
         panel.addView(title);
@@ -857,12 +852,17 @@ public class MainActivity extends Activity {
 
     @Override protected void onStart() {
         super.onStart();
-        if (authed && leftAtMs > 0 && System.currentTimeMillis() - leftAtMs > 8L * 60L * 1000L) {
-            authed = false;
-        }
+        // 本次进入设置后不再重复验证；菜单键在设置页不响应，只有锁屏时才弹家长验证
         if (!authed && !gateOpen && prefs != null && !prefs.isLocked()) {
             showGate();
         }
+    }
+
+    @Override public boolean dispatchKeyEvent(android.view.KeyEvent event) {
+        if (authed && event.getKeyCode() == android.view.KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override protected void onStop() {

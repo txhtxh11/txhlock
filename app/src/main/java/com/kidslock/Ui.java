@@ -241,4 +241,13 @@ public final class Ui {
         l.setPadding(p, dp(c, 24), p, dp(c, 24));
         return l;
     }
+
+    /** 1.9.1 的家长密码面板：深灰 #1F1F1F、直角、无多余装饰。 */
+    public static LinearLayout pinPanel(Context c) {
+        LinearLayout l = column(c);
+        l.setBackgroundResource(R.drawable.bg_pin_panel);
+        int p = dp(c, 22);
+        l.setPadding(p, dp(c, 18), p, dp(c, 18));
+        return l;
+    }
 }
