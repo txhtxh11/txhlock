@@ -15,23 +15,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * 答题面板控制器（v3.0）。
+ * 答题面板控制器（v4.0 经典版）。
  *
  * 同一个面板既能放进 Activity（LockScreenActivity），也能放进系统悬浮层
- * （LockOverlay）—— 两种宿主共用一套出题、判题、解锁逻辑，行为完全一致。
+ * （LockOverlay）—— 两种宿主共用一套出题、判题、解锁逻辑。
  *
- * 悬浮层是解决"主页键回桌面闪一下"的关键：系统桌面启动后，悬浮层仍然盖在最上面，
- * 孩子根本看不到桌面。Activity 只作为没有悬浮窗权限时的兜底。
+ * v4 的答题界面回到 1.9.1：四个答案排成一行，遥控器只需要左右移动；
+ * 选中项蓝底 + 白字 + 白框，答对绿框、答错红框。
  */
 public class QuizPanel {
 
     public interface Host {
-        /** 解锁成功（viaParent=true 表示家长密码解锁）。宿主负责关闭自己。 */
         void onUnlocked(boolean viaParent);
-
-        /** 面板发现已经不需要锁屏（例如跨夜清零），宿主应静默关闭。 */
         void onClosed();
-
         Context context();
     }
 
@@ -42,11 +38,8 @@ public class QuizPanel {
 
     private QuizEngine engine;
     private View root;
-    private TextView tvQuestion, tvProgress, tvType, tvHint, tvFeedback;
-    private LinearLayout dotsRow;
-    private final LinearLayout[] optViews = new LinearLayout[4];
+    private TextView tvQuestion, tvProgress, tvHint, tvFeedback;
     private final TextView[] optTexts = new TextView[4];
-    private final TextView[] optLetters = new TextView[4];
     private final String[] OPT_LETTERS = {"A", "B", "C", "D"};
 
     private QuizQuestion current;
@@ -55,7 +48,6 @@ public class QuizPanel {
     private boolean answering = false;
     private boolean started = false;
 
-    /** 家长密码浮层（不再用系统 Dialog，悬浮层里也能用）。 */
     private FrameLayout pinLayer;
     private boolean pinOpen = false;
 
@@ -76,50 +68,48 @@ public class QuizPanel {
         this.prefs = new Prefs(ctx);
     }
 
-    /** 构建视图（只做一次）。 */
     public View createView() {
         if (root != null) return root;
         LayoutInflater inf = LayoutInflater.from(ctx);
         root = inf.inflate(R.layout.activity_lock, null, false);
         tvQuestion = (TextView) root.findViewById(R.id.tvQuestion);
         tvProgress = (TextView) root.findViewById(R.id.tvProgress);
-        tvType = (TextView) root.findViewById(R.id.tvType);
         tvHint = (TextView) root.findViewById(R.id.tvHint);
         tvFeedback = (TextView) root.findViewById(R.id.tvFeedback);
-        dotsRow = (LinearLayout) root.findViewById(R.id.dots);
+
+        int[] ids = {R.id.opt0, R.id.opt1, R.id.opt2, R.id.opt3};
+        for (int i = 0; i < 4; i++) {
+            optTexts[i] = (TextView) root.findViewById(ids[i]);
+            final int idx = i;
+            optTexts[i].setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onSelect(idx);
+                }
+            });
+        }
         if (root instanceof KeyRoot) {
+            ((KeyRoot) root).setFocusTarget(optTexts[0]);
             ((KeyRoot) root).setKeyHandler(new KeyRoot.KeyHandler() {
                 @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
                     return QuizPanel.this.onKeyDown(keyCode, event);
                 }
             });
         }
-
-        int[] ids = {R.id.opt0, R.id.opt1, R.id.opt2, R.id.opt3};
-        int[] textIds = {R.id.optText0, R.id.optText1, R.id.optText2, R.id.optText3};
-        int[] letterIds = {R.id.optLetter0, R.id.optLetter1, R.id.optLetter2, R.id.optLetter3};
-        for (int i = 0; i < 4; i++) {
-            optViews[i] = (LinearLayout) root.findViewById(ids[i]);
-            optTexts[i] = (TextView) root.findViewById(textIds[i]);
-            optLetters[i] = (TextView) root.findViewById(letterIds[i]);
-            final int idx = i;
-            optViews[i].setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    onSelect(idx);
-                }
-            });
-        }
         return root;
     }
 
-    /** 开始出题（视图已 attach 后调用）。 */
     public void start() {
         if (started) return;
         started = true;
         engine = new QuizEngine(ctx, prefs);
         showNextQuestion();
         updateProgressUI();
-        if (optViews[0] != null) optViews[0].requestFocus();
+        if (optTexts[0] != null) optTexts[0].requestFocus();
+        handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                if (optTexts[0] != null) optTexts[0].requestFocus();
+            }
+        }, 250);
         handler.postDelayed(stateWatcher, 1000);
     }
 
@@ -141,37 +131,39 @@ public class QuizPanel {
     private void showNextQuestion() {
         current = engine.nextQuestion();
         tvQuestion.setText(current.question);
-        tvType.setText(current.subLabel == null ? "答题" : current.subLabel);
         applyQuestionSize(current.question);
+        // 四个答案用同一个字号（取最长的那条），整行看起来才整齐
+        int maxLen = 0;
+        for (int i = 0; i < 4; i++) maxLen = Math.max(maxLen, current.options[i].length() + 2);
+        float rowSize = optionSize(maxLen);
         for (int i = 0; i < 4; i++) {
-            optViews[i].setBackgroundResource(R.drawable.bg_option);
-            optLetters[i].setBackgroundResource(R.drawable.bg_badge);
-            optLetters[i].setTextColor(Ui.color(ctx, R.color.text_main));
-            optTexts[i].setTextColor(ctx.getResources().getColorStateList(R.color.block_text));
-            optTexts[i].setText(current.options[i]);
-            optTexts[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, optionSize(current.options[i]));
+            optTexts[i].setBackgroundResource(R.drawable.bg_option);
+            optTexts[i].setTextColor(Ui.color(ctx, R.color.text_main));
+            optTexts[i].setText(OPT_LETTERS[i] + "." + current.options[i]);
+            optTexts[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, rowSize);
             optTexts[i].setTypeface(hasCjk(current.options[i]) ? null : latinTypeface());
         }
-        if (optViews[0] != null) optViews[0].requestFocus();
+        if (optTexts[0] != null) optTexts[0].requestFocus();
         updateHint();
     }
 
     private void applyQuestionSize(String q) {
         int len = q == null ? 0 : q.length();
         float sp;
-        if (len <= 12) sp = 42;
-        else if (len <= 24) sp = 36;
-        else if (len <= 38) sp = 30;
-        else sp = 25;
+        if (len <= 12) sp = 46;
+        else if (len <= 24) sp = 40;
+        else if (len <= 38) sp = 34;
+        else sp = 28;
         tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
     }
 
-    private float optionSize(String s) {
-        int len = s == null ? 0 : s.length();
-        if (len <= 10) return 26;
-        if (len <= 16) return 23;
-        if (len <= 24) return 20;
-        return 18;
+    /** 一行四个格子，字越短越大；长答案最多两行。 */
+    private float optionSize(int totalLen) {
+        int len = totalLen;
+        if (len <= 7) return 30;
+        if (len <= 9) return 22;
+        if (len <= 12) return 19;
+        return 17;
     }
 
     private Typeface latinFace;
@@ -203,29 +195,7 @@ public class QuizPanel {
     private void updateProgressUI() {
         int need = Math.max(1, prefs.requiredCorrect());
         tvProgress.setText("连续答对 " + progress + " / " + need + " 题可解锁");
-        rebuildDots(need);
         updateHint();
-    }
-
-    private void rebuildDots(int need) {
-        if (dotsRow == null) return;
-        int n = Math.min(need, 10);
-        if (dotsRow.getChildCount() != n) {
-            dotsRow.removeAllViews();
-            for (int i = 0; i < n; i++) {
-                View dot = new View(ctx);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        Ui.dp(ctx, 18), Ui.dp(ctx, 5));
-                lp.leftMargin = Ui.dp(ctx, i == 0 ? 0 : 6);
-                dot.setLayoutParams(lp);
-                dot.setBackgroundResource(R.drawable.bg_dot);
-                dotsRow.addView(dot);
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            dotsRow.getChildAt(i).setBackgroundResource(
-                    i < progress ? R.drawable.bg_dot_on : R.drawable.bg_dot);
-        }
     }
 
     private void updateHint() {
@@ -234,14 +204,16 @@ public class QuizPanel {
             tvHint.setText("今日观看时间已用完 · 答对也不能解锁 · 请家长按【菜单键】输入密码");
             tvHint.setTextColor(Ui.color(ctx, R.color.warn));
         } else {
-            tvHint.setText("方向键选择 · OK 确认 · 菜单键输入家长密码");
-            tvHint.setTextColor(Ui.color(ctx, R.color.text_faint));
+            tvHint.setText("用方向键选答案，按 OK 确认 · 菜单键输入家长密码");
+            tvHint.setTextColor(Ui.color(ctx, R.color.text_dim));
         }
     }
 
     private void onSelect(int index) {
         if (current == null || answering) return;
         answering = true;
+        // 数字键直接作答时，把焦点也移到所选答案，避免两个选项同时高亮
+        if (optTexts[index] != null) optTexts[index].requestFocus();
         if (index == current.correctIndex) {
             progress++;
             markOption(index, true);
@@ -282,7 +254,7 @@ public class QuizPanel {
         } else {
             progress = 0;
             markOption(index, false);
-            optViews[current.correctIndex].setBackgroundResource(R.drawable.bg_option_correct);
+            optTexts[current.correctIndex].setBackgroundResource(R.drawable.bg_option_correct);
             tvFeedback.setText("✗ 正确答案是 " + OPT_LETTERS[current.correctIndex] + "."
                     + current.options[current.correctIndex]);
             tvFeedback.setTextColor(Ui.color(ctx, R.color.danger));
@@ -298,23 +270,14 @@ public class QuizPanel {
     }
 
     private void markOption(int index, boolean correct) {
-        optViews[index].setBackgroundResource(
+        optTexts[index].setBackgroundResource(
                 correct ? R.drawable.bg_option_correct : R.drawable.bg_option_wrong);
-        optTexts[index].setTextColor(Ui.color(ctx,
-                correct ? R.color.ok : R.color.danger));
-        optLetters[index].setTextColor(Ui.color(ctx,
-                correct ? R.color.ok : R.color.danger));
     }
 
-    /** 解锁：写状态 + 通知宿主关闭。 */
     private void unlock(boolean viaParent) {
-        if (prefs.isDailyLocked() && !viaParent) {
-            return;
-        }
+        if (prefs.isDailyLocked() && !viaParent) return;
         unlocking = true;
-        if (viaParent && prefs.isDailyLocked()) {
-            prefs.setDailyExempt(true);
-        }
+        if (viaParent && prefs.isDailyLocked()) prefs.setDailyExempt(true);
         prefs.setDailyLocked(false);
         prefs.setLocked(false);
         long now = System.currentTimeMillis();
@@ -326,15 +289,9 @@ public class QuizPanel {
 
     // ---------------- 按键 ----------------
 
-    /**
-     * 返回 true 表示已消费。
-     * 悬浮层和 Activity 都把按键先交给这里，保证行为一致。
-     */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (pinOpen) return false;   // 家长键盘自己处理
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;             // 锁屏里返回键无效
-        }
+        if (pinOpen) return false;
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             showParentPin();
             return true;
@@ -361,7 +318,7 @@ public class QuizPanel {
         pinLayer.setFocusable(true);
 
         LinearLayout card = Ui.dialogPanel(ctx);
-        TextView title = Ui.text(ctx, "家长密码", 22, Ui.color(ctx, R.color.text_main), true);
+        TextView title = Ui.text(ctx, "家长密码", 24, Ui.color(ctx, R.color.text_main), true);
         title.setGravity(Gravity.CENTER);
         card.addView(title);
 
@@ -400,7 +357,7 @@ public class QuizPanel {
             pinLayer = null;
         }
         pinOpen = false;
-        if (optViews[0] != null) optViews[0].requestFocus();
+        if (optTexts[0] != null) optTexts[0].requestFocus();
     }
 
     public boolean isPinOpen() {

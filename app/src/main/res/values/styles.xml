@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-      Android 4.3 (API 18) 基础主题：
-      4.3 上没有 Theme.Material（API 21 才有），旧版直接写 Material 主题，
-      在 4.3 电视上会退化成系统默认 Holo 主题 —— 按钮、对话框、输入框全是
-      另一套灰紫色样式，和卡片界面完全不搭。这里用 Holo 打底，
-      values-v21 再换成 Material，保证 4.3 到最新系统是同一套视觉。
-    -->
+    <!-- 4.3 用 Holo 打底；values-v21 再换 Material，避免 4.3 退化主题 -->
     <style name="Theme.KidsLock" parent="android:Theme.Holo.NoActionBar">
         <item name="android:windowBackground">@color/bg_dark</item>
         <item name="android:windowNoTitle">true</item>
@@ -22,14 +16,14 @@
         <item name="android:windowBackground">@color/bg_dark</item>
     </style>
 
-    <!-- 兼容旧布局的样式 -->
+    <!-- 1.9.1 的大字号列表风格 -->
     <style name="Label">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">26dp</item>
-        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:layout_marginTop">28dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textColor">@color/text_main</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -39,46 +33,57 @@
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:textColor">@color/text_dim</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:lineSpacingExtra">4dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingExtra">6dp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="RowBtn">
         <item name="android:textAllCaps">false</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">64dp</item>
-        <item name="android:background">@drawable/bg_ghost</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:background">@drawable/bg_option</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
         <item name="android:textColor">@color/text_main</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="Stepper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 
     <style name="StepBtn">
         <item name="android:textAllCaps">false</item>
-        <item name="android:layout_width">96dp</item>
-        <item name="android:layout_height">72dp</item>
-        <item name="android:background">@drawable/bg_ghost</item>
+        <item name="android:layout_width">140dp</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:background">@drawable/bg_option</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_main</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">34sp</item>
     </style>
 
     <style name="StepValue">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">72dp</item>
+        <item name="android:layout_height">88dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_main</item>
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
     <style name="TypeBtn">
         <item name="android:textAllCaps">false</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_height">88dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_margin">6dp</item>
-        <item name="android:background">@drawable/bg_ghost</item>
+        <item name="android:background">@drawable/bg_option</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_main</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">26sp</item>
     </style>
 </resources>

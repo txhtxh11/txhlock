@@ -3,6 +3,7 @@ package com.kidslock;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 
 /**
@@ -18,6 +19,7 @@ public class KeyRoot extends FrameLayout {
     }
 
     private KeyHandler handler;
+    private View focusTarget;
 
     public KeyRoot(Context context) {
         super(context);
@@ -35,6 +37,11 @@ public class KeyRoot extends FrameLayout {
         this.handler = h;
     }
 
+    /** 窗口真正拿到焦点后，把焦点交给第一个答案，避免"先按一下方向键才出现高亮"。 */
+    public void setFocusTarget(View v) {
+        focusTarget = v;
+    }
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && handler != null) {
@@ -49,10 +56,17 @@ public class KeyRoot extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         setFocusableInTouchMode(true);
-        post(new Runnable() {
-            @Override public void run() {
-                requestFocus();
-            }
-        });
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        if (hasWindowFocus && focusTarget != null) {
+            focusTarget.post(new Runnable() {
+                @Override public void run() {
+                    focusTarget.requestFocus();
+                }
+            });
+        }
     }
 }

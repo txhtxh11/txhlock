@@ -69,23 +69,23 @@ public class PinPad extends LinearLayout {
 
         dotsView = new TextView(c);
         dotsView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-        dotsView.setTextColor(Ui.color(c, R.color.accent));
+        dotsView.setTextColor(0xFF111111);
         dotsView.setGravity(Gravity.CENTER);
         dotsView.setIncludeFontPadding(false);
-        dotsView.setPadding(0, Ui.dp(c, 4), 0, Ui.dp(c, 6));
+        dotsView.setBackgroundResource(R.drawable.bg_display);
 
         statusView = new TextView(c);
         statusView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         statusView.setTextColor(Ui.color(c, R.color.text_dim));
         statusView.setGravity(Gravity.CENTER);
         statusView.setIncludeFontPadding(false);
-        statusView.setMinHeight(Ui.dp(c, 24));
+        statusView.setMinHeight(Ui.dp(c, 20));
         statusView.setText(title == null ? "" : title);
 
         grid = buildGrid(c);
 
         addView(dotsView, new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                ViewGroup.LayoutParams.MATCH_PARENT, Ui.dp(c, 64)));
         addView(statusView, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         LinearLayout.LayoutParams glp = new LinearLayout.LayoutParams(
@@ -164,12 +164,12 @@ public class PinPad extends LinearLayout {
                 final int k = rows[r][col];
                 TextView b = new TextView(c);
                 b.setText(labelOf(k));
-                b.setTextSize(TypedValue.COMPLEX_UNIT_SP, k == KEY_DELETE || k == KEY_OK ? 20 : 26);
+                b.setTextSize(TypedValue.COMPLEX_UNIT_SP, k == KEY_DELETE || k == KEY_OK ? 18 : 24);
                 b.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
                 b.setGravity(Gravity.CENTER);
                 b.setIncludeFontPadding(false);
-                TableRow.LayoutParams lp = new TableRow.LayoutParams(0, Ui.dp(c, 60), 1f);
-                lp.setMargins(Ui.dp(c, 5), Ui.dp(c, 5), Ui.dp(c, 5), Ui.dp(c, 5));
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(0, Ui.dp(c, 50), 1f);
+                lp.setMargins(Ui.dp(c, 4), Ui.dp(c, 4), Ui.dp(c, 4), Ui.dp(c, 4));
                 b.setLayoutParams(lp);
                 b.setClickable(true);
                 b.setOnClickListener(new OnClickListener() {
