@@ -34,7 +34,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "1.9.5"
+$script:Version = "1.9.6"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 
@@ -417,14 +417,23 @@ try {
         & $adb -s $target shell "settings put secure enabled_accessibility_services '$new'" 2>&1 | Out-Null
     }
     & $adb -s $target shell "settings put secure accessibility_enabled 1" 2>&1 | Out-Null
-    Start-Sleep -Milliseconds 1000
+    Start-Sleep -Milliseconds 2000
     $now = (& $adb -s $target shell "settings get secure enabled_accessibility_services" 2>$null | Out-String).Trim()
     $dump = (& $adb -s $target shell "dumpsys accessibility" 2>$null | Out-String)
-    if ($now -match "com\.kidslock" -and ($dump -match "kidslock|答题锁屏")) {
+    # 应用已改名「每日壁纸」，服务标签也会跟着变，这里三种都认
+    if ($now -match "com\.kidslock" -and ($dump -match "kidslock|答题锁屏|每日壁纸")) {
         Log "  ✓ 无障碍保活：已开启（主页键拦截 + 开机自启）" "Green"
     } else {
-        Log "  ! 无障碍保活没自动打开，需要在电视上手动开一次" "Yellow"
-        Log "    设置 → 无障碍 → 每日壁纸/答题锁屏 → 打开" "White"
+        # MIUI 刚覆盖安装后绑定慢，隔 2 秒再试一次
+        & $adb -s $target shell "settings put secure accessibility_enabled 1" 2>&1 | Out-Null
+        Start-Sleep -Milliseconds 2500
+        $dump2 = (& $adb -s $target shell "dumpsys accessibility" 2>$null | Out-String)
+        if ($dump2 -match "kidslock|答题锁屏|每日壁纸") {
+            Log "  ✓ 无障碍保活：已开启（重试后绑定成功）" "Green"
+        } else {
+            Log "  ! 无障碍保活没自动打开，需要在电视上手动开一次" "Yellow"
+            Log "    设置 → 无障碍 → 每日壁纸 → 打开" "White"
+        }
     }
 } catch {
     Log "  ! 无障碍设置失败：$($_.Exception.Message)" "Yellow"
@@ -477,7 +486,7 @@ Log "  └───────────────────────�
 Log ""
 Log "  接下来在电视上还要做 3 件小事（都是一次性的）：" "Yellow"
 Log ""
-Log "    1. 打开桌面上的「答题锁屏」（开了伪装就是「每日壁纸」）；开了伪装后要长按菜单键 5 秒 + 密码 1234 才能进设置" "White"
+Log "    1. 打开桌面上的「每日壁纸」；进家长设置要长按菜单键 10 秒 + 密码 1234" "White"
 Log "    2. 到 设置 → 应用 → 每日壁纸/答题锁屏 → 打开「自启动」（小米电视必须开）" "White"
 Log "    3. 安全起见，回到 设置 → 开发者选项 → 关掉「ADB 调试」" "White"
 Log ""
