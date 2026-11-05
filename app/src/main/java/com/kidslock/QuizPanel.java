@@ -70,31 +70,102 @@ public class QuizPanel {
 
     public View createView() {
         if (root != null) return root;
-        LayoutInflater inf = LayoutInflater.from(ctx);
-        root = inf.inflate(R.layout.activity_lock, null, false);
-        tvQuestion = (TextView) root.findViewById(R.id.tvQuestion);
-        tvProgress = (TextView) root.findViewById(R.id.tvProgress);
-        tvHint = (TextView) root.findViewById(R.id.tvHint);
-        tvFeedback = (TextView) root.findViewById(R.id.tvFeedback);
+        // 注意：锁屏界面**完全用代码构建**，不再 inflate activity_lock.xml。
+        // 原因：部分 MIUI Android 4.3 的二进制 XML 解析器会在这个布局上抛
+        // StringBlock index out of bounds（AOSP 4.3 正常），用代码建视图可以绕开。
+        KeyRoot r = new KeyRoot(ctx);
+        r.setBackgroundColor(Ui.color(ctx, R.color.bg_dark));
 
-        int[] ids = {R.id.opt0, R.id.opt1, R.id.opt2, R.id.opt3};
+        LinearLayout col = new LinearLayout(ctx);
+        col.setOrientation(LinearLayout.VERTICAL);
+        int padH = Ui.dp(ctx, 48);
+        col.setPadding(padH, Ui.dp(ctx, 34), padH, Ui.dp(ctx, 26));
+        r.addView(col, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+
+        TextView title = Ui.text(ctx, "答题解锁才能继续看电视", 32,
+                Ui.color(ctx, R.color.text_main), true);
+        col.addView(title, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        tvProgress = Ui.text(ctx, "", 24, Ui.color(ctx, R.color.accent), false);
+        LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        plp.topMargin = Ui.dp(ctx, 10);
+        col.addView(tvProgress, plp);
+
+        LinearLayout qBox = new LinearLayout(ctx);
+        qBox.setOrientation(LinearLayout.VERTICAL);
+        qBox.setGravity(Gravity.CENTER);
+        col.addView(qBox, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+
+        tvQuestion = new TextView(ctx);
+        tvQuestion.setTextColor(Ui.color(ctx, R.color.text_main));
+        tvQuestion.setTextSize(TypedValue.COMPLEX_UNIT_SP, 46);
+        tvQuestion.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        tvQuestion.setGravity(Gravity.CENTER);
+        tvQuestion.setIncludeFontPadding(false);
+        tvQuestion.setMaxLines(3);
+        tvQuestion.setLineSpacing(Ui.dp(ctx, 6), 1f);
+        qBox.addView(tvQuestion, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        tvFeedback = new TextView(ctx);
+        tvFeedback.setTextColor(Ui.color(ctx, R.color.ok));
+        tvFeedback.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+        tvFeedback.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        tvFeedback.setGravity(Gravity.CENTER);
+        tvFeedback.setIncludeFontPadding(false);
+        tvFeedback.setMaxLines(2);
+        tvFeedback.setMinHeight(Ui.dp(ctx, 40));
+        LinearLayout.LayoutParams flp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        flp.bottomMargin = Ui.dp(ctx, 10);
+        col.addView(tvFeedback, flp);
+
+        LinearLayout row = new LinearLayout(ctx);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setBaselineAligned(false);
+        col.addView(row, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, Ui.dp(ctx, 120)));
+
         for (int i = 0; i < 4; i++) {
-            optTexts[i] = (TextView) root.findViewById(ids[i]);
+            final TextView o = new TextView(ctx);
+            o.setTextColor(Ui.color(ctx, R.color.text_main));
+            o.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+            o.setGravity(Gravity.CENTER);
+            o.setIncludeFontPadding(false);
+            o.setMaxLines(2);
+            o.setBackgroundResource(R.drawable.bg_option);
+            o.setPadding(Ui.dp(ctx, 8), 0, Ui.dp(ctx, 8), 0);
+            o.setClickable(true);
+            o.setFocusable(true);
             final int idx = i;
-            optTexts[i].setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    onSelect(idx);
-                }
+            o.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) { onSelect(idx); }
             });
+            LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(0,
+                    LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+            olp.rightMargin = Ui.dp(ctx, 10);
+            row.addView(o, olp);
+            optTexts[i] = o;
         }
-        if (root instanceof KeyRoot) {
-            ((KeyRoot) root).setFocusTarget(optTexts[0]);
-            ((KeyRoot) root).setKeyHandler(new KeyRoot.KeyHandler() {
-                @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-                    return QuizPanel.this.onKeyDown(keyCode, event);
-                }
-            });
-        }
+
+        tvHint = Ui.text(ctx, "", 20, Ui.color(ctx, R.color.text_dim), false);
+        tvHint.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        hlp.topMargin = Ui.dp(ctx, 18);
+        col.addView(tvHint, hlp);
+
+        root = r;
+        r.setFocusTarget(optTexts[0]);
+        r.setKeyHandler(new KeyRoot.KeyHandler() {
+            @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+                return QuizPanel.this.onKeyDown(keyCode, event);
+            }
+        });
         return root;
     }
 

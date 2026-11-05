@@ -518,7 +518,10 @@ public class MainActivity extends Activity {
                     gateOpen = false;
                     gateLayer.setVisibility(View.GONE);
                     refreshAll();
-                    btnEnable.requestFocus();
+                    // 门禁消失后焦点可能落在已移除的键盘上：延后一帧再把焦点交给第一个按钮
+                    btnEnable.post(new Runnable() {
+                        @Override public void run() { btnEnable.requestFocus(); }
+                    });
                 } else {
                     padRef[0].showError("密码错误，请重试");
                 }
@@ -865,9 +868,14 @@ public class MainActivity extends Activity {
         if (prefs != null && !prefs.isLocked()) refreshAll();
         // 从系统设置/自启动页返回时，重新把焦点放回本页，避免遥控器"没反应"
         if (gateLayer != null && gateLayer.getVisibility() == View.VISIBLE) {
-            if (gateLayer.getChildCount() > 0) gateLayer.getChildAt(0).requestFocus();
+            if (gateLayer.getChildCount() > 0) {
+                final View g = gateLayer.getChildAt(0);
+                g.post(new Runnable() { @Override public void run() { g.requestFocus(); } });
+            }
         } else if (getCurrentFocus() == null) {
-            if (btnEnable != null) btnEnable.requestFocus();
+            if (btnEnable != null) {
+                btnEnable.post(new Runnable() { @Override public void run() { btnEnable.requestFocus(); } });
+            }
         }
     }
 

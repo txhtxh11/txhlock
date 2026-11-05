@@ -1,4 +1,4 @@
-# txhlock · 答题锁屏（小米电视版）v1.9.3
+# txhlock · 答题锁屏（小米电视版）v1.9.4
 
 给孩子看的电视加一道「先答题、再看电视」的闸门：看满设定时长自动锁屏，遥控器连续答对几题才解锁。家长可用 PIN 直接解锁，可换题库、调时长、选教材版本。
 
@@ -37,11 +37,11 @@
 ## 二、安装
 
 > 有电脑：双击 `安装器\一键安装.bat`，或把一句话发给豆包（Agent 模式）。
-> 没电脑：U 盘拷 `txhlock_v1.9.3.apk` 到电视安装。
+> 没电脑：U 盘拷 `txhlock_v1.9.4.apk` 到电视安装。
 
 > **下载地址**
-> 1. https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.3/apk/txhlock_v1.9.3.apk
-> 2. https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.3/txhlock_v1.9.3.apk
+> 1. https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.4/apk/txhlock_v1.9.4.apk
+> 2. https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.4/txhlock_v1.9.4.apk
 >
 > 文件大小 **1,853,458 字节**，MD5 `e84a2aaef2eea6d334166dad31216dd8`。
 
@@ -58,7 +58,7 @@
 
 ### 方式三：U 盘
 
-拷 `txhlock_v1.9.3.apk` 到 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「悬浮窗」。
+拷 `txhlock_v1.9.4.apk` 到 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「悬浮窗」。
 
 ### 装完必做
 
@@ -342,7 +342,13 @@ adb shell dpm set-device-owner com.kidslock/.MainActivity
 - **已验证进入设置后，遥控菜单键不再弹验证**；只有锁屏时才用菜单键呼出家长密码
 - 进入设置后本次不再重复验证（去掉了 8 分钟重新验证）
 
-### v1.9.3（当前）
+### v1.9.4（当前）
+
+- **修复电视上锁屏页崩溃**：部分 MIUI Android 4.3 的二进制 XML 解析器在 `activity_lock.xml` 上抛 `StringBlock index out of bounds`；锁屏界面改为**纯代码构建**，不再 inflate 该 XML
+- **修复设置页/弹窗关闭后"卡住"**：门禁消失、弹窗关闭后焦点会落在已移除的视图上，遥控器方向键没反应；现在门禁和所有弹窗关闭后都会把焦点还给原按钮
+- 以上均为电视实测发现并验证
+
+### v1.9.3
 
 - **修复「开机先答题 = 关」时重启会清掉锁屏/计时**：之前 `Keeper.lockOnBoot` 在关闭分支里无条件 `setLocked(false)` + `sessionStart=0`，孩子重启一次就能绕过短关机保留锁屏的规则
 - **修复长关机清零把「今日已看」也清掉**：现在长关机只清本次连续观看并解锁，今日累计额度保留；今日额度用完时继续锁定，不能靠关机刷额度

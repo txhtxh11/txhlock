@@ -3,6 +3,7 @@ package com.kidslock;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -218,6 +219,7 @@ public final class Ui {
 
     /** 统一弹窗：无系统标题栏、直角面板、居中。 */
     public static Dialog dialog(Activity a, View content, int widthDp, int maxHeightDp) {
+        final View prevFocus = a.getCurrentFocus();
         Dialog d = new Dialog(a, android.R.style.Theme_Translucent_NoTitleBar);
         d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         d.setContentView(content);
@@ -230,6 +232,16 @@ public final class Ui {
             w.setDimAmount(0.78f);
         }
         d.setCanceledOnTouchOutside(true);
+        // 关闭弹窗后把焦点还给打开它的按钮；否则老电视上会出现"遥控器没反应"
+        d.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override public void onDismiss(DialogInterface di) {
+                if (prevFocus != null) {
+                    prevFocus.post(new Runnable() {
+                        @Override public void run() { prevFocus.requestFocus(); }
+                    });
+                }
+            }
+        });
         return d;
     }
 
