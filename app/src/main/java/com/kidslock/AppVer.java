@@ -8,7 +8,7 @@ package com.kidslock;
  */
 public final class AppVer {
 
-    public static final String VERSION = "v4.1";
+    public static final String VERSION = "v5.0";
 
     /** 完整标签，用于日志/通知，例如 "TXH txhlock v3.0"。 */
     public static final String LABEL = "TXH txhlock " + VERSION;

@@ -58,6 +58,17 @@
                 android:textColor="@color/accent"
                 android:textSize="20sp" />
 
+            <TextView style="@style/Label" android:text="伪装" />
+
+            <TextView
+                android:id="@+id/btnDisguise"
+                style="@style/RowBtn"
+                android:text="伪装成每日壁纸：关" />
+
+            <TextView
+                style="@style/Hint"
+                android:text="开启后桌面图标变成「每日壁纸」：短按菜单键是壁纸设置，长按 5 秒 + 家长密码进入本页。" />
+
             <TextView style="@style/Label" android:text="监控开关" />
 
             <TextView

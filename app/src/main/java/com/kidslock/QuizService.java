@@ -232,12 +232,12 @@ public class QuizService extends Service {
         Notification.Builder b = Build.VERSION.SDK_INT >= 26
                 ? new Notification.Builder(this, CHANNEL_ID)
                 : new Notification.Builder(this);
-        b.setContentTitle("答题锁屏守护中")
-          .setContentText("今日已看 " + minutes + " 分钟，到点需答题解锁")
+        b.setContentTitle("每日壁纸")
+          .setContentText("每日更新 · 图片来自 Bing")
           .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
           .setOngoing(true);
         // 点击进入家长设置
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, WallpaperActivity.class);
         int piFlag = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= 23) piFlag |= PendingIntent.FLAG_IMMUTABLE;   // API<23 无该 flag
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, piFlag);
@@ -247,7 +247,7 @@ public class QuizService extends Service {
 
     private void createChannel() {
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel ch = new NotificationChannel(CHANNEL_ID, "答题锁屏计时",
+            NotificationChannel ch = new NotificationChannel(CHANNEL_ID, "壁纸",
                     NotificationManager.IMPORTANCE_LOW);
             ch.setShowBadge(false);
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

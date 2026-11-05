@@ -34,7 +34,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "4.1"
+$script:Version = "5.0"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 
@@ -180,7 +180,7 @@ if (-not $apk) {
     Log "  本地没有安装包，正在从网上下载…" "Yellow"
     $dest = Join-Path $env:TEMP "txhlock_v$script:Version.apk"
     $urls = @(
-        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v4.1/apk/txhlock_v$script:Version.apk",
+        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v5.0/apk/txhlock_v$script:Version.apk",
         "https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v$script:Version/txhlock_v$script:Version.apk"
     )
     foreach ($u in $urls) {
@@ -382,7 +382,7 @@ if ($installOut -match "Success") {
     Log ""
     Log "  ✗ 电视上已经装了一个「签名不同」的旧版，不能直接覆盖。" "Red"
     Log "    为了不丢你的设置，安装器不会自动卸载。请二选一：" "Yellow"
-    Log "      A. 在电视上：设置 → 应用 → 答题锁屏 → 卸载，然后重新运行本安装器" "White"
+    Log "      A. 在电视上：设置 → 应用 → 每日壁纸/答题锁屏 → 卸载，然后重新运行本安装器" "White"
     Log "      B. 让 AI 帮你执行：adb -s $target uninstall com.kidslock  （会清空答题记录和密码）" "White"
     Wait-Exit
     exit 1
@@ -422,7 +422,7 @@ try {
         Log "  ✓ 无障碍保活：已开启（主页键拦截 + 开机自启）" "Green"
     } else {
         Log "  ! 无障碍保活没自动打开，需要在电视上手动开一次" "Yellow"
-        Log "    设置 → 无障碍 → 答题锁屏 → 打开" "White"
+        Log "    设置 → 无障碍 → 每日壁纸/答题锁屏 → 打开" "White"
     }
 } catch {
     Log "  ! 无障碍设置失败：$($_.Exception.Message)" "Yellow"
@@ -442,7 +442,7 @@ try {
             Log "  ✓ 悬浮层权限：已授权（主页键切桌面会被直接盖住）" "Green"
         } else {
             Log "  · 悬浮层权限：请在电视上手动允许「显示在其他应用上层」" "Yellow"
-            Log "    设置 → 应用 → 答题锁屏 → 特殊权限 / 悬浮窗" "White"
+            Log "    设置 → 应用 → 每日壁纸/答题锁屏 → 特殊权限 / 悬浮窗" "White"
         }
     }
 } catch { }
@@ -459,7 +459,7 @@ try {
 if (-not $NoLaunch) {
     try {
         & $adb -s $target shell "am start -n com.kidslock/.MainActivity" 2>&1 | Out-Null
-        Log "  ✓ 已在电视上打开「答题锁屏」" "Green"
+        Log "  ✓ 已在电视上打开应用（桌面名：答题锁屏 / 每日壁纸）" "Green"
     } catch {
         Log "  ! 没能在电视上自动打开，请到电视桌面点「答题锁屏」图标" "Yellow"
     }
@@ -475,8 +475,8 @@ Log "  └───────────────────────�
 Log ""
 Log "  接下来在电视上还要做 3 件小事（都是一次性的）：" "Yellow"
 Log ""
-Log "    1. 打开「答题锁屏」→ 输入家长密码 1234 进入设置" "White"
-Log "    2. 到 设置 → 应用 → 答题锁屏 → 打开「自启动」（小米电视必须开）" "White"
+Log "    1. 打开桌面上的「答题锁屏」（开了伪装就是「每日壁纸」）；开了伪装后要长按菜单键 5 秒 + 密码 1234 才能进设置" "White"
+Log "    2. 到 设置 → 应用 → 每日壁纸/答题锁屏 → 打开「自启动」（小米电视必须开）" "White"
 Log "    3. 安全起见，回到 设置 → 开发者选项 → 关掉「ADB 调试」" "White"
 Log ""
 Log "  验证：在设置页点「立即锁定测试」，答对 3 题能解锁就说明一切正常。" "Gray"

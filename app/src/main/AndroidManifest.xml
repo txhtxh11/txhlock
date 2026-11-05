@@ -36,17 +36,49 @@
         android:theme="@style/Theme.KidsLock"
         android:supportsRtl="false">
 
-        <!-- 家长设置主界面(桌面图标) -->
+        <!-- 家长设置（不在桌面直接出现：从「每日壁纸」长按菜单键 5 秒进入） -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:label="@string/name_settings"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- 壁纸伪装入口：桌面显示「每日壁纸」 -->
+        <activity
+            android:name=".WallpaperActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/Theme.KidsLock.Wallpaper" />
+
+        <!-- 普通入口（关闭伪装时使用） -->
+        <activity-alias
+            android:name=".LauncherNormal"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:label="@string/name_lock"
+            android:icon="@mipmap/ic_launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <!-- 伪装入口：桌面显示「每日壁纸」 -->
+        <activity-alias
+            android:name=".LauncherWallpaper"
+            android:targetActivity=".WallpaperActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:label="@string/name_wall"
+            android:icon="@mipmap/ic_wallpaper">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- 全屏答题锁屏 -->
         <activity

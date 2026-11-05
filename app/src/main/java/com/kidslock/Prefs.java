@@ -187,4 +187,23 @@ public class Prefs {
      */
     public boolean isDailyExempt() { return sp.getBoolean("daily_exempt", false); }
     public void setDailyExempt(boolean v) { sp.edit().putBoolean("daily_exempt", v).apply(); }
+
+    // ---------------- v5.0 壁纸伪装 ----------------
+    public boolean disguise() { return sp.getBoolean("disguise", false); }
+    public void setDisguise(boolean v) { sp.edit().putBoolean("disguise", v).apply(); }
+
+    public boolean wallpaperBing() { return sp.getBoolean("wall_bing", true); }
+    public void setWallpaperBing(boolean v) { sp.edit().putBoolean("wall_bing", v).apply(); }
+
+    public int wallpaperIndex() { return sp.getInt("wall_index", 0); }
+    public void setWallpaperIndex(int v) { sp.edit().putInt("wall_index", v).apply(); }
+
+    public long wallpaperFetchedAt() { return sp.getLong("wall_at", 0L); }
+    public void setWallpaperFetchedAt(long v) { sp.edit().putLong("wall_at", v).apply(); }
+
+    public String wallpaperCredit() { return sp.getString("wall_credit", ""); }
+    public void setWallpaperCredit(String v) { sp.edit().putString("wall_credit", v).apply(); }
+
+    public String wallpaperFile() { return sp.getString("wall_file", ""); }
+    public void setWallpaperFile(String v) { sp.edit().putString("wall_file", v).apply(); }
 }

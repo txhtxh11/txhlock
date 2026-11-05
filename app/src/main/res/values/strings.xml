@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">答题锁屏</string>
+    <string name="app_name">每日壁纸</string>
+    <string name="name_wall">每日壁纸</string>
+    <string name="name_lock">答题锁屏</string>
+    <string name="name_settings">家长设置</string>
     <string name="acc_desc">开启后：\n1) 电视开机时自动启动答题锁屏（小米电视会拦截普通应用的"开机自启"，但不会拦截无障碍服务）；\n2) 孩子切到别的应用或按主页键时，锁屏会立刻回到前台。\n\n本服务不读取屏幕内容，只用于判断"当前前台是哪个应用"。</string>
 </resources>

@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     private Prefs prefs;
     private QuizEngine engine;
 
-    private TextView tvStatus, tvVersion, btnEnable,
+    private TextView tvStatus, tvVersion, btnEnable, btnDisguise,
             btnSingleMinus, btnSinglePlus, tvSingle,
             btnDailyMinus, btnDailyPlus, tvDaily,
             btnAwayMinus, btnAwayPlus, tvAway,
@@ -72,6 +72,8 @@ public class MainActivity extends Activity {
             finish();
             return;
         }
+        // 保证桌面入口与设置一致（升级后也生效）
+        LauncherAlias.apply(this, prefs.disguise());
         setContentView(R.layout.activity_main);
         bind();
         buildEditionRow();
@@ -88,6 +90,7 @@ public class MainActivity extends Activity {
         tvVersion = (TextView) findViewById(R.id.tvVersion);
         tvVersion.setText(AppVer.VERSION);
         btnEnable = (TextView) findViewById(R.id.btnEnable);
+        btnDisguise = (TextView) findViewById(R.id.btnDisguise);
         btnSingleMinus = (TextView) findViewById(R.id.btnSingleMinus);
         btnSinglePlus = (TextView) findViewById(R.id.btnSinglePlus);
         tvSingle = (TextView) findViewById(R.id.tvSingle);
@@ -125,7 +128,7 @@ public class MainActivity extends Activity {
         btnTestLock = (TextView) findViewById(R.id.btnTestLock);
         gateLayer = (FrameLayout) findViewById(R.id.gateLayer);
 
-        for (TextView v : new TextView[]{btnEnable, btnSingleMinus, btnSinglePlus,
+        for (TextView v : new TextView[]{btnEnable, btnDisguise, btnSingleMinus, btnSinglePlus,
                 btnDailyMinus, btnDailyPlus, btnAwayMinus, btnAwayPlus,
                 btnCorrMinus, btnCorrPlus, btnLevelMinus, btnLevelPlus,
                 btnExportQuiz, btnReloadQuiz, btnClearLocal, btnSmbSetup, btnSmbSyncNow,
@@ -251,6 +254,9 @@ public class MainActivity extends Activity {
     // ---------------- 交互 ----------------
 
     private void wire() {
+        btnDisguise.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { toggleDisguise(); }
+        });
         btnEnable.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { toggleMonitor(); }
         });
@@ -374,6 +380,7 @@ public class MainActivity extends Activity {
     private void refreshAll() {
         tvStatus.setText(prefs.isLocked() ? "当前状态：锁定中" : "当前状态：未锁定");
         btnEnable.setText(prefs.isEnabled() ? "已开启（点击停用）" : "已停用（点击开启）");
+        btnDisguise.setText(prefs.disguise() ? "伪装成每日壁纸：开" : "伪装成每日壁纸：关");
         tvSingle.setText(String.valueOf(prefs.singleMinutes()));
         tvDaily.setText(String.valueOf(prefs.dailyMinutes()));
         tvAway.setText(prefs.awayResetMinutes() <= 0 ? "关闭" : (prefs.awayResetMinutes() + " 分钟"));
@@ -453,6 +460,26 @@ public class MainActivity extends Activity {
         sb.append("悬浮层权限：").append(LockOverlay.canShow(this) ? "已授权" : "未授权").append("\n\n");
         sb.append("主页键防回桌面失效时：点下面「去修复」，把无障碍开关关掉再打开一次。");
         tvHelp.setText(sb.toString());
+    }
+
+    // ---------------- 伪装 ----------------
+
+    private void toggleDisguise() {
+        final boolean on = !prefs.disguise();
+        confirm(on ? "伪装成「每日壁纸」？" : "恢复「答题锁屏」图标？",
+                on ? "开启后：\n• 桌面图标变成「每日壁纸」\n• 短按菜单键是壁纸设置\n"
+                        + "• 长按菜单键 5 秒 + 家长密码，才能回到本页\n\n"
+                        + "如果桌面图标没有立刻变化，重启电视或等半分钟。"
+                        : "恢复后桌面图标变回「答题锁屏」，长按菜单键也不再打开家长设置。",
+                on ? "开启伪装" : "恢复", new Runnable() {
+                    @Override public void run() {
+                        prefs.setDisguise(on);
+                        LauncherAlias.apply(MainActivity.this, on);
+                        refreshAll();
+                        toast(on ? "已伪装成「每日壁纸」：长按菜单键 5 秒回到这里"
+                                : "已恢复「答题锁屏」图标");
+                    }
+                });
     }
 
     // ---------------- 监控开关 ----------------

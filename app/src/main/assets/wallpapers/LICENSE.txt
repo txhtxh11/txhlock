@@ -1,0 +1,4 @@
+﻿Wallpapers in this folder:
+- photo1..photo6.jpg: photos from Unsplash (unsplash.com), delivered via Lorem Picsum.
+  Unsplash License: free to use, no permission or attribution required.
+- dawn/day/dusk/night.jpg: simple abstract fallbacks generated for this app (public domain).
