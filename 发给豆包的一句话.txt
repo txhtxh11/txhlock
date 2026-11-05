@@ -9,7 +9,7 @@
 帮我把家里的小米电视装上「答题锁屏」，并配置好，让孩子看满时间必须答题才能继续看。
 请直接运行这个安装器（Windows PowerShell，它会自动找电视、装应用、开无障碍、保持常亮）：
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v5.0/tools/install.ps1 -OutFile \"$env:TEMP\txhlock-install.ps1\"; & powershell -NoProfile -ExecutionPolicy Bypass -File \"$env:TEMP\txhlock-install.ps1\" -NoPause"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.2/tools/install.ps1 -OutFile \"$env:TEMP\txhlock-install.ps1\"; & powershell -NoProfile -ExecutionPolicy Bypass -File \"$env:TEMP\txhlock-install.ps1\" -NoPause"
 
 我是小白什么都不懂，需要我配合的地方直接问我，不要用术语。
 电脑和电视连的是同一个 WiFi；电视是小米电视，Android 4.3。
@@ -23,7 +23,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://cdn.jsdelivr
 - 电视 IP 我不知道，安装器会自动扫描局域网里开着 5555 端口的设备，那台就是电视；
   扫到多台它会自己选小米/电视设备，选错了你告诉我。
 - 安装包下不动就换这个（一样能下，国内不翻墙可用）：
-  https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v5.0/txhlock_v5.0.apk
+  https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.2/txhlock_v1.9.2.apk
 - 电脑上没有 adb 不用管，安装器会自己装。
 - 电视会弹「允许 USB 调试吗」，选「始终允许」→ 确定。
 - 如果报签名冲突或空间不足，停下来告诉我，不要自己卸载重装，否则我的设置会丢。

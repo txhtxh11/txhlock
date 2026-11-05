@@ -189,6 +189,9 @@ public class Prefs {
     public void setDailyExempt(boolean v) { sp.edit().putBoolean("daily_exempt", v).apply(); }
 
     // ---------------- v5.0 壁纸伪装 ----------------
+    public int holdSeconds() { return sp.getInt("hold_sec", 10); }
+    public void setHoldSeconds(int v) { sp.edit().putInt("hold_sec", v).apply(); }
+
     public boolean disguise() { return sp.getBoolean("disguise", false); }
     public void setDisguise(boolean v) { sp.edit().putBoolean("disguise", v).apply(); }
 

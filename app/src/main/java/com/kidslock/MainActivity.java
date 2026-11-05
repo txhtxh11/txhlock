@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     private Prefs prefs;
     private QuizEngine engine;
 
-    private TextView tvStatus, tvVersion, btnEnable, btnDisguise,
+    private TextView tvVersion, btnEnable, btnHoldMinus, btnHoldPlus, tvHoldSec,
             btnSingleMinus, btnSinglePlus, tvSingle,
             btnDailyMinus, btnDailyPlus, tvDaily,
             btnAwayMinus, btnAwayPlus, tvAway,
@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
     private LinearLayout editionRow, typeGrid;
     private FrameLayout gateLayer;
 
+    private static boolean sAuthed = false;
     private boolean authed = false;
     private long leftAtMs = 0L;
     private boolean gateOpen = false;
@@ -67,13 +68,12 @@ public class MainActivity extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = new Prefs(this);
+        authed = sAuthed;
         if (prefs.isLocked()) {
             Keeper.launchLock(this);
             finish();
             return;
         }
-        // 保证桌面入口与设置一致（升级后也生效）
-        LauncherAlias.apply(this, prefs.disguise());
         setContentView(R.layout.activity_main);
         bind();
         buildEditionRow();
@@ -86,11 +86,12 @@ public class MainActivity extends Activity {
     }
 
     private void bind() {
-        tvStatus = (TextView) findViewById(R.id.tvStatus);
         tvVersion = (TextView) findViewById(R.id.tvVersion);
         tvVersion.setText(AppVer.VERSION);
         btnEnable = (TextView) findViewById(R.id.btnEnable);
-        btnDisguise = (TextView) findViewById(R.id.btnDisguise);
+        btnHoldMinus = (TextView) findViewById(R.id.btnHoldMinus);
+        btnHoldPlus = (TextView) findViewById(R.id.btnHoldPlus);
+        tvHoldSec = (TextView) findViewById(R.id.tvHoldSec);
         btnSingleMinus = (TextView) findViewById(R.id.btnSingleMinus);
         btnSinglePlus = (TextView) findViewById(R.id.btnSinglePlus);
         tvSingle = (TextView) findViewById(R.id.tvSingle);
@@ -128,7 +129,7 @@ public class MainActivity extends Activity {
         btnTestLock = (TextView) findViewById(R.id.btnTestLock);
         gateLayer = (FrameLayout) findViewById(R.id.gateLayer);
 
-        for (TextView v : new TextView[]{btnEnable, btnDisguise, btnSingleMinus, btnSinglePlus,
+        for (TextView v : new TextView[]{btnEnable, btnHoldMinus, btnHoldPlus, btnSingleMinus, btnSinglePlus,
                 btnDailyMinus, btnDailyPlus, btnAwayMinus, btnAwayPlus,
                 btnCorrMinus, btnCorrPlus, btnLevelMinus, btnLevelPlus,
                 btnExportQuiz, btnReloadQuiz, btnClearLocal, btnSmbSetup, btnSmbSyncNow,
@@ -254,8 +255,15 @@ public class MainActivity extends Activity {
     // ---------------- 交互 ----------------
 
     private void wire() {
-        btnDisguise.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { toggleDisguise(); }
+        btnHoldMinus.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                prefs.setHoldSeconds(clamp(prefs.holdSeconds() - 1, 3, 20)); refreshAll();
+            }
+        });
+        btnHoldPlus.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                prefs.setHoldSeconds(clamp(prefs.holdSeconds() + 1, 3, 20)); refreshAll();
+            }
         });
         btnEnable.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { toggleMonitor(); }
@@ -378,9 +386,8 @@ public class MainActivity extends Activity {
     }
 
     private void refreshAll() {
-        tvStatus.setText(prefs.isLocked() ? "当前状态：锁定中" : "当前状态：未锁定");
         btnEnable.setText(prefs.isEnabled() ? "已开启（点击停用）" : "已停用（点击开启）");
-        btnDisguise.setText(prefs.disguise() ? "伪装成每日壁纸：开" : "伪装成每日壁纸：关");
+        tvHoldSec.setText(String.valueOf(prefs.holdSeconds()));
         tvSingle.setText(String.valueOf(prefs.singleMinutes()));
         tvDaily.setText(String.valueOf(prefs.dailyMinutes()));
         tvAway.setText(prefs.awayResetMinutes() <= 0 ? "关闭" : (prefs.awayResetMinutes() + " 分钟"));
@@ -462,26 +469,6 @@ public class MainActivity extends Activity {
         tvHelp.setText(sb.toString());
     }
 
-    // ---------------- 伪装 ----------------
-
-    private void toggleDisguise() {
-        final boolean on = !prefs.disguise();
-        confirm(on ? "伪装成「每日壁纸」？" : "恢复「答题锁屏」图标？",
-                on ? "开启后：\n• 桌面图标变成「每日壁纸」\n• 短按菜单键是壁纸设置\n"
-                        + "• 长按菜单键 5 秒 + 家长密码，才能回到本页\n\n"
-                        + "如果桌面图标没有立刻变化，重启电视或等半分钟。"
-                        : "恢复后桌面图标变回「答题锁屏」，长按菜单键也不再打开家长设置。",
-                on ? "开启伪装" : "恢复", new Runnable() {
-                    @Override public void run() {
-                        prefs.setDisguise(on);
-                        LauncherAlias.apply(MainActivity.this, on);
-                        refreshAll();
-                        toast(on ? "已伪装成「每日壁纸」：长按菜单键 5 秒回到这里"
-                                : "已恢复「答题锁屏」图标");
-                    }
-                });
-    }
-
     // ---------------- 监控开关 ----------------
 
     private void toggleMonitor() {
@@ -527,6 +514,7 @@ public class MainActivity extends Activity {
             @Override public void onEntered(String s) {
                 if (s.equals(prefs.pin())) {
                     authed = true;
+                    sAuthed = true;
                     gateOpen = false;
                     gateLayer.setVisibility(View.GONE);
                     refreshAll();
@@ -875,6 +863,12 @@ public class MainActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         if (prefs != null && !prefs.isLocked()) refreshAll();
+        // 从系统设置/自启动页返回时，重新把焦点放回本页，避免遥控器"没反应"
+        if (gateLayer != null && gateLayer.getVisibility() == View.VISIBLE) {
+            if (gateLayer.getChildCount() > 0) gateLayer.getChildAt(0).requestFocus();
+        } else if (getCurrentFocus() == null) {
+            if (btnEnable != null) btnEnable.requestFocus();
+        }
     }
 
     @Override protected void onStart() {

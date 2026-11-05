@@ -133,8 +133,9 @@ public class WallpaperActivity extends Activity {
                 h.removeCallbacks(showHold);
                 h.removeCallbacks(tick);
                 h.removeCallbacks(fire);
-                h.postDelayed(showHold, 600);
-                h.postDelayed(fire, 5000);
+                long total = holdTotalMs();
+                h.postDelayed(showHold, (long) (total * 0.8));
+                h.postDelayed(fire, total);
                 return true;
             }
             if (e.getAction() == KeyEvent.ACTION_UP) {
@@ -157,8 +158,12 @@ public class WallpaperActivity extends Activity {
         return super.dispatchKeyEvent(e);
     }
 
+    private long holdTotalMs() {
+        return Math.max(3, Math.min(20, prefs.holdSeconds())) * 1000L;
+    }
+
     private void updateHold() {
-        long leftMs = 5000 - (System.currentTimeMillis() - holdStart);
+        long leftMs = holdTotalMs() - (System.currentTimeMillis() - holdStart);
         int left = (int) Math.ceil(leftMs / 1000.0);
         if (left < 1) left = 1;
         tvHold.setText("继续按住 " + left + " 秒…");

@@ -41,6 +41,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/name_settings"
+            android:taskAffinity="com.kidslock.settings"
+            android:excludeFromRecents="true"
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
         <!-- 壁纸伪装入口：桌面显示「每日壁纸」 -->
@@ -51,26 +53,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/Theme.KidsLock.Wallpaper" />
 
-        <!-- 普通入口（关闭伪装时使用） -->
-        <activity-alias
-            android:name=".LauncherNormal"
-            android:targetActivity=".MainActivity"
-            android:exported="true"
-            android:label="@string/name_lock"
-            android:icon="@mipmap/ic_launcher">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
         <!-- 伪装入口：桌面显示「每日壁纸」 -->
         <activity-alias
             android:name=".LauncherWallpaper"
             android:targetActivity=".WallpaperActivity"
             android:exported="true"
-            android:enabled="false"
             android:label="@string/name_wall"
             android:icon="@mipmap/ic_wallpaper">
             <intent-filter>
