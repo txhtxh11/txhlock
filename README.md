@@ -2,6 +2,8 @@
 
 一款给小米电视（Android TV）用的**答题解锁**应用：孩子看了一会儿电视，到点自动弹出全屏锁屏，必须用遥控器连续答对几道题才能继续看。家长可自定义题库、时长、答对题数，并可用 PIN 码直接解锁。
 
+> **不知道怎么装？** 直接看下面「二、安装」的**方式一**：电脑上打开豆包，把一段话发给它，它自己下载、自己装到电视，3 步搞定，不用 U 盘。
+
 > 定位说明：靠无障碍服务的**按键过滤**能力，锁定状态下可以把遥控器主页键在系统分发前吞掉（桌面根本不出现），不需要接管系统桌面、不刷机。代价是无障碍服务可能被电视系统解绑，v1.9 起会在设置页直接标出这种状态并给出一键修复入口。
 
 ---
@@ -63,9 +65,10 @@
 - 我的电视是小米电视，Android 4.3，IP 是 192.168.1.23，和这台电脑在同一个 WiFi
 - 电视上的 ADB 调试已经打开了
 
-第 1 步 下载安装包（优先第 1 个，下载失败就换第 2 个）：
-1. https://github.com/txhtxh11/txhlock/releases/download/v1.9.1/txhlock_v1.9.1.apk
-2. https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/apk/txhlock_v1.9.1.apk
+第 1 步 下载安装包（按顺序试，第 1 个是国内 CDN，最快）：
+1. https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/apk/txhlock_v1.9.1.apk
+2. https://github.com/txhtxh11/txhlock/releases/download/v1.9.1/txhlock_v1.9.1.apk
+如果两个都下不下来，请直接告诉我下载失败，不要自己编造安装包。
 下载后请校验：文件大小应为 1751611 字节，MD5 应为 383aaa59b6044115acd279eff61dfb89
 
 第 2 步 准备 adb：这台电脑如果没装 adb，请你下载 Android platform-tools（Windows 版）解压，
