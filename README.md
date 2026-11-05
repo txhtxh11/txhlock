@@ -50,7 +50,7 @@
 > 2. 备用：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v2.0/txhlock_v2.0.apk
 > 3. 不要用 GitHub 官方直链：`github.com` / `raw.githubusercontent.com` 国内直连会失败
 >
-> 文件大小 **1,773,325 字节**，MD5 `8d8bac6356628a2918c4e462795f083e`。
+> 文件大小 **1,822,676 字节**，MD5 `a10cf22d39b1e3e38800ee6037092755`。
 
 ### 方式一（推荐 · 小白首选）：双击 `一键安装.bat`
 

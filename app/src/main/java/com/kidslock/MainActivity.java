@@ -1125,7 +1125,12 @@ public class MainActivity extends Activity {
         pass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         EditText path = addField(panel, "共享内子目录（可留空）", prefs.smbPath(), false);
 
-        final Dialog dlg = Ui.dialog(this, panel, 620);
+        // 5 个输入框在小屏电视上会超过一屏，套一层 ScrollView，窗口高度限制在屏幕内
+        ScrollView sv = new ScrollView(this);
+        sv.setVerticalScrollBarEnabled(false);
+        sv.addView(panel, new ScrollView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        final Dialog dlg = Ui.dialog(this, sv, 620, 460);
         LinearLayout buttons = Ui.row(this);
         TextView off = Ui.button(this, "停用", false, 52);
         TextView save = Ui.button(this, "保存并同步", true, 52);
