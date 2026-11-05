@@ -18,3 +18,7 @@ local.properties
 # ===== 系统文件 =====
 .DS_Store
 Thumbs.db
+
+# ===== 最新安装包（供直接下载，Release 之外的第二条路）=====
+!apk/
+!apk/*.apk
