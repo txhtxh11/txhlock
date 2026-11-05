@@ -400,7 +400,7 @@ public class MainActivity extends Activity {
         refreshAccStatus();
         refreshOverlayStatus();
         refreshHelp();
-        tvHomeStatus.setText("系统桌面：未做任何修改 —— 本应用只负责锁屏，不接管桌面，卸载后小米桌面自动恢复原样。");
+        tvHomeStatus.setText("不改系统桌面；卸载后小米桌面自动恢复。");
     }
 
     private void refreshQuizStatus() {
@@ -465,7 +465,7 @@ public class MainActivity extends Activity {
         sb.append("无障碍：").append(KeyFilter.isBound(this) ? "已绑定" : "未开启").append("\n");
         sb.append("题库：").append(engine == null ? 0 : engine.questionCount()).append(" 道\n");
         sb.append("悬浮层权限：").append(LockOverlay.canShow(this) ? "已授权" : "未授权").append("\n\n");
-        sb.append("主页键防回桌面失效时：点下面「去修复」，把无障碍开关关掉再打开一次。");
+        sb.append("主页键没反应时，点「去修复」：把无障碍关掉再打开。");
         tvHelp.setText(sb.toString());
     }
 

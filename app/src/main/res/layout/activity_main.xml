@@ -73,7 +73,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="在壁纸界面按住菜单键这么久才会要求家长密码；前 80% 不显示倒计时，最后 20% 才读秒。默认 10 秒。" />
+                android:text="壁纸界面按住菜单键这么久才进家长设置；前 8 秒不显示，最后 2 秒才倒计时（默认 10 秒）。" />
 
             <TextView style="@style/Label" android:text="监控开关" />
 
@@ -148,7 +148,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="关机/待机不超过这个时长：计时接着走、锁屏状态保留；超过：本次计时清零并解锁，但今日已看时长保留（防止靠关机刷每日额度）；跨夜（过零点）才清空当日额度。0=不限，只有跨夜清零。" />
+                android:text="关机不超过这个时长：计时接着走、锁屏保留；超过：本次计时清零（今日已看不减）；过零点：全部清零。0=不限。" />
 
             <TextView style="@style/Label" android:text="连续答对题数（答对才解锁）" />
 
@@ -192,7 +192,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="1~9 年级；口算按年级自动出题，各学科只出该年级及以下的题，不会超纲。" />
+                android:text="1~9 年级；只出该年级及以下的题，不超纲。" />
 
             <TextView style="@style/Label" android:text="教材版本（语文/数学/英语按版本出题）" />
 
@@ -219,9 +219,13 @@
                 android:text="未加载" />
 
             <TextView
+                style="@style/Hint"
+                android:text="想加自己的题：把 txt 文件拷到电视的 Download/txhlock 文件夹（U 盘或 SMB 都行），再点「重新加载题库」。一行一题：题目|答案|错误1;错误2;错误3" />
+
+            <TextView
                 android:id="@+id/btnExportQuiz"
                 style="@style/RowBtn"
-                android:text="导出内置题库（查看/照着改）" />
+                android:text="导出内置题库（照着改）" />
 
             <TextView
                 android:id="@+id/btnReloadQuiz"

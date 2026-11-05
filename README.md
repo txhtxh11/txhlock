@@ -1,4 +1,4 @@
-# txhlock · 答题锁屏（小米电视版）v1.9.4
+# txhlock · 答题锁屏（小米电视版）v1.9.5
 
 给孩子看的电视加一道「先答题、再看电视」的闸门：看满设定时长自动锁屏，遥控器连续答对几题才解锁。家长可用 PIN 直接解锁，可换题库、调时长、选教材版本。
 
@@ -37,13 +37,17 @@
 ## 二、安装
 
 > 有电脑：双击 `安装器\一键安装.bat`，或把一句话发给豆包（Agent 模式）。
-> 没电脑：U 盘拷 `txhlock_v1.9.4.apk` 到电视安装。
+> 没电脑：U 盘拷 `txhlock_v1.9.5.apk` 到电视安装。
 
-> **下载地址**
-> 1. https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.4/apk/txhlock_v1.9.4.apk
-> 2. https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.4/txhlock_v1.9.4.apk
+> **下载地址（任选一个能打开的；国内镜像可备用）**
+> 1. jsDelivr：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.5/apk/txhlock_v1.9.5.apk
+> 2. 国内加速：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.5/txhlock_v1.9.5.apk
+> 3. 国内加速 2：https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.5/txhlock_v1.9.5.apk
+> 4. jsDelivr Fastly：https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.5/apk/txhlock_v1.9.5.apk
 >
-> 文件大小 **1,853,458 字节**，MD5 `e84a2aaef2eea6d334166dad31216dd8`。
+> 安装器脚本（国内镜像）：https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.5/tools/install.ps1
+>
+> 文件大小 **4,197,690 字节**，MD5 `1ca7095dacae6fa6ba9c33f21b2264dc`。
 
 ### 方式一：一键安装器
 
@@ -54,11 +58,11 @@
 
 ### 方式二：豆包一句话全自动
 
-`发给豆包的提示词.txt` 整段复制给豆包 Agent 模式即可。
+见 `发给豆包的提示词.txt`：一句中文 + 一条命令，豆包会自动找电视、开 ADB、装 APK、配好无障碍和悬浮层；命令里已带国内镜像备用下载。
 
 ### 方式三：U 盘
 
-拷 `txhlock_v1.9.4.apk` 到 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「悬浮窗」。
+拷 `txhlock_v1.9.5.apk` 到 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「悬浮窗」。
 
 ### 装完必做
 
@@ -342,7 +346,14 @@ adb shell dpm set-device-owner com.kidslock/.MainActivity
 - **已验证进入设置后，遥控菜单键不再弹验证**；只有锁屏时才用菜单键呼出家长密码
 - 进入设置后本次不再重复验证（去掉了 8 分钟重新验证）
 
-### v1.9.4（当前）
+### v1.9.5（当前）
+
+- **题库区恢复「本地题库怎么加」说明**：把 txt 拷到 `Download/txhlock`，再点「重新加载题库」；一行一题：`题目|答案|错误1;错误2;错误3`
+- **所有提示改成小白能看懂的一句话**：长按 10 秒只最后 2 秒倒计时、长关机保留今日已看、主页键没反应怎么修
+- **安装器 + 仓库补国内镜像**：jsDelivr / ghfast / ghproxy / Fastly 四个下载地址，装了自动按顺序回退
+- **豆包一句话更新**：一条命令全自动装好，GitHub 打不开时自动换国内镜像
+
+### v1.9.4
 
 - **修复电视上锁屏页崩溃**：部分 MIUI Android 4.3 的二进制 XML 解析器在 `activity_lock.xml` 上抛 `StringBlock index out of bounds`；锁屏界面改为**纯代码构建**，不再 inflate 该 XML
 - **修复设置页/弹窗关闭后"卡住"**：门禁消失、弹窗关闭后焦点会落在已移除的视图上，遥控器方向键没反应；现在门禁和所有弹窗关闭后都会把焦点还给原按钮
