@@ -149,11 +149,14 @@ public class WallpaperActivity extends Activity {
             }
             if (e.getAction() == KeyEvent.ACTION_UP) {
                 if (holding) {
+                    long held = System.currentTimeMillis() - holdStart;
                     holding = false;
                     h.removeCallbacks(showHold);
                     h.removeCallbacks(tick);
                     h.removeCallbacks(fire);
                     holdBox.setVisibility(View.GONE);
+                    // 没有菜单键的遥控器：短按 OK 也能打开壁纸设置（长按 10 秒仍是家长验证）
+                    if (!longFired && held < 1500) showWallpaperSettings();
                 }
                 return true;
             }
