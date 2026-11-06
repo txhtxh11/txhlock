@@ -42,7 +42,7 @@ public class SettingsActivity extends Activity {
     private Prefs prefs;
     private QuizEngine engine;
 
-    private TextView tvVersion, btnEnable, btnHoldMinus, btnHoldPlus, tvHoldSec,
+    private TextView tvVersion, btnEnable, btnHoldMinus, btnHoldPlus, tvHoldSec, tvAutoStart,
             btnSingleMinus, btnSinglePlus, tvSingle,
             btnDailyMinus, btnDailyPlus, tvDaily,
             btnAwayMinus, btnAwayPlus, tvAway,
@@ -154,6 +154,7 @@ public class SettingsActivity extends Activity {
         tvAccState = (TextView) findViewById(R.id.tvAccState);
         btnOverlay = (TextView) findViewById(R.id.btnOverlay);
         btnSysSettings = (TextView) findViewById(R.id.btnSysSettings);
+        tvAutoStart = (TextView) findViewById(R.id.tvAutoStart);
         btnHomeSetup = (TextView) findViewById(R.id.btnHomeSetup);
         tvHelp = (TextView) findViewById(R.id.tvHelp);
         btnFixAcc = (TextView) findViewById(R.id.btnFixAcc);
@@ -428,6 +429,7 @@ public class SettingsActivity extends Activity {
         refreshTypeButtons();
         refreshEditionRow();
         refreshQuizStatus();
+        refreshAutoStart();
         refreshAccStatus();
         refreshOverlayStatus();
         refreshHelp();
@@ -453,6 +455,23 @@ public class SettingsActivity extends Activity {
                     + "\n上次更新：" + last);
         } else {
             tvSmbStatus.setText("SMB 同步未开启");
+        }
+    }
+
+    private void refreshAutoStart() {
+        if (tvAutoStart == null) return;
+        long up = android.os.SystemClock.elapsedRealtime();
+        long bootWall = System.currentTimeMillis() - up;
+        long last = prefs.lastBootAt();
+        if (last >= bootWall - 120000L) {
+            tvAutoStart.setText("自启动：本次开机已自动启动");
+            tvAutoStart.setTextColor(getResources().getColor(R.color.ok));
+        } else if (up < 10L * 60L * 1000L) {
+            tvAutoStart.setText("自启动：本次开机未自动启动（点下面的按钮去系统设置打开）");
+            tvAutoStart.setTextColor(getResources().getColor(R.color.danger));
+        } else {
+            tvAutoStart.setText("自启动：未检测到（系统不提供查询，建议去系统设置确认）");
+            tvAutoStart.setTextColor(getResources().getColor(R.color.warn));
         }
     }
 

@@ -1,4 +1,4 @@
-# txhlock · 答题锁屏（小米电视版）v1.9.14
+# txhlock · 答题锁屏（小米电视版）v1.9.15
 
 给孩子看的电视加一道「先答题、再看电视」的闸门：看满设定时长自动锁屏，遥控器连续答对几题才解锁。家长可用 PIN 直接解锁，可换题库、调时长、选教材版本。
 
@@ -37,17 +37,17 @@
 ## 二、安装
 
 > 有电脑：双击 `安装器\一键安装.bat`，或把一句话发给豆包（Agent 模式）。
-> 没电脑：U 盘拷 `txhlock_v1.9.14.apk` 到电视安装。
+> 没电脑：U 盘拷 `txhlock_v1.9.15.apk` 到电视安装。
 
 > **下载地址（任选一个能打开的；国内镜像可备用）**
-> 1. jsDelivr：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.14/apk/txhlock_v1.9.14.apk
-> 2. 国内加速：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.14/txhlock_v1.9.14.apk
-> 3. 国内加速 2：https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.14/txhlock_v1.9.14.apk
-> 4. jsDelivr Fastly：https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.14/apk/txhlock_v1.9.14.apk
+> 1. jsDelivr：https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.15/apk/txhlock_v1.9.15.apk
+> 2. 国内加速：https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.15/txhlock_v1.9.15.apk
+> 3. 国内加速 2：https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.15/txhlock_v1.9.15.apk
+> 4. jsDelivr Fastly：https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.15/apk/txhlock_v1.9.15.apk
 >
-> 安装器脚本（国内镜像）：https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.14/tools/install.ps1
+> 安装器脚本（国内镜像）：https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.15/tools/install.ps1
 >
-> 文件大小 **4,207,223 字节**，MD5 `e5aef5f3503855924f24b7cc001ce299`。
+> 文件大小 **4,207,612 字节**，MD5 `c178b87820561f2e8fc72f7cd71aceaa`。
 
 ### 方式一：一键安装器
 
@@ -62,7 +62,7 @@
 
 ### 方式三：U 盘
 
-拷 `txhlock_v1.9.14.apk` 到 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「悬浮窗」。
+拷 `txhlock_v1.9.15.apk` 到 U 盘 → 电视文件管理器安装 → 手动开「无障碍」和「悬浮窗」。
 
 ### 装完必做
 
@@ -346,7 +346,7 @@ adb shell dpm set-device-owner com.kidslock/.MainActivity
 - **已验证进入设置后，遥控菜单键不再弹验证**；只有锁屏时才用菜单键呼出家长密码
 - 进入设置后本次不再重复验证（去掉了 8 分钟重新验证）
 
-### v1.9.14（当前）
+### v1.9.15（当前）
 
 - **题库区恢复「本地题库怎么加」说明**：把 txt 拷到 `Download/txhlock`，再点「重新加载题库」；一行一题：`题目|答案|错误1;错误2;错误3`
 - **所有提示改成小白能看懂的一句话**：长按 10 秒只最后 2 秒倒计时、长关机保留今日已看、主页键没反应怎么修

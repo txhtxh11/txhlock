@@ -24,6 +24,9 @@ public class BootReceiver extends BroadcastReceiver {
                 || "com.htc.intent.action.QUICKBOOT_POWERON".equals(action);
         boolean isPackageReplaced = Intent.ACTION_MY_PACKAGE_REPLACED.equals(action);
 
+        // 记录"本次开机是否收到开机广播"，用于设置页显示自启动状态
+        if (isRealBoot) prefs.setLastBootAt(System.currentTimeMillis());
+
         if (!prefs.isEnabled()) return;      // 家长停用了监控，不做任何事
         if (!isRealBoot && !isPackageReplaced) return;
 

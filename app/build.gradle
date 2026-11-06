@@ -10,8 +10,8 @@ android {
         applicationId "com.kidslock"
         minSdk 18
         targetSdk 33
-        versionCode 104
-        versionName "1.9.14"
+        versionCode 105
+        versionName "1.9.15"
     }
 
     signingConfigs {
