@@ -34,7 +34,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "1.9.8"
+$script:Version = "1.9.9"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 
