@@ -106,8 +106,8 @@ https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.28.pdf
 | 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.28/tools/install.ps1 |
 | 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.28.pdf |
 
-- 文件大小：**4,415,748 字节**
-- MD5：`1ff0a1d0472eaaf68ca20473bf754c0c`
+- 文件大小：**4,416,317 字节**
+- MD5：`f399a78825657115ebd80e3fd24cec06`
 - 适用：Android 4.3–14（API 18–34），已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ### 安装（用户，三种方式任选一种）
@@ -199,7 +199,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 ### 版本（用户）
 
 - 当前：**v1.9.28**（versionCode 118）
-- APK：4,415,748 字节，MD5 `1ff0a1d0472eaaf68ca20473bf754c0c`
+- APK：4,416,317 字节，MD5 `f399a78825657115ebd80e3fd24cec06`
 - 更新日志：https://github.com/txhtxh11/txhlock/releases
 
 ---

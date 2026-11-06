@@ -38,10 +38,32 @@ public class QuizPanel {
     // 锁屏页统一用 OK 键：长按呼出家长密码；短按 OK 仍然是选答案
     private boolean okHolding = false;
     private boolean okPinFired = false;
+    private TextView tvUnlockHold;
+    private long unlockHoldStartMs;
+    private int unlockHoldTotalMs;
     private final Runnable okPinHold = new Runnable() {
         @Override public void run() {
             okPinFired = true;
+            hideUnlockHold();
             if (!pinOpen) showParentPin();
+        }
+    };
+    // 长按解锁：最后 20% 才显示读秒（10 秒 → 最后 2 秒）
+    private final Runnable unlockShow = new Runnable() {
+        @Override public void run() {
+            if (!okHolding || tvUnlockHold == null) return;
+            tvUnlockHold.setVisibility(View.VISIBLE);
+            unlockTick.run();
+        }
+    };
+    private final Runnable unlockTick = new Runnable() {
+        @Override public void run() {
+            if (!okHolding || tvUnlockHold == null) return;
+            long left = unlockHoldTotalMs - (System.currentTimeMillis() - unlockHoldStartMs);
+            int sec = (int) Math.ceil(Math.max(0, left) / 1000.0);
+            if (sec < 1) sec = 1;
+            tvUnlockHold.setText("继续按住 " + sec + " 秒…");
+            if (left > 0) handler.postDelayed(this, 250);
         }
     };
 
@@ -167,6 +189,15 @@ public class QuizPanel {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         hlp.topMargin = Ui.dp(ctx, 18);
         col.addView(tvHint, hlp);
+
+        tvUnlockHold = Ui.text(ctx, "", 24, Ui.color(ctx, R.color.accent), true);
+        tvUnlockHold.setGravity(Gravity.CENTER);
+        tvUnlockHold.setVisibility(View.GONE);
+        FrameLayout.LayoutParams ulp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        ulp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        ulp.bottomMargin = Ui.dp(ctx, 76);
+        r.addView(tvUnlockHold, ulp);
 
         root = r;
         r.setFocusTarget(optTexts[0]);
@@ -381,7 +412,14 @@ public class QuizPanel {
             if (event.getRepeatCount() == 0) {
                 okHolding = true;
                 okPinFired = false;
-                handler.postDelayed(okPinHold, Math.max(3, Math.min(20, prefs.unlockHoldSeconds())) * 1000L);
+                handler.removeCallbacks(okPinHold);
+                handler.removeCallbacks(unlockShow);
+                handler.removeCallbacks(unlockTick);
+                if (tvUnlockHold != null) tvUnlockHold.setVisibility(View.GONE);
+                unlockHoldTotalMs = Math.max(3, Math.min(20, prefs.unlockHoldSeconds())) * 1000;
+                unlockHoldStartMs = System.currentTimeMillis();
+                handler.postDelayed(okPinHold, unlockHoldTotalMs);
+                handler.postDelayed(unlockShow, (long) (unlockHoldTotalMs * 0.8));
             }
             return true;
         }
@@ -400,12 +438,19 @@ public class QuizPanel {
         return false;
     }
 
+    private void hideUnlockHold() {
+        if (tvUnlockHold != null) tvUnlockHold.setVisibility(View.GONE);
+    }
+
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) return true;
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
                 || keyCode == KeyEvent.KEYCODE_ENTER
                 || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
             handler.removeCallbacks(okPinHold);
+            handler.removeCallbacks(unlockShow);
+            handler.removeCallbacks(unlockTick);
+            hideUnlockHold();
             boolean shouldClick = okHolding && !okPinFired && !pinOpen;
             okHolding = false;
             if (shouldClick && root != null) {

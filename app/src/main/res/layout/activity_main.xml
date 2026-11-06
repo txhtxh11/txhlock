@@ -110,7 +110,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="锁屏答题页按住 OK 键这么久呼出家长密码（默认 10 秒）。" />
+                android:text="锁屏答题页按住 OK 键这么久呼出家长密码（默认 10 秒；最后 20% 显示倒计时）。" />
 
             <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
 
