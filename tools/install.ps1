@@ -11,6 +11,7 @@
 #
 #  可选参数：
 #    -TvIp 192.168.50.139    电视已知 IP 时直接连，跳过扫描
+#    -Port 5555              电视 ADB 端口（不是 5555 时必须指定，常见 5555/5556/4321）
 #    -ApkPath D:\txhlock.apk 指定安装包路径
 #    -WaitSeconds 300        找不到电视时等待多久（秒），默认 300
 #    -NoLaunch               装完不自动打开应用
@@ -19,6 +20,7 @@
 # =====================================================================
 param(
     [string]$TvIp = "",
+    [int]$Port = 0,
     [string]$ApkPath = "",
     [int]$WaitSeconds = 300,
     [switch]$NoLaunch,
@@ -37,6 +39,8 @@ $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
 $script:Version = "1.9.22"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
+# 常见 ADB 端口；-Port 指定时只用指定的那个
+$script:Ports = @(5555, 5556, 4321, 5557, 6666)
 
 # 非交互运行（AI Agent / 输出被重定向）时不暂停，避免自动化流程卡住
 $script:Interactive = $true
@@ -326,8 +330,12 @@ while ($found.Count -eq 0 -and $waited -lt $WaitSeconds) {
     if ($waited % 20 -eq 0) { Log ("  还在等… 已等待 {0} 秒（剩 {1} 秒）" -f $waited, ($WaitSeconds - $waited)) "DarkGray" }
 
     if ($TvIp -ne "") {
-        & $adb connect "$TvIp`:5555" 2>&1 | Out-Null
-        if (Test-AdbDevice "$TvIp`:5555") { $found = @($found) + "$TvIp`:5555" }
+        $tryPorts = if ($Port -gt 0) { @($Port) } else { $script:Ports }
+        foreach ($pt in $tryPorts) {
+            & $adb connect "$TvIp`:$pt" 2>&1 | Out-Null
+            Start-Sleep -Milliseconds 350
+            if (Test-AdbDevice "$TvIp`:$pt") { $found = @($found) + "$TvIp`:$pt"; break }
+        }
     } elseif ($waited % 15 -eq 0) {
         $open = Scan-Lan
         foreach ($ip in $open) {
@@ -340,7 +348,7 @@ while ($found.Count -eq 0 -and $waited -lt $WaitSeconds) {
 }
 
 if ($found.Count -eq 0) {
-    Fail "没有找到电视。" "请确认电脑和电视连的是同一个 WiFi/路由器，然后在电视上打开 ADB 调试后重新运行。"
+    Fail "没有找到电视。" "确认电脑和电视同一 WiFi、电视已开 ADB；如果电视 ADB 端口不是 5555，请在电视开发者选项里找到「IP:端口」，然后用：install.ps1 -TvIp 电视IP -Port 端口 重跑。"
 }
 
 $found = @($found | Select-Object -Unique)

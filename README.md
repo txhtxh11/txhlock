@@ -30,18 +30,23 @@ Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.22/tools/in
 powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -NoPause
 ```
 
-脚本会自动：找 adb（**电脑没装 adb 会自动下载，带国内镜像**）→ 扫局域网找电视 → 装 APK → 开无障碍 → 授权悬浮层 → 设置常亮 → 启动应用。**这一步不需要先问用户 IP，也不需要用户手动装 adb。**
+脚本会自动：找 adb（**电脑没装 adb 会自动下载，带国内镜像**）→ 扫局域网（默认 5555 端口）找电视 → 装 APK → 开无障碍 → 授权悬浮层 → 设置常亮 → 启动应用。**这一步不需要先问用户 IP，也不需要用户手动装 adb。**
 
-3. **只有在脚本提示找不到电视 / 连不上时，才与用户交互**，引导用户做两件事：
+电视 ADB 端口不是 5555 时脚本会找不到，直接看第 3 步。
 
-   - 查电视 IP：电视 设置 → 关于 / 网络信息 → 状态信息 → IPv4（形如 `192.168.50.139`）
-   - 开 ADB：电视 设置 → 关于 / 系统信息 → 光标移到「产品型号」连按 OK 5~7 次 → 返回 设置 → 开发者选项 → 打开 **ADB 调试**
+3. **只有在脚本提示找不到电视 / 连不上时，才与用户交互**，按顺序引导用户确认三件事：
 
-   然后带 IP 重跑：
+   - **查电视 IP**：电视 设置 → 关于 / 网络信息 → 状态信息 → IPv4（形如 `192.168.50.139`）
+   - **开 ADB**：电视 设置 → 关于 / 系统信息 → 光标移到「产品型号」连按 OK 5~7 次 → 返回 设置 → 开发者选项 → 打开 **ADB 调试**
+   - **查 ADB 端口**：电视的开发者选项 / 网络调试 / 无线调试页面，有的会直接显示 `IP:端口`；常见端口是 **5555、5556、4321、5557、6666**。**不要猜**，让用户看页面上的数字，或挨个试这几个常见端口。
+
+   知道 IP 和端口后重跑（端口不是 5555 时必须加 `-Port`）：
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -TvIp 192.168.50.139 -NoPause
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -TvIp 192.168.50.139 -Port 5555 -NoPause
 ```
+
+   用户也不知道端口时，先带 IP 重跑（脚本会依次试 5555/5556/4321/5557/6666）：`-TvIp 电视IP -NoPause`；仍找不到再让用户去开发者选项里看。
 
 4. **确认安装成功**（可选）：
 
