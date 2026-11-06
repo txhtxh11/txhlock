@@ -22,3 +22,6 @@ Thumbs.db
 # ===== 最新安装包（供直接下载，Release 之外的第二条路）=====
 !apk/
 !apk/*.apk
+
+# dev build log
+build_out.txt

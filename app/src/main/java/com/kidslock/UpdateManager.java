@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,9 +22,13 @@ import java.net.URL;
 /** 应用内更新：检查 GitHub 上的 update.json，下载 APK、校验 MD5，再拉起系统安装器。 */
 public final class UpdateManager {
     private static final String[] META_URLS = {
+            "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/update.json",
+            "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/update.json",
+            "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/update.json",
+            "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/update.json",
+            "https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@dev/update.json",
             "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/update.json",
-            "https://raw.githubusercontent.com/txhtxh11/txhlock/master/update.json",
-            "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/master/update.json"
+            "https://raw.githubusercontent.com/txhtxh11/txhlock/master/update.json"
     };
 
     public interface Listener {
@@ -62,7 +67,9 @@ public final class UpdateManager {
                         try {
                             body = http(META_URLS[i]);
                             if (body != null && body.length() > 0) break;
-                        } catch (Throwable ignored) { }
+                        } catch (Throwable ignored) {
+                            Log.w("UpdateManager", "meta failed " + META_URLS[i] + " : " + ignored);
+                        }
                     }
                     if (body == null) throw new RuntimeException("update.json 下载失败");
                     JSONObject o = new JSONObject(body);
