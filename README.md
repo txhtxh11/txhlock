@@ -1,4 +1,4 @@
-# 每日壁纸（答题锁屏）· 小米电视版 v1.9.21
+# 每日壁纸（答题锁屏）· 小米电视版 v1.9.22
 
 > **用户只需要把这一句话发给豆包（电脑版 / Agent 模式）：**
 >
@@ -10,7 +10,7 @@
 
 请阅读本 README 的「下载」「安装」章节，完成电视安装；装好后把「使用指南」交给用户：
 
-- 图文指南（PDF）：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.21.pdf`
+- 图文指南（PDF）：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf`
 - 或直接把下面「给用户的简短使用指南」念/发给用户。
 
 ---
@@ -29,14 +29,14 @@
 
 | 文件 | 地址 |
 | --- | --- |
-| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.21/apk/txhlock_v1.9.21.apk |
-| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.21/txhlock_v1.9.21.apk |
-| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.21/txhlock_v1.9.21.apk |
-| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.21/tools/install.ps1 |
-| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.21.pdf |
+| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.22/apk/txhlock_v1.9.22.apk |
+| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.22/txhlock_v1.9.22.apk |
+| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.22/txhlock_v1.9.22.apk |
+| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.22/tools/install.ps1 |
+| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf |
 
-- 文件大小：**4,413,934 字节**
-- MD5：`ed05dcdc08736ca0ece24c1fde417a86`
+- 文件大小：**4,414,084 字节**
+- MD5：`badd3532128fc46f8fe9dde5d3b94f5b`
 - 适用：Android 4.3（API 18）及以上，已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ---
@@ -56,13 +56,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -TvIp 192.168.
 
 ### 方式二：U 盘
 
-把 `txhlock_v1.9.21.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
+把 `txhlock_v1.9.22.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
 
 ### 方式三：ADB 命令
 
 ```bash
 adb connect 192.168.50.139:5555
-adb install -r txhlock_v1.9.21.apk
+adb install -r txhlock_v1.9.22.apk
 adb shell settings put secure enabled_accessibility_services com.kidslock/com.kidslock.BootAccessibility
 adb shell settings put secure accessibility_enabled 1
 adb shell am start -n com.kidslock/.LauncherWallpaper
@@ -139,8 +139,8 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ## 版本
 
-- 当前：**v1.9.21**（versionCode 110）
-- APK：4,413,934 字节，MD5 `ed05dcdc08736ca0ece24c1fde417a86`
+- 当前：**v1.9.22**（versionCode 110）
+- APK：4,414,084 字节，MD5 `badd3532128fc46f8fe9dde5d3b94f5b`
 - 更新日志见 Releases 页面：https://github.com/txhtxh11/txhlock/releases
 
 ## 开发者

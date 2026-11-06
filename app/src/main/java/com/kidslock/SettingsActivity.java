@@ -639,7 +639,11 @@ public class SettingsActivity extends Activity {
             }
 
             @Override public void onCancelled() {
-                // 门禁不可取消
+                // 返回键：退出验证页，回到壁纸/桌面
+                if (!authed) {
+                    gateOpen = false;
+                    finish();
+                }
             }
         });
         padRef[0] = pad;
@@ -1055,6 +1059,14 @@ public class SettingsActivity extends Activity {
     }
 
     @Override public boolean dispatchKeyEvent(android.view.KeyEvent event) {
+        // 验证页（还没验证通过）允许返回键退出，回到壁纸/桌面
+        if (event.getKeyCode() == android.view.KeyEvent.KEYCODE_BACK
+                && event.getAction() == android.view.KeyEvent.ACTION_DOWN
+                && gateOpen && !authed) {
+            gateOpen = false;
+            finish();
+            return true;
+        }
         if (event.getKeyCode() == android.view.KeyEvent.KEYCODE_MENU) {
             return true; // 设置页不响应菜单键；只有锁屏答题页才用它呼出家长密码
         }
