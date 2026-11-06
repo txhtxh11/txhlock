@@ -6,16 +6,66 @@
 
 ---
 
-## ① 给豆包电脑版（只给豆包看，用户可跳过）
+## ① 给豆包电脑版（只读这一节；其他章节是用户说明，不要执行）
 
-豆包，你只需要做两件事：
+豆包，你的任务只有一件：**帮用户把「每日壁纸」装到电视上，装好后把 ② 的简短使用指南发给用户。**
 
-1. 按本 README 的「下载」「安装」章节，帮用户把电视装好；
-2. 装好后，把下面 ② 的「用户使用指南」原样发给用户，或把图文指南 PDF 链接发给用户。
+### 尽量全自动，不要一上来就问 IP
 
-**注意：② 是给用户看的，不要把它当成你要执行的操作。**
+1. **下载安装器**（任选一个国内镜像）：
 
-图文指南 PDF：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf`
+```powershell
+Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.22/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+```
+
+备选：
+
+```powershell
+Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.22/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+```
+
+2. **直接运行，让脚本自己扫局域网找电视**：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -NoPause
+```
+
+脚本会自动：找 adb → 扫局域网找电视 → 装 APK → 开无障碍 → 授权悬浮层 → 设置常亮 → 启动应用。**这一步不需要先问用户 IP。**
+
+3. **只有在脚本提示找不到电视 / 连不上时，才与用户交互**，引导用户做两件事：
+
+   - 查电视 IP：电视 设置 → 关于 / 网络信息 → 状态信息 → IPv4（形如 `192.168.50.139`）
+   - 开 ADB：电视 设置 → 关于 / 系统信息 → 光标移到「产品型号」连按 OK 5~7 次 → 返回 设置 → 开发者选项 → 打开 **ADB 调试**
+
+   然后带 IP 重跑：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -TvIp 192.168.50.139 -NoPause
+```
+
+4. **确认安装成功**（可选）：
+
+```powershell
+adb -s 192.168.50.139:5555 shell "dumpsys package com.kidslock | grep versionName"
+# 期望：versionName=1.9.22
+adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
+# 期望：Service[label=每日壁纸 ...]
+```
+
+电视桌面出现 **「每日壁纸」** 图标即成功（不是「答题锁屏」）；如果还是旧名字/图标，让用户重启一次电视。
+
+5. **装好后，把 ② 的「用户使用指南」原样发给用户**，或发图文指南 PDF：
+
+```
+https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf
+```
+
+### 豆包的边界（重要）
+
+- 你只需要读 **①** 这一节；
+- **② 是给用户看的，直接转交，不要照着执行；**
+- **③ 的其他内容都是给用户的说明，你可以了解，但不要按里面的步骤操作；**
+- 不要改电视系统、不要 root、不要卸载用户其他应用。
 
 ---
 
@@ -31,7 +81,11 @@
 
 ---
 
-## 下载
+## ③ 用户说明（给用户看；豆包可了解，但不要执行）
+
+> 豆包：以下全部是给用户的说明，你可以了解，但不要按这些步骤操作。
+
+### 下载（用户）
 
 | 文件 | 地址 |
 | --- | --- |
@@ -45,11 +99,9 @@
 - MD5：`badd3532128fc46f8fe9dde5d3b94f5b`
 - 适用：Android 4.3（API 18）及以上，已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
----
+### 安装（用户，三种方式任选一种）
 
-## 安装（三种方式，任选一种）
-
-### 方式一：一键安装器（推荐）
+**方式一：一键安装器（推荐）**
 
 1. 下载 `tools/install.ps1`（或把仓库里的 `安装器` 文件夹拷到电脑）。
 2. 双击 `一键安装.bat`，或运行：
@@ -58,13 +110,13 @@
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -TvIp 192.168.50.139
 ```
 
-3. 脚本自动找 adb → 找电视 → 装 APK → 开无障碍 → 授权悬浮层 → 常亮 → 启动。
+不知道 IP 就去掉 `-TvIp`，脚本会自动扫局域网。
 
-### 方式二：U 盘
+**方式二：U 盘**
 
 把 `txhlock_v1.9.22.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
 
-### 方式三：ADB 命令
+**方式三：ADB 命令**
 
 ```bash
 adb connect 192.168.50.139:5555
@@ -74,9 +126,7 @@ adb shell settings put secure accessibility_enabled 1
 adb shell am start -n com.kidslock/.LauncherWallpaper
 ```
 
----
-
-## 首次设置（装完必做）
+### 首次设置（用户，装完必做）
 
 1. 打开「每日壁纸」→ 长按菜单键 10 秒 → 密码 `1234`。
 2. 确认 **监控：已开启**。
@@ -85,9 +135,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 5. **自启动**：显示绿色「已开启（无需操作）」就不用管；显示「未开启 / 未确认」才点按钮去打开。
 6. 修改家长密码；按孩子情况设置单次/每日/连对题数。
 
----
-
-## 日常使用
+### 日常使用（用户）
 
 | 操作 | 结果 |
 | --- | --- |
@@ -99,16 +147,14 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 | 壁纸页长按菜单键 10 秒 | 家长密码 → 家长设置 |
 | 手机扫码（验证页右侧） | 同一 WiFi 下改设置、立刻锁定 / 解锁 |
 
-### 手机扫码设置
+### 手机扫码设置（用户）
 
 1. 电视长按菜单键 10 秒 → 验证页右侧二维码 + 地址（`http://电视IP:8765/`）。
 2. 手机连同一个家庭 WiFi → 扫码 / 输地址 → 输入家长密码。
 3. 可改监控、单次/每日/长关机、连对题数、长按秒数、开机先答题、家长密码；可「立刻锁定 / 立刻解锁」。
 4. 只限局域网：手机用 4G/5G 打不开；连续错 5 次密码锁 5 分钟；10 分钟无人访问自动关闭。
 
----
-
-## 关机 / 重启规则
+### 关机 / 重启规则（用户）
 
 | 设置 | 场景 | 结果 |
 | --- | --- | --- |
@@ -120,18 +166,14 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 「长关机」阈值在 设置 → 时间 → 长关机重置（默认 30 分钟，0 = 不重置）。
 
----
-
-## 题库
+### 题库（用户）
 
 - 内置 **2297 道**：人教版 / 北师大 / 苏教版 / 外研版 / 译林版 / 通用，按年级 + 教材版本出题。
 - 本地题库：放到电视 `/sdcard/kidslock/`（`*.txt`），设置 → 题库 → 重新加载。
 - SMB 同步：设置 → 题库 → SMB 同步设置（host / share / user / pass）→ 立即更新。
 - 内置题库只读，外部题库只能加题、不能改内置题。
 
----
-
-## 常见问题
+### 常见问题（用户）
 
 - **更新后无障碍变红/未开启？** 小米电视覆盖安装会自动解绑无障碍，点「去系统里打开无障碍」重开一次；安装器也会尝试重开。
 - **锁屏时按主页键能回桌面？** 点「主页键拦截失效？点此修复」：把无障碍关掉再打开；仍不行确认悬浮层是「已开启」。
@@ -141,15 +183,15 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 - **忘记家长密码？** 默认 `1234`；改过又忘了只能卸载重装（会清空设置）。
 - **卸载**：设置 → 应用 → 每日壁纸 → 卸载；或家长设置 → 帮助 → 还原并卸载。
 
----
-
-## 版本
+### 版本（用户）
 
 - 当前：**v1.9.22**（versionCode 112）
 - APK：4,414,084 字节，MD5 `badd3532128fc46f8fe9dde5d3b94f5b`
-- 更新日志见 Releases 页面：https://github.com/txhtxh11/txhlock/releases
+- 更新日志：https://github.com/txhtxh11/txhlock/releases
 
-## 开发者
+---
+
+## 开发者（豆包可忽略）
 
 - 源码：`app/`（Java，minSdk 18，targetSdk 33，compileSdk 34）
 - 构建：
