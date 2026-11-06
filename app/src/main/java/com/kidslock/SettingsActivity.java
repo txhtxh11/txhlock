@@ -483,7 +483,7 @@ public class SettingsActivity extends Activity {
 
         if (on) {
             // 已开启：不需要用户操作，只显示状态，不做成按钮
-            btnSysSettings.setText("自启动：已开启（系统里已允许，无需操作）");
+            btnSysSettings.setText("自启动：已开启（无需操作）");
             btnSysSettings.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 17);
             btnSysSettings.setTextColor(getResources().getColor(R.color.ok));
             btnSysSettings.setBackgroundColor(0x00000000);
@@ -500,7 +500,7 @@ public class SettingsActivity extends Activity {
             // 未开启 / 未确认：必须用户手动去系统设置，才做成按钮
             btnSysSettings.setText(off
                     ? "自启动：未开启（点此去系统设置）"
-                    : "自启动：未确认（点此去系统设置）");
+                    : "自启动：未确认（部分电视没有这个开关）");
             btnSysSettings.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 24);
             btnSysSettings.setTextColor(getResources().getColor(R.color.text_main));
             btnSysSettings.setBackgroundResource(R.drawable.bg_option);

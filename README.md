@@ -106,8 +106,8 @@ https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.28.pdf
 | 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.28/tools/install.ps1 |
 | 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.28.pdf |
 
-- 文件大小：**4,414,984 字节**
-- MD5：`d9c49788fedf372d1028725d175f283b`
+- 文件大小：**4,415,748 字节**
+- MD5：`1ff0a1d0472eaaf68ca20473bf754c0c`
 - 适用：Android 4.3–14（API 18–34），已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ### 安装（用户，三种方式任选一种）
@@ -188,7 +188,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 - **更新后无障碍变红/未开启？** 小米电视覆盖安装会自动解绑无障碍，点「去系统里打开无障碍」重开一次；安装器也会尝试重开。
 - **锁屏时按主页键能回桌面？** 点「主页键拦截失效？点此修复」：把无障碍关掉再打开；仍不行确认悬浮层是「已开启」。
-- **自启动显示「未确认」？** 系统不提供查询，重启一次电视后再看：绿色=已启，红色=没启。
+- **自启动显示「未确认」/系统里没有自启动开关？** 小米等电视有「自启动」开关；Sony、Google TV 等原生系统没有这个开关，不用管——只要无障碍已开启，开机后会自动恢复。重启一次电视后再看：绿色=已生效。
 - **手机扫码打不开？** 确认同一 WiFi（不是访客网络）、直接输验证页地址、路由器没开 AP 隔离。
 - **遥控器没有菜单键？** 壁纸页长按 OK 键 10 秒进家长设置；锁屏页长按 OK 键 10 秒呼出家长密码。\n- **设置页按菜单键没反应？** 正常：设置页不响应菜单键；只有锁屏答题页/壁纸页长按才用菜单键。
 - **Android 12/13/14 点图标闪退？** 升级到 v1.9.28：修复了 PendingIntent 缺少 FLAG_IMMUTABLE 的崩溃。
@@ -199,7 +199,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 ### 版本（用户）
 
 - 当前：**v1.9.28**（versionCode 118）
-- APK：4,414,984 字节，MD5 `d9c49788fedf372d1028725d175f283b`
+- APK：4,415,748 字节，MD5 `1ff0a1d0472eaaf68ca20473bf754c0c`
 - 更新日志：https://github.com/txhtxh11/txhlock/releases
 
 ---

@@ -26,7 +26,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -264,6 +266,8 @@ public class WallpaperActivity extends Activity {
     // ---------------- 必应每日一图 ----------------
 
     private void loadBing() {
+        final File dir = wallDir();
+        pruneWallDir(dir);
         long at = prefs.wallpaperFetchedAt();
         File f = prefs.wallpaperFile() == null ? null : new File(prefs.wallpaperFile());
         if (at > 0 && sameDay(at, System.currentTimeMillis()) && f != null && f.exists()) {
@@ -285,10 +289,10 @@ public class WallpaperActivity extends Activity {
                     final String credit = im.optString("copyright", "");
                     String full = path.startsWith("http") ? path : "https://cn.bing.com" + path;
 
-                    File dir = new File(getFilesDir(), "wall");
-                    if (!dir.exists()) dir.mkdirs();
-                    File out = new File(dir, "today.jpg");
+                    File out = new File(dir, "wall_"
+                            + new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date()) + ".jpg");
                     download(full, out);
+                    pruneWallDir(dir);
 
                     final Bitmap b = decode(out);
                     if (b == null) throw new RuntimeException("decode failed");
@@ -317,6 +321,27 @@ public class WallpaperActivity extends Activity {
             tvCredit.setText(credit);
         } else if (prefs.wallpaperBing()) {
             tvCredit.setText("Bing 每日一图");
+        }
+    }
+
+    /** 壁纸目录：只保留最近 2 个文件（今天 + 昨天），最多两张。 */
+    private File wallDir() {
+        File dir = new File(getFilesDir(), "wall");
+        if (!dir.exists()) dir.mkdirs();
+        return dir;
+    }
+
+    private static void pruneWallDir(File dir) {
+        File[] fs = dir.listFiles();
+        if (fs == null || fs.length <= 2) return;
+        Arrays.sort(fs, new Comparator<File>() {
+            @Override public int compare(File a, File b) {
+                long d = b.lastModified() - a.lastModified();
+                return d > 0 ? 1 : (d < 0 ? -1 : 0);
+            }
+        });
+        for (int i = 2; i < fs.length; i++) {
+            try { fs[i].delete(); } catch (Throwable ignored) { }
         }
     }
 

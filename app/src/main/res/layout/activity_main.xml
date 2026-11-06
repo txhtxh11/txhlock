@@ -337,7 +337,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="「自启动」需要手动去系统设置里打开；如果已开启，下面只显示绿色状态，不用点。" />
+                android:text="小米/部分电视有「自启动」开关；Sony、Google TV 等原生系统没有这个开关，只要无障碍已开启，开机后会自动恢复，不用管。" />
 
             <TextView
                 android:id="@+id/btnSysSettings"
