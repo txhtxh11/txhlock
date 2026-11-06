@@ -43,8 +43,10 @@ public final class Ui {
             DisplayMetrics dm = res.getDisplayMetrics();
             int px = Math.max(dm.widthPixels, dm.heightPixels);
             if (px <= 0 || dm.density <= 0) return base;
-            float target = px / DESIGN_WIDTH_DP;
-            if (target <= dm.density * 1.02f) return base;
+            // 4K / 100 寸不要按分辨率放大：最多 320dpi（960dp 设计宽 = 1920px），
+            // 设置页固定 960dp 居中，大屏上是一列内容，不会被拉满整屏。
+            float target = Math.min(px / DESIGN_WIDTH_DP, 2.0f);
+            if (Math.abs(target - dm.density) <= dm.density * 0.02f) return base;
             Configuration cfg = new Configuration(res.getConfiguration());
             cfg.densityDpi = Math.round(target * 160f);
             return base.createConfigurationContext(cfg);
