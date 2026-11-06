@@ -54,31 +54,21 @@ public class MainActivity extends Activity {
             btnOverlay, btnSysSettings, btnHomeSetup, tvHelp, btnFixAcc, btnTestLock;
 
     private LinearLayout editionRow, typeGrid;
-    private LinearLayout rail;
-    private LinearLayout[] sections;
-    private TextView[] railItems;
-    private ScrollView scrollView;
-    private int section = 0;
-    private static final String[] RAIL_NAMES = {"监控", "时间", "答题", "题库", "家长", "帮助"};
     private FrameLayout gateLayer;
 
     private final Handler ui = new Handler(Looper.getMainLooper());
 
     // 焦点看门狗：从系统设置/无障碍页回来、弹窗关闭后，如果没有任何控件拿到焦点，
-    // 每 2 秒把焦点放回当前分类的第一个可操作项，避免"遥控器没反应"。
+    // 每 2 秒把焦点放回「监控开关」，避免"遥控器没反应"。
     private final Runnable focusKeeper = new Runnable() {
         @Override public void run() {
             if (isFinishing()) return;
             if (gateLayer != null && gateLayer.getVisibility() == View.VISIBLE) {
                 if (gateLayer.getChildCount() > 0) gateLayer.getChildAt(0).requestFocus();
-            } else if (sections != null && section < sections.length) {
+            } else {
                 View cur = getCurrentFocus();
                 if (cur == null || !cur.isShown()) {
-                    View f = firstFocusable(sections[section]);
-                    if (f != null) f.requestFocus();
-                    else if (railItems != null && railItems.length > section) {
-                        railItems[section].requestFocus();
-                    }
+                    if (btnEnable != null) btnEnable.requestFocus();
                 }
             }
             ui.postDelayed(this, 2000);
@@ -113,8 +103,6 @@ public class MainActivity extends Activity {
         if (prefs.isEnabled()) Keeper.startService(this);
         engine = new QuizEngine(this, prefs);
         refreshAll();
-        buildRail();
-        showSection(0);
         showGate();
     }
 
@@ -141,16 +129,6 @@ public class MainActivity extends Activity {
         btnLevelPlus = (TextView) findViewById(R.id.btnLevelPlus);
         tvLevel = (TextView) findViewById(R.id.tvLevel);
         editionRow = (LinearLayout) findViewById(R.id.editionRow);
-        rail = (LinearLayout) findViewById(R.id.rail);
-        scrollView = (ScrollView) findViewById(R.id.scroll);
-        sections = new LinearLayout[]{
-                (LinearLayout) findViewById(R.id.secMonitor),
-                (LinearLayout) findViewById(R.id.secTime),
-                (LinearLayout) findViewById(R.id.secQuiz),
-                (LinearLayout) findViewById(R.id.secBank),
-                (LinearLayout) findViewById(R.id.secGuard),
-                (LinearLayout) findViewById(R.id.secHelp)
-        };
         typeGrid = (LinearLayout) findViewById(R.id.typeGrid);
         tvQuizStatus = (TextView) findViewById(R.id.tvQuizStatus);
         btnExportQuiz = (TextView) findViewById(R.id.btnExportQuiz);
@@ -181,74 +159,6 @@ public class MainActivity extends Activity {
             v.setClickable(true);
             v.setFocusable(true);
         }
-    }
-
-    // ---------------- 左侧分类 / 右侧内容 ----------------
-
-    private void buildRail() {
-        if (rail == null) return;
-        rail.removeAllViews();
-        railItems = new TextView[RAIL_NAMES.length];
-        for (int i = 0; i < RAIL_NAMES.length; i++) {
-            final int idx = i;
-            TextView t = new TextView(this);
-            t.setText(RAIL_NAMES[i]);
-            t.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            t.setGravity(Gravity.CENTER_VERTICAL);
-            t.setIncludeFontPadding(false);
-            t.setPadding(Ui.dp(this, 16), 0, Ui.dp(this, 10), 0);
-            t.setBackgroundResource(R.drawable.bg_option);
-            t.setTextColor(getResources().getColor(R.color.text_main));
-            t.setClickable(true);
-            t.setFocusable(true);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, Ui.dp(this, 56));
-            lp.bottomMargin = Ui.dp(this, 6);
-            t.setLayoutParams(lp);
-            t.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) { showSection(idx); }
-            });
-            rail.addView(t);
-            railItems[i] = t;
-        }
-    }
-
-    private void showSection(int index) {
-        if (sections == null || index < 0 || index >= sections.length) return;
-        section = index;
-        for (int i = 0; i < sections.length; i++) {
-            sections[i].setVisibility(i == index ? View.VISIBLE : View.GONE);
-        }
-        if (railItems != null) {
-            for (int i = 0; i < railItems.length; i++) {
-                boolean on = i == index;
-                railItems[i].setBackgroundResource(on ? R.drawable.bg_chip_on : R.drawable.bg_option);
-                railItems[i].setTextColor(getResources().getColor(R.color.text_main));
-            }
-        }
-        final LinearLayout sec = sections[index];
-        if (scrollView != null) scrollView.post(new Runnable() {
-            @Override public void run() { scrollView.scrollTo(0, 0); }
-        });
-        sec.post(new Runnable() {
-            @Override public void run() {
-                View f = firstFocusable(sec);
-                if (f != null) f.requestFocus();
-            }
-        });
-    }
-
-    private View firstFocusable(ViewGroup g) {
-        for (int i = 0; i < g.getChildCount(); i++) {
-            View c = g.getChildAt(i);
-            if (c.getVisibility() != View.VISIBLE) continue;
-            if (c.isFocusable()) return c;
-            if (c instanceof ViewGroup) {
-                View f = firstFocusable((ViewGroup) c);
-                if (f != null) return f;
-            }
-        }
-        return null;
     }
 
     // ---------------- 教材版本 ----------------
@@ -980,13 +890,9 @@ public class MainActivity extends Activity {
         if (gateLayer != null && gateLayer.getVisibility() == View.VISIBLE) return;
         View cur = getCurrentFocus();
         if (cur == null || !cur.isShown()) {
-            if (sections != null && section < sections.length) {
-                final LinearLayout sec = sections[section];
-                sec.post(new Runnable() {
-                    @Override public void run() {
-                        View f = firstFocusable(sec);
-                        if (f != null) f.requestFocus();
-                    }
+            if (btnEnable != null) {
+                btnEnable.post(new Runnable() {
+                    @Override public void run() { btnEnable.requestFocus(); }
                 });
             }
         }
@@ -1004,14 +910,9 @@ public class MainActivity extends Activity {
                 final View g = gateLayer.getChildAt(0);
                 g.post(new Runnable() { @Override public void run() { g.requestFocus(); } });
             }
-        } else if (sections != null && section < sections.length) {
-            // 从系统设置/无障碍页返回：不管原来焦点在哪，都恢复到当前分类的第一个可操作项
-            final LinearLayout sec = sections[section];
-            sec.postDelayed(new Runnable() {
-                @Override public void run() {
-                    View f = firstFocusable(sec);
-                    if (f != null) f.requestFocus();
-                }
+        } else if (btnEnable != null) {
+            btnEnable.postDelayed(new Runnable() {
+                @Override public void run() { btnEnable.requestFocus(); }
             }, 350);
         }
     }
