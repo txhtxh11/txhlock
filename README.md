@@ -1,4 +1,4 @@
-# 每日壁纸（答题锁屏）· 小米电视版 v1.9.20
+# 每日壁纸（答题锁屏）· 小米电视版 v1.9.21
 
 > **用户只需要把这一句话发给豆包（电脑版 / Agent 模式）：**
 >
@@ -8,7 +8,7 @@
 
 ## 豆包电脑版：请按这个顺序执行
 
-你是一名电脑上的安装助手。目标：帮用户把电视装上 v1.9.20、把该开的权限开好，最后把使用指南交给用户。
+你是一名电脑上的安装助手。目标：帮用户把电视装上 v1.9.21、把该开的权限开好，最后把使用指南交给用户。
 
 ### 第 0 步：先确认三件事
 
@@ -22,10 +22,10 @@
 
 ```powershell
 # 方式 A：ghfast 镜像
-Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.20/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.21/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 
 # 方式 B：jsDelivr
-Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.20/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.21/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 ### 第 2 步：安装（一条命令）
@@ -39,7 +39,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -TvI
 脚本会自动完成：
 
 1. 找到 / 下载 adb；
-2. 连接电视、安装 `txhlock_v1.9.20.apk`；
+2. 连接电视、安装 `txhlock_v1.9.21.apk`；
 3. 打开「每日壁纸」的无障碍保活；
 4. 授权悬浮层、设置屏幕常亮；
 5. 启动应用。
@@ -75,7 +75,7 @@ adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
 
 ### 第 5 步：把使用指南交给用户
 
-- **完整图文指南（PDF）**：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.20.pdf`
+- **完整图文指南（PDF）**：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.21.pdf`
 - 把链接发给用户，或直接把下面「给用户的简短使用指南」念/发给用户。
 
 ### 第 6 步：告诉用户以后怎么更新
@@ -98,14 +98,14 @@ adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
 
 | 文件 | 地址 |
 | --- | --- |
-| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.20/apk/txhlock_v1.9.20.apk |
-| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.20/txhlock_v1.9.20.apk |
-| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.20/txhlock_v1.9.20.apk |
-| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.20/tools/install.ps1 |
-| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.20.pdf |
+| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.21/apk/txhlock_v1.9.21.apk |
+| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.21/txhlock_v1.9.21.apk |
+| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.21/txhlock_v1.9.21.apk |
+| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.21/tools/install.ps1 |
+| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.21.pdf |
 
-- 文件大小：**4,413,897 字节**
-- MD5：`2096e60a9524ac1eb90cc561f96b9277`
+- 文件大小：**4,413,934 字节**
+- MD5：`ed05dcdc08736ca0ece24c1fde417a86`
 - 适用：Android 4.3（API 18）及以上，已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ---
@@ -125,13 +125,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -TvIp 192.168.
 
 ### 方式二：U 盘
 
-把 `txhlock_v1.9.20.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
+把 `txhlock_v1.9.21.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
 
 ### 方式三：ADB 命令
 
 ```bash
 adb connect 192.168.50.139:5555
-adb install -r txhlock_v1.9.20.apk
+adb install -r txhlock_v1.9.21.apk
 adb shell settings put secure enabled_accessibility_services com.kidslock/com.kidslock.BootAccessibility
 adb shell settings put secure accessibility_enabled 1
 adb shell am start -n com.kidslock/.LauncherWallpaper
@@ -208,8 +208,8 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ## 版本
 
-- 当前：**v1.9.20**（versionCode 110）
-- APK：4,413,897 字节，MD5 `2096e60a9524ac1eb90cc561f96b9277`
+- 当前：**v1.9.21**（versionCode 110）
+- APK：4,413,934 字节，MD5 `ed05dcdc08736ca0ece24c1fde417a86`
 - 更新日志见 Releases 页面：https://github.com/txhtxh11/txhlock/releases
 
 ## 开发者

@@ -118,6 +118,8 @@ public class WallpaperActivity extends Activity {
         try {
             Intent i = new Intent(this, SettingsActivity.class);
             i.putExtra("from_wallpaper", true);
+            // 每次长按都新开一个设置任务，确保一定重新弹家长密码
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         } catch (Throwable t) {
             Log.w(TAG, "open settings failed", t);

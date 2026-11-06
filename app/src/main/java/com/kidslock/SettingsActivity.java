@@ -77,7 +77,6 @@ public class SettingsActivity extends Activity {
         }
     };
 
-    private static boolean sAuthed = false;
     private boolean authed = false;
     private long leftAtMs = 0L;
     private boolean gateOpen = false;
@@ -91,7 +90,7 @@ public class SettingsActivity extends Activity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = new Prefs(this);
-        authed = sAuthed;
+        authed = false;   // 每次从壁纸长按进来都必须重新验证
         if (prefs.isLocked()) {
             Keeper.launchLock(this);
             finish();
@@ -627,7 +626,6 @@ public class SettingsActivity extends Activity {
             @Override public void onEntered(String s) {
                 if (s.equals(prefs.pin())) {
                     authed = true;
-                    sAuthed = true;
                     gateOpen = false;
                     gateLayer.setVisibility(View.GONE);
                     refreshAll();
@@ -1016,6 +1014,16 @@ public class SettingsActivity extends Activity {
                     @Override public void run() { btnEnable.requestFocus(); }
                 });
             }
+        }
+    }
+
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent != null && intent.getBooleanExtra("from_wallpaper", false)) {
+            authed = false;
+            gateOpen = false;
+            showGate();
         }
     }
 
