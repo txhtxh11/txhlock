@@ -35,7 +35,7 @@ public class QuizPanel {
     private final Context ctx;
     private final Prefs prefs;
     private final Handler handler = new Handler(Looper.getMainLooper());
-    // 没有菜单键的遥控器：锁屏页长按返回键 2.5 秒也能呼出家长密码
+    // 没有菜单键的遥控器：锁屏页长按返回键 3 秒也能呼出家长密码
     private final Runnable backPinHold = new Runnable() {
         @Override public void run() {
             if (!pinOpen) showParentPin();
@@ -372,7 +372,7 @@ public class QuizPanel {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (pinOpen) return false;
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (event.getRepeatCount() == 0) handler.postDelayed(backPinHold, 2500);
+            if (event.getRepeatCount() == 0) handler.postDelayed(backPinHold, 3000);
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_MENU) {
