@@ -145,7 +145,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ## 版本
 
-- 当前：**v1.9.22**（versionCode 110）
+- 当前：**v1.9.22**（versionCode 112）
 - APK：4,414,084 字节，MD5 `badd3532128fc46f8fe9dde5d3b94f5b`
 - 更新日志见 Releases 页面：https://github.com/txhtxh11/txhlock/releases
 
