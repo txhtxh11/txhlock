@@ -129,8 +129,12 @@ public class WallpaperActivity extends Activity {
     // ---------------- 按键：短按壁纸设置，长按 5 秒家长设置 ----------------
 
     @Override public boolean dispatchKeyEvent(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.KEYCODE_MENU
-                || e.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+        // 菜单键只做壁纸设置（短按）；进家长验证统一用 OK 键长按
+        if (e.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+            if (e.getAction() == KeyEvent.ACTION_UP) showWallpaperSettings();
+            return true;
+        }
+        if (e.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
             if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() == 0) {
                 holding = true;
                 longFired = false;
@@ -150,7 +154,6 @@ public class WallpaperActivity extends Activity {
                     h.removeCallbacks(tick);
                     h.removeCallbacks(fire);
                     holdBox.setVisibility(View.GONE);
-                    if (!longFired && e.getKeyCode() == KeyEvent.KEYCODE_MENU) showWallpaperSettings();
                 }
                 return true;
             }

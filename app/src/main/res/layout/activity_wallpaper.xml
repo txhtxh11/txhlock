@@ -78,16 +78,6 @@
             android:textColor="#CCCCCC"
             android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowColor="#80000000"
-            android:shadowDx="0"
-            android:shadowDy="2"
-            android:shadowRadius="6"
-            android:text="短按菜单键：壁纸设置&#10;长按菜单键 / OK 键 10 秒：家长设置"
-            android:textColor="#AAAAAA"
-            android:textSize="18sp" />
     </LinearLayout>
 
     <ProgressBar

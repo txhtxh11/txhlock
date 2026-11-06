@@ -1,4 +1,4 @@
-# 每日壁纸（答题锁屏）· 小米电视版 v1.9.24
+# 每日壁纸（答题锁屏）· 小米电视版 v1.9.25
 
 > **用户只需要把这一句话发给豆包（电脑版 / Agent 模式）：**
 >
@@ -6,7 +6,7 @@
 
 ---
 
-> **仓库只保留最新版：`apk/` 目录里只有 `txhlock_v1.9.24.apk`。安装请只用本 README 的链接，不要从旧版本或旧 Release 下载。**
+> **仓库只保留最新版：`apk/` 目录里只有 `txhlock_v1.9.25.apk`。安装请只用本 README 的链接，不要从旧版本或旧 Release 下载。**
 
 ## ① 给豆包电脑版（只读这一节；其他章节是用户说明，不要执行）
 
@@ -17,13 +17,13 @@
 1. **下载安装器**（任选一个国内镜像）：
 
 ```powershell
-Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.24/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.25/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 备选：
 
 ```powershell
-Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.24/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.25/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 2. **直接运行，让脚本自己扫局域网找电视**：
@@ -68,7 +68,7 @@ adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
 把 ② 的「用户使用指南」原样发给用户，或发图文指南 PDF：
 
 ```
-https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.24.pdf
+https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.25.pdf
 ```
 
 ### 豆包的边界（重要）
@@ -85,7 +85,7 @@ https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.24.pdf
 > 豆包：以下内容请直接转发给用户，不要照着操作。
 
 1. **孩子看电视**：正常看，后台会计时；看满设定时长自动弹出答题，**连续答对 3 题**才能继续看。
-2. **家长进设置**：在「每日壁纸」界面**按住菜单键或 OK 键 10 秒** → 输入家长密码（默认 `1234`）。没有菜单键的遥控器就长按 OK 键。
+2. **家长进设置**：在「每日壁纸」界面**按住 OK 键 10 秒** → 输入家长密码（默认 `1234`）。
 3. **手机扫码设置**：长按 10 秒后的验证页右侧有二维码；手机连**同一个家庭 WiFi** 扫码 → 输入同一个家长密码 → 可改设置、**立刻锁定 / 立刻解锁**。
 4. **换壁纸**：在壁纸界面**短按**菜单键，不是进设置。
 5. **卸载**：电视 设置 → 应用 → 每日壁纸 → 卸载。
@@ -100,14 +100,14 @@ https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.24.pdf
 
 | 文件 | 地址 |
 | --- | --- |
-| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.24/apk/txhlock_v1.9.24.apk |
-| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.24/txhlock_v1.9.24.apk |
-| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.24/txhlock_v1.9.24.apk |
-| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.24/tools/install.ps1 |
-| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.24.pdf |
+| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.25/apk/txhlock_v1.9.25.apk |
+| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.25/txhlock_v1.9.25.apk |
+| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.25/txhlock_v1.9.25.apk |
+| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.25/tools/install.ps1 |
+| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.25.pdf |
 
-- 文件大小：**4,414,267 字节**
-- MD5：`cc41d9820447d58ea88f78298be32c6d`
+- 文件大小：**4,414,107 字节**
+- MD5：`e945854c6f0e3c5fa8816c6c02775da6`
 - 适用：Android 4.3–14（API 18–34），已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ### 安装（用户，三种方式任选一种）
@@ -125,13 +125,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -TvIp 192.168.
 
 **方式二：U 盘**
 
-把 `txhlock_v1.9.24.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
+把 `txhlock_v1.9.25.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
 
 **方式三：ADB 命令**
 
 ```bash
 adb connect 192.168.50.139:5555
-adb install -r txhlock_v1.9.24.apk
+adb install -r txhlock_v1.9.25.apk
 adb shell settings put secure enabled_accessibility_services com.kidslock/com.kidslock.BootAccessibility
 adb shell settings put secure accessibility_enabled 1
 adb shell am start -n com.kidslock/.LauncherWallpaper
@@ -139,7 +139,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ### 首次设置（用户，装完必做）
 
-1. 打开「每日壁纸」→ 长按菜单键 **或 OK 键** 10 秒 → 密码 `1234`。
+1. 打开「每日壁纸」→ 长按 OK 键 10 秒 → 密码 `1234`。
 2. 确认 **监控：已开启**。
 3. 打开 **无障碍**（红色未开启时点按钮去系统设置打开）。
 4. **悬浮层**：显示绿色「已开启（系统自动授权，无需操作）」即可，不用点。
@@ -155,7 +155,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 | 连续答对 N 题 | 解锁，重新计时 |
 | 锁屏页按菜单键（没有菜单键长按返回键 2.5 秒） | 输入家长密码，直接解锁 |
 | 壁纸页短按菜单键 | 壁纸设置（每日更新 / 换一张 / 关闭） |
-| 壁纸页长按菜单键 / OK 键 10 秒 | 家长密码 → 家长设置 |
+| 壁纸页长按 OK 键 10 秒 | 家长密码 → 家长设置 |
 | 手机扫码（验证页右侧） | 同一 WiFi 下改设置、立刻锁定 / 解锁 |
 
 ### 手机扫码设置（用户）
@@ -191,15 +191,15 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 - **自启动显示「未确认」？** 系统不提供查询，重启一次电视后再看：绿色=已启，红色=没启。
 - **手机扫码打不开？** 确认同一 WiFi（不是访客网络）、直接输验证页地址、路由器没开 AP 隔离。
 - **遥控器没有菜单键？** 壁纸页长按 OK 键 10 秒进家长设置；锁屏页长按返回键 2.5 秒呼出家长密码。\n- **设置页按菜单键没反应？** 正常：设置页不响应菜单键；只有锁屏答题页/壁纸页长按才用菜单键。
-- **Android 12/13/14 点图标闪退？** 升级到 v1.9.24：修复了 PendingIntent 缺少 FLAG_IMMUTABLE 的崩溃。
+- **Android 12/13/14 点图标闪退？** 升级到 v1.9.25：修复了 PendingIntent 缺少 FLAG_IMMUTABLE 的崩溃。
 - **Android 14 悬浮层没盖住？** 设置 → 应用 → 每日壁纸 → 显示在其他应用上层，手动允许。
 - **忘记家长密码？** 默认 `1234`；改过又忘了只能卸载重装（会清空设置）。
 - **卸载**：设置 → 应用 → 每日壁纸 → 卸载；或家长设置 → 帮助 → 还原并卸载。
 
 ### 版本（用户）
 
-- 当前：**v1.9.24**（versionCode 114）
-- APK：4,414,267 字节，MD5 `cc41d9820447d58ea88f78298be32c6d`
+- 当前：**v1.9.25**（versionCode 115）
+- APK：4,414,107 字节，MD5 `e945854c6f0e3c5fa8816c6c02775da6`
 - 更新日志：https://github.com/txhtxh11/txhlock/releases
 
 ---
