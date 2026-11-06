@@ -299,6 +299,15 @@
                 android:text="正在检测无障碍保活状态…" />
 
             <TextView
+                android:id="@+id/tvAccState"
+                style="@style/Hint"
+                android:text="无障碍：正在检测…" />
+
+            <TextView
+                style="@style/Hint"
+                android:text="更新/覆盖安装后，小米电视可能会自动关掉无障碍；更新完回来看到「未开启」，点上面的按钮重开一次即可。" />
+
+            <TextView
                 android:id="@+id/btnSysSettings"
                 style="@style/RowBtn"
                 android:layout_marginTop="10dp"

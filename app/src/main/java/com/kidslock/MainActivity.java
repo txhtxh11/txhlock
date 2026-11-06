@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
             btnLevelMinus, btnLevelPlus, tvLevel,
             tvQuizStatus, btnExportQuiz, btnReloadQuiz, btnClearLocal,
             tvSmbStatus, btnSmbSetup, btnSmbSyncNow,
-            btnChangePin, btnBootLock, tvHomeStatus, btnAcc, tvAccStatus,
+            btnChangePin, btnBootLock, tvHomeStatus, btnAcc, tvAccStatus, tvAccState,
             btnOverlay, btnSysSettings, btnHomeSetup, tvHelp, btnFixAcc, btnTestLock;
 
     private LinearLayout editionRow, typeGrid;
@@ -142,6 +142,7 @@ public class MainActivity extends Activity {
         tvHomeStatus = (TextView) findViewById(R.id.tvHomeStatus);
         btnAcc = (TextView) findViewById(R.id.btnAcc);
         tvAccStatus = (TextView) findViewById(R.id.tvAccStatus);
+        tvAccState = (TextView) findViewById(R.id.tvAccState);
         btnOverlay = (TextView) findViewById(R.id.btnOverlay);
         btnSysSettings = (TextView) findViewById(R.id.btnSysSettings);
         btnHomeSetup = (TextView) findViewById(R.id.btnHomeSetup);
@@ -451,6 +452,15 @@ public class MainActivity extends Activity {
         boolean filter = KeyFilter.hasKeyFilter(this);
         boolean effective = KeyFilter.isEffective(this);
         boolean overlay = LockOverlay.canShow(this);
+        if (tvAccState != null) {
+            if (bound) {
+                tvAccState.setText("无障碍：✅ 已开启");
+                tvAccState.setTextColor(getResources().getColor(R.color.ok));
+            } else {
+                tvAccState.setText("无障碍：❌ 未开启（更新后常见，点上面按钮重开一次）");
+                tvAccState.setTextColor(getResources().getColor(R.color.danger));
+            }
+        }
         if (overlay) {
             tvAccStatus.setText("锁屏方式：✅ 悬浮层（主页键切桌面也会被直接盖住）");
             tvAccStatus.setTextColor(getResources().getColor(R.color.ok));
@@ -464,7 +474,7 @@ public class MainActivity extends Activity {
             tvAccStatus.setText("无障碍：⚠ 服务在跑，但没有按键过滤；建议关掉再开一次");
             tvAccStatus.setTextColor(getResources().getColor(R.color.warn));
         } else {
-            tvAccStatus.setText("无障碍：❌ 未开启 —— 建议开启，开机自启更可靠");
+            tvAccStatus.setText("无障碍：❌ 未开启（更新后常见）—— 点上面按钮重开一次");
             tvAccStatus.setTextColor(getResources().getColor(R.color.danger));
         }
     }
