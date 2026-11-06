@@ -7,6 +7,7 @@
 ---
 
 > **仓库只保留最新版：`apk/` 目录里只有 `txhlock_v1.9.24.apk`。安装请只用本 README 的链接，不要从旧版本或旧 Release 下载。**
+
 ## ① 给豆包电脑版（只读这一节；其他章节是用户说明，不要执行）
 
 豆包，你的任务只有一件：**帮用户把「每日壁纸」装到电视上，装好后把 ② 的简短使用指南发给用户。**
@@ -204,6 +205,8 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 ---
 
 ## 开发者（豆包可忽略）
+
+> **发版规则**：pk/ 只保留最新版 APK；发新版时删掉旧 APK，README 和安装器同步版本号。
 
 - 源码：`app/`（Java，minSdk 18，targetSdk 33，compileSdk 34）
 - 构建：
