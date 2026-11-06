@@ -3,10 +3,9 @@
     "urls":  [
                  "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
                  "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
-                 "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
-                 "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/apk/txhlock_v2.0.2-dev.apk"
+                 "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk"
              ],
-    "versionCode":  202,
-    "versionName":  "2.0.2-dev",
-    "notes":  "测试更新：2.0.1 应检查到 2.0.2，下载并拉起安装器。"
+    "versionCode":  203,
+    "versionName":  "2.0.3-test",
+    "notes":  "测试：2.0.2 应能下载 2.0.2 APK 并拉起安装器（版本号故意写 203）。"
 }
