@@ -417,14 +417,14 @@ public class SettingsActivity extends Activity {
     }
 
     private void refreshAll() {
-        btnEnable.setText(prefs.isEnabled() ? "已开启（点击停用）" : "已停用（点击开启）");
+        btnEnable.setText(prefs.isEnabled() ? "监控：已开启（点此停用）" : "监控：未开启（点此开启）");
         tvHoldSec.setText(String.valueOf(prefs.holdSeconds()));
         tvSingle.setText(String.valueOf(prefs.singleMinutes()));
         tvDaily.setText(String.valueOf(prefs.dailyMinutes()));
         tvAway.setText(prefs.awayResetMinutes() <= 0 ? "关闭" : (prefs.awayResetMinutes() + " 分钟"));
         tvCorrect.setText(String.valueOf(prefs.requiredCorrect()));
         tvLevel.setText(Prefs.gradeName(prefs.grade()));
-        btnBootLock.setText(prefs.lockOnBoot() ? "开机先答题：开" : "开机先答题：关");
+        btnBootLock.setText(prefs.lockOnBoot() ? "开机先答题：开（点此关闭）" : "开机先答题：关（点此开启）");
         refreshTypeButtons();
         refreshEditionRow();
         refreshQuizStatus();
@@ -463,37 +463,64 @@ public class SettingsActivity extends Activity {
         boolean overlay = LockOverlay.canShow(this);
         if (tvAccState != null) {
             if (bound) {
-                tvAccState.setText("无障碍：✅ 已开启");
+                tvAccState.setText("无障碍：✅ 已开启（更新/重启后可能被系统关掉，回来看到未开启就重开）");
                 tvAccState.setTextColor(getResources().getColor(R.color.ok));
             } else {
-                tvAccState.setText("无障碍：❌ 未开启（更新后常见，点上面按钮重开一次）");
+                tvAccState.setText("无障碍：❌ 未开启（点上面的按钮，去系统里打开）");
                 tvAccState.setTextColor(getResources().getColor(R.color.danger));
             }
         }
         if (overlay) {
-            tvAccStatus.setText("锁屏方式：✅ 悬浮层（主页键切桌面也会被直接盖住）");
+            tvAccStatus.setText("主页键拦截：✅ 悬浮层覆盖（桌面不出现）");
             tvAccStatus.setTextColor(getResources().getColor(R.color.ok));
         } else if (bound && effective) {
-            tvAccStatus.setText("锁屏方式：✅ 无障碍物理拦截（桌面不出现）");
+            tvAccStatus.setText("主页键拦截：✅ 无障碍已拦截（桌面不出现）");
             tvAccStatus.setTextColor(getResources().getColor(R.color.ok));
         } else if (bound && filter) {
-            tvAccStatus.setText("锁屏方式：⚠ 无障碍秒级抢回（桌面会闪一下，建议开悬浮层）");
+            tvAccStatus.setText("主页键拦截：⚠ 秒级抢回（桌面会闪一下）");
             tvAccStatus.setTextColor(getResources().getColor(R.color.warn));
         } else if (bound) {
-            tvAccStatus.setText("无障碍：⚠ 服务在跑，但没有按键过滤；建议关掉再开一次");
+            tvAccStatus.setText("主页键拦截：⚠ 无障碍在跑，但没拿到按键过滤");
             tvAccStatus.setTextColor(getResources().getColor(R.color.warn));
         } else {
-            tvAccStatus.setText("无障碍：❌ 未开启（更新后常见）—— 点上面按钮重开一次");
+            tvAccStatus.setText("主页键拦截：❌ 未开启");
             tvAccStatus.setTextColor(getResources().getColor(R.color.danger));
         }
+        btnAcc.setText(bound ? "去系统里检查无障碍（当前：已开启）"
+                : "去系统里打开无障碍（当前：未开启）");
     }
 
     private void refreshOverlayStatus() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            boolean ok = LockOverlay.canShow(this);
-            btnOverlay.setText(ok ? "锁屏方式：悬浮层已授权（推荐）" : "锁屏方式：点此允许「显示在其他应用上层」");
+        boolean ok = LockOverlay.canShow(this);
+        if (ok) {
+            // 已授权：只显示状态，不做成按钮，不需要用户点
+            btnOverlay.setText("悬浮层：已开启（系统自动授权，无需操作）");
+            btnOverlay.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 17);
+            btnOverlay.setTextColor(getResources().getColor(R.color.ok));
+            btnOverlay.setBackgroundColor(0x00000000);
+            btnOverlay.setGravity(android.view.Gravity.LEFT);
+            btnOverlay.setPadding(0, Ui.dp(this, 6), 0, Ui.dp(this, 6));
+            btnOverlay.setClickable(false);
+            btnOverlay.setFocusable(false);
+            btnOverlay.setFocusableInTouchMode(false);
+            if (btnOverlay.getLayoutParams() != null) {
+                btnOverlay.getLayoutParams().height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+                btnOverlay.requestLayout();
+            }
         } else {
-            btnOverlay.setText("锁屏方式：悬浮层（Android 4.3 安装即授权）");
+            btnOverlay.setText("悬浮层：未开启（点此去授权）");
+            btnOverlay.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 24);
+            btnOverlay.setTextColor(getResources().getColor(R.color.text_main));
+            btnOverlay.setBackgroundResource(R.drawable.bg_option);
+            btnOverlay.setGravity(android.view.Gravity.CENTER);
+            btnOverlay.setPadding(0, 0, 0, 0);
+            btnOverlay.setClickable(true);
+            btnOverlay.setFocusable(true);
+            btnOverlay.setFocusableInTouchMode(true);
+            if (btnOverlay.getLayoutParams() != null) {
+                btnOverlay.getLayoutParams().height = Ui.dp(this, 76);
+                btnOverlay.requestLayout();
+            }
         }
     }
 

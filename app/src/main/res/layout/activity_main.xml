@@ -55,7 +55,7 @@
             <TextView
                 android:id="@+id/btnEnable"
                 style="@style/RowBtn"
-                android:text="已开启（点击停用）" />
+                android:text="监控：已开启（点此停用）" />
 
             <TextView
                 style="@style/Hint"
@@ -275,13 +275,13 @@
             <TextView
                 android:id="@+id/btnBootLock"
                 style="@style/RowBtn"
-                android:text="开机先答题：开" />
+                android:text="开机先答题：开（点此关闭）" />
 
             <TextView
                 android:id="@+id/btnOverlay"
                 style="@style/RowBtn"
                 android:layout_marginTop="10dp"
-                android:text="锁屏方式：检查中…" />
+                android:text="悬浮层：检查中…" />
 
             <TextView
                 android:id="@+id/tvHomeStatus"
@@ -291,7 +291,7 @@
             <TextView
                 android:id="@+id/btnAcc"
                 style="@style/RowBtn"
-                android:text="开启无障碍保活（推荐）" />
+                android:text="去系统里打开无障碍（当前：未开启）" />
 
             <TextView
                 android:id="@+id/tvAccStatus"
