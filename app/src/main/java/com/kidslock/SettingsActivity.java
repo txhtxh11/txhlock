@@ -532,7 +532,7 @@ public class SettingsActivity extends Activity {
         sb.append("无障碍：").append(KeyFilter.isBound(this) ? "已绑定" : "未开启").append("\n");
         sb.append("题库：").append(engine == null ? 0 : engine.questionCount()).append(" 道\n");
         sb.append("悬浮层权限：").append(LockOverlay.canShow(this) ? "已授权" : "未授权").append("\n\n");
-        sb.append("主页键没反应时，点「去修复」：把无障碍关掉再打开。");
+        sb.append("答题锁定时如果按主页键能回到桌面（拦截失效），点「去修复」：把无障碍关掉再打开。");
         tvHelp.setText(sb.toString());
     }
 

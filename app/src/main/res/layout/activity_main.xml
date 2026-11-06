@@ -308,10 +308,13 @@
                 android:text="更新/覆盖安装后，小米电视可能会自动关掉无障碍；更新完回来看到「未开启」，点上面的按钮重开一次即可。" />
 
             <TextView
+                style="@style/Hint"
+                android:text="「自启动」需要在系统设置里手动打开；点下面的按钮跳到应用详情页。" />
+
+            <TextView
                 android:id="@+id/btnSysSettings"
                 style="@style/RowBtn"
-                android:layout_marginTop="10dp"
-                android:text="打开系统设置：自启动 / 权限" />
+                android:text="点此打开系统设置（自启动 / 权限）" />
 
             <TextView
                 android:id="@+id/btnHomeSetup"
@@ -329,7 +332,7 @@
             <TextView
                 android:id="@+id/btnFixAcc"
                 style="@style/RowBtn"
-                android:text="去修复主页键拦截" />
+                android:text="主页键拦截失效？点此修复" />
 
             <TextView
                 android:id="@+id/btnTestLock"
