@@ -277,7 +277,8 @@ public final class MiniWeb {
             prefs.setDailyMinutes(clamp(intval(f, "daily", 0), 0, 720));
             prefs.setAwayResetMinutes(clamp(intval(f, "away", 30), 0, 1440));
             prefs.setRequiredCorrect(clamp(intval(f, "correct", 3), 1, 10));
-            prefs.setHoldSeconds(clamp(intval(f, "hold", 10), 3, 20));
+            prefs.setHoldSeconds(clamp(intval(f, "hold", 5), 3, 20));
+            prefs.setUnlockHoldSeconds(clamp(intval(f, "unlock_hold", 5), 3, 20));
             prefs.setLockOnBoot(f.containsKey("boot"));
             String pin = f.get("pin");
             if (pin != null && pin.matches("\\d{4,8}")) prefs.setPin(pin);
@@ -369,7 +370,8 @@ public final class MiniWeb {
         b.append(num("每日累计上限（分钟，0=不限）", "daily", prefs.dailyMinutes(), 0, 720));
         b.append(num("长关机重置（分钟，0=不重置）", "away", prefs.awayResetMinutes(), 0, 1440));
         b.append(num("连续答对题数", "correct", prefs.requiredCorrect(), 1, 10));
-        b.append(num("长按菜单键（秒）", "hold", prefs.holdSeconds(), 3, 20));
+        b.append(num("壁纸页长按 OK（秒）", "hold", prefs.holdSeconds(), 3, 20));
+        b.append(num("锁屏页长按 OK（秒）", "unlock_hold", prefs.unlockHoldSeconds(), 3, 20));
         b.append("<label class=row><span>开机先答题</span><input type=checkbox name=boot ")
                 .append(prefs.lockOnBoot() ? "checked" : "").append("></label>");
         b.append("<label class=field><span>新家长密码（4~8 位数字，留空不改）</span>")

@@ -45,6 +45,7 @@ public class SettingsActivity extends Activity {
     private QuizEngine engine;
 
     private TextView tvVersion, btnEnable, btnHoldMinus, btnHoldPlus, tvHoldSec,
+            btnUnlockMinus, btnUnlockPlus, tvUnlockSec,
             btnSingleMinus, btnSinglePlus, tvSingle,
             btnDailyMinus, btnDailyPlus, tvDaily,
             btnAwayMinus, btnAwayPlus, tvAway,
@@ -123,6 +124,9 @@ public class SettingsActivity extends Activity {
         btnHoldMinus = (TextView) findViewById(R.id.btnHoldMinus);
         btnHoldPlus = (TextView) findViewById(R.id.btnHoldPlus);
         tvHoldSec = (TextView) findViewById(R.id.tvHoldSec);
+        btnUnlockMinus = (TextView) findViewById(R.id.btnUnlockMinus);
+        btnUnlockPlus = (TextView) findViewById(R.id.btnUnlockPlus);
+        tvUnlockSec = (TextView) findViewById(R.id.tvUnlockSec);
         btnSingleMinus = (TextView) findViewById(R.id.btnSingleMinus);
         btnSinglePlus = (TextView) findViewById(R.id.btnSinglePlus);
         tvSingle = (TextView) findViewById(R.id.tvSingle);
@@ -161,7 +165,7 @@ public class SettingsActivity extends Activity {
         btnTestLock = (TextView) findViewById(R.id.btnTestLock);
         gateLayer = (FrameLayout) findViewById(R.id.gateLayer);
 
-        for (TextView v : new TextView[]{btnEnable, btnHoldMinus, btnHoldPlus, btnSingleMinus, btnSinglePlus,
+        for (TextView v : new TextView[]{btnEnable, btnHoldMinus, btnHoldPlus, btnUnlockMinus, btnUnlockPlus, btnSingleMinus, btnSinglePlus,
                 btnDailyMinus, btnDailyPlus, btnAwayMinus, btnAwayPlus,
                 btnCorrMinus, btnCorrPlus, btnLevelMinus, btnLevelPlus,
                 btnExportQuiz, btnReloadQuiz, btnClearLocal, btnSmbSetup, btnSmbSyncNow,
@@ -297,6 +301,16 @@ public class SettingsActivity extends Activity {
                 prefs.setHoldSeconds(clamp(prefs.holdSeconds() + 1, 3, 20)); refreshAll();
             }
         });
+        btnUnlockMinus.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                prefs.setUnlockHoldSeconds(clamp(prefs.unlockHoldSeconds() - 1, 3, 20)); refreshAll();
+            }
+        });
+        btnUnlockPlus.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                prefs.setUnlockHoldSeconds(clamp(prefs.unlockHoldSeconds() + 1, 3, 20)); refreshAll();
+            }
+        });
         btnEnable.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { toggleMonitor(); }
         });
@@ -420,6 +434,7 @@ public class SettingsActivity extends Activity {
     private void refreshAll() {
         btnEnable.setText(prefs.isEnabled() ? "监控：已开启（点此停用）" : "监控：未开启（点此开启）");
         tvHoldSec.setText(String.valueOf(prefs.holdSeconds()));
+        tvUnlockSec.setText(String.valueOf(prefs.unlockHoldSeconds()));
         tvSingle.setText(String.valueOf(prefs.singleMinutes()));
         tvDaily.setText(String.valueOf(prefs.dailyMinutes()));
         tvAway.setText(prefs.awayResetMinutes() <= 0 ? "关闭" : (prefs.awayResetMinutes() + " 分钟"));

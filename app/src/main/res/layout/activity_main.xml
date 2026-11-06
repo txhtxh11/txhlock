@@ -64,7 +64,7 @@
             
             <TextView
                 style="@style/Label"
-                android:text="长按 OK 键进入设置（秒）" />
+                android:text="壁纸页长按 OK 进验证（秒）" />
 
             <LinearLayout style="@style/Stepper">
 
@@ -76,7 +76,7 @@
                 <TextView
                     android:id="@+id/tvHoldSec"
                     style="@style/StepValue"
-                    android:text="10" />
+                    android:text="5" />
 
                 <TextView
                     android:id="@+id/btnHoldPlus"
@@ -86,7 +86,31 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="壁纸界面按住 OK 键这么久才进家长设置；前 2 秒不显示，最后 1 秒才倒计时（默认 3 秒）。" />
+                android:text="壁纸界面按住 OK 键这么久才进家长设置（默认 5 秒）。" />
+
+            <TextView style="@style/Label" android:text="锁屏页长按 OK 解锁（秒）" />
+
+            <LinearLayout style="@style/Stepper">
+
+                <TextView
+                    android:id="@+id/btnUnlockMinus"
+                    style="@style/StepBtn"
+                    android:text="-" />
+
+                <TextView
+                    android:id="@+id/tvUnlockSec"
+                    style="@style/StepValue"
+                    android:text="5" />
+
+                <TextView
+                    android:id="@+id/btnUnlockPlus"
+                    style="@style/StepBtn"
+                    android:text="+" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Hint"
+                android:text="锁屏答题页按住 OK 键这么久呼出家长密码（默认 5 秒）。" />
 
             <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
 
