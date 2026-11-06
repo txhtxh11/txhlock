@@ -30,7 +30,7 @@ Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.22/tools/in
 powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -NoPause
 ```
 
-脚本会自动：找 adb → 扫局域网找电视 → 装 APK → 开无障碍 → 授权悬浮层 → 设置常亮 → 启动应用。**这一步不需要先问用户 IP。**
+脚本会自动：找 adb（**电脑没装 adb 会自动下载，带国内镜像**）→ 扫局域网找电视 → 装 APK → 开无障碍 → 授权悬浮层 → 设置常亮 → 启动应用。**这一步不需要先问用户 IP，也不需要用户手动装 adb。**
 
 3. **只有在脚本提示找不到电视 / 连不上时，才与用户交互**，引导用户做两件事：
 

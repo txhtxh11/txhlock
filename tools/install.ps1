@@ -110,6 +110,8 @@ Step "第 1 步 / 共 5 步：准备 adb 工具"
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $adbCandidates = @(
+    (Join-Path $scriptDir "adb\adb.exe"),
+    (Join-Path $scriptDir "adb.exe"),
     (Join-Path $scriptDir "platform-tools\adb.exe"),
     (Join-Path $scriptDir "..\platform-tools\adb.exe"),
     (Join-Path $env:LOCALAPPDATA "Android\Sdk\platform-tools\adb.exe"),
@@ -127,17 +129,29 @@ if (-not $adb) {
     if ($cmd) { $adb = $cmd.Source }
 }
 if (-not $adb) {
-    Log "  电脑上没有 adb，正在自动下载（约 8MB，国内可能慢一点）…" "Yellow"
-    $zip = Join-Path $env:TEMP "txhlock-platform-tools.zip"
-    $ok = Download "https://dl.google.com/android/repository/platform-tools-latest-windows.zip" $zip "adb 工具"
-    if ($ok) {
-        $out = Join-Path $env:TEMP "txhlock-platform-tools"
+    Log "  电脑上没有 adb，正在自动下载（带国内镜像，约 4MB）…" "Yellow"
+    $zip = Join-Path $env:TEMP "txhlock-adb.zip"
+    $adbUrls = @(
+        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v$script:Version/tools/adb.zip",
+        "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v$script:Version/tools/adb.zip",
+        "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/v$script:Version/tools/adb.zip",
+        "https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@v$script:Version/tools/adb.zip",
+        "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/tools/adb.zip",
+        "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
+    )
+    $downloaded = $false
+    foreach ($u in $adbUrls) {
+        Log "    尝试：$u" "DarkGray"
+        if (Download $u $zip "adb 工具") { $downloaded = $true; break }
+    }
+    if ($downloaded) {
+        $out = Join-Path $env:TEMP "txhlock-adb"
         if (Test-Path $out) { Remove-Item $out -Recurse -Force -ErrorAction SilentlyContinue }
         try {
             Add-Type -AssemblyName System.IO.Compression.FileSystem
             [System.IO.Compression.ZipFile]::ExtractToDirectory($zip, $out)
-            $candidate = Join-Path $out "platform-tools\adb.exe"
-            if (Test-Path $candidate) { $adb = $candidate }
+            $found = Get-ChildItem $out -Recurse -Filter "adb.exe" | Select-Object -First 1
+            if ($found) { $adb = $found.FullName }
         } catch {
             Log "  解压失败：$($_.Exception.Message)" "Red"
         }
