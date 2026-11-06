@@ -16,6 +16,7 @@ public class KeyRoot extends FrameLayout {
 
     public interface KeyHandler {
         boolean onKeyDown(int keyCode, KeyEvent event);
+        boolean onKeyUp(int keyCode, KeyEvent event);
     }
 
     private KeyHandler handler;
@@ -46,6 +47,11 @@ public class KeyRoot extends FrameLayout {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && handler != null) {
             if (handler.onKeyDown(event.getKeyCode(), event)) {
+                return true;
+            }
+        }
+        if (event.getAction() == KeyEvent.ACTION_UP && handler != null) {
+            if (handler.onKeyUp(event.getKeyCode(), event)) {
                 return true;
             }
         }

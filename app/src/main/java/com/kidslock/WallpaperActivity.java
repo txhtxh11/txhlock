@@ -129,7 +129,8 @@ public class WallpaperActivity extends Activity {
     // ---------------- 按键：短按壁纸设置，长按 5 秒家长设置 ----------------
 
     @Override public boolean dispatchKeyEvent(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+        if (e.getKeyCode() == KeyEvent.KEYCODE_MENU
+                || e.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
             if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() == 0) {
                 holding = true;
                 longFired = false;
@@ -149,7 +150,7 @@ public class WallpaperActivity extends Activity {
                     h.removeCallbacks(tick);
                     h.removeCallbacks(fire);
                     holdBox.setVisibility(View.GONE);
-                    if (!longFired) showWallpaperSettings();
+                    if (!longFired && e.getKeyCode() == KeyEvent.KEYCODE_MENU) showWallpaperSettings();
                 }
                 return true;
             }

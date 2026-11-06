@@ -53,6 +53,9 @@ public final class LockOverlay {
                 @Override public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
                     return panel.onKeyDown(keyCode, event);
                 }
+                @Override public boolean onKeyUp(int keyCode, android.view.KeyEvent event) {
+                    return panel.onKeyUp(keyCode, event);
+                }
             });
         }
         panel.start();

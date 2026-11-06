@@ -35,6 +35,12 @@ public class QuizPanel {
     private final Context ctx;
     private final Prefs prefs;
     private final Handler handler = new Handler(Looper.getMainLooper());
+    // 没有菜单键的遥控器：锁屏页长按返回键 2.5 秒也能呼出家长密码
+    private final Runnable backPinHold = new Runnable() {
+        @Override public void run() {
+            if (!pinOpen) showParentPin();
+        }
+    };
 
     private QuizEngine engine;
     private View root;
@@ -164,6 +170,9 @@ public class QuizPanel {
         r.setKeyHandler(new KeyRoot.KeyHandler() {
             @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
                 return QuizPanel.this.onKeyDown(keyCode, event);
+            }
+            @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
+                return QuizPanel.this.onKeyUp(keyCode, event);
             }
         });
         return root;
@@ -362,7 +371,10 @@ public class QuizPanel {
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (pinOpen) return false;
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (event.getRepeatCount() == 0) handler.postDelayed(backPinHold, 2500);
+            return true;
+        }
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             showParentPin();
             return true;
@@ -373,6 +385,14 @@ public class QuizPanel {
         }
         if (keyCode >= KeyEvent.KEYCODE_A && keyCode <= KeyEvent.KEYCODE_D) {
             onSelect(keyCode - KeyEvent.KEYCODE_A);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            handler.removeCallbacks(backPinHold);
             return true;
         }
         return false;

@@ -64,7 +64,7 @@
             
             <TextView
                 style="@style/Label"
-                android:text="长按菜单键进入设置（秒）" />
+                android:text="长按菜单键 / OK 键进入设置（秒）" />
 
             <LinearLayout style="@style/Stepper">
 
@@ -86,7 +86,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="壁纸界面按住菜单键这么久才进家长设置；前 8 秒不显示，最后 2 秒才倒计时（默认 10 秒）。" />
+                android:text="壁纸界面按住菜单键或 OK 键这么久才进家长设置；前 8 秒不显示，最后 2 秒才倒计时（默认 10 秒）。" />
 
             <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
 

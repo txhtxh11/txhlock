@@ -85,7 +85,7 @@
             android:shadowDx="0"
             android:shadowDy="2"
             android:shadowRadius="6"
-            android:text="菜单键：壁纸设置"
+            android:text="短按菜单键：壁纸设置&#10;长按菜单键 / OK 键 10 秒：家长设置"
             android:textColor="#AAAAAA"
             android:textSize="18sp" />
     </LinearLayout>
