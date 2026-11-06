@@ -198,15 +198,15 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ### 版本（用户）
 
-- 当前：**v1.9.28**（versionCode 118）
+- 当前：**v1.9.34**（versionCode 124）
 - APK：4,416,317 字节，MD5 `f399a78825657115ebd80e3fd24cec06`
 - 更新日志：https://github.com/txhtxh11/txhlock/releases
 
 ---
 
-## 开发者（豆包可忽略）`n`n> **发版规则**：`apk/` 只保留最新版 APK；每次运行 `tools/publish_share.ps1 -Version x.y.z`，把最新 APK 和指南覆盖到 `D:\share`。
+## 开发者（豆包可忽略）
 
-> **发版规则**：pk/ 只保留最新版 APK；发新版时删掉旧 APK，README 和安装器同步版本号。
+> **发版规则**：`apk/` 只保留最新版 APK；每次运行 `tools/publish_share.ps1 -Version x.y.z`，清空 `D:\share` 后只放两个文件：`txhlock.apk`、`每日壁纸-安装使用指南.pdf`。
 
 - 源码：`app/`（Java，minSdk 18，targetSdk 33，compileSdk 34）
 - 构建：
