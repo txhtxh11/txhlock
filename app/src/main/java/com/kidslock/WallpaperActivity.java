@@ -130,11 +130,12 @@ public class WallpaperActivity extends Activity {
 
     @Override public boolean dispatchKeyEvent(KeyEvent e) {
         // 菜单键只做壁纸设置（短按）；进家长验证统一用 OK 键长按
-        if (e.getKeyCode() == KeyEvent.KEYCODE_MENU) {
-            if (e.getAction() == KeyEvent.ACTION_UP) showWallpaperSettings();
-            return true;
-        }
-        if (e.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+        int kc = e.getKeyCode();
+        boolean isOk = kc == KeyEvent.KEYCODE_DPAD_CENTER
+                || kc == KeyEvent.KEYCODE_ENTER
+                || kc == KeyEvent.KEYCODE_NUMPAD_ENTER;
+        boolean isMenu = kc == KeyEvent.KEYCODE_MENU;
+        if (isOk || isMenu) {
             if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() == 0) {
                 holding = true;
                 longFired = false;
@@ -155,7 +156,7 @@ public class WallpaperActivity extends Activity {
                     h.removeCallbacks(tick);
                     h.removeCallbacks(fire);
                     holdBox.setVisibility(View.GONE);
-                    // 没有菜单键的遥控器：短按 OK 也能打开壁纸设置（长按 10 秒仍是家长验证）
+                    // 短按：壁纸设置；长按 10 秒：家长验证（OK / ENTER / 菜单键都支持）
                     if (!longFired && held < 1500) showWallpaperSettings();
                 }
                 return true;

@@ -86,7 +86,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="壁纸界面按住 OK 键这么久才进家长设置；前 8 秒不显示，最后 2 秒才倒计时（默认 10 秒）。" />
+                android:text="壁纸界面按住 OK 键这么久才进家长设置；前 2 秒不显示，最后 1 秒才倒计时（默认 3 秒）。" />
 
             <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
 

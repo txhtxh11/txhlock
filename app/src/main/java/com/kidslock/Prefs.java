@@ -192,7 +192,7 @@ public class Prefs {
     public long lastBootAt() { return sp.getLong("last_boot_at", 0L); }
     public void setLastBootAt(long v) { sp.edit().putLong("last_boot_at", v).apply(); }
 
-    public int holdSeconds() { return sp.getInt("hold_sec", 10); }
+    public int holdSeconds() { return sp.getInt("hold_sec", 3); }
     public void setHoldSeconds(int v) { sp.edit().putInt("hold_sec", v).apply(); }
 
     public boolean disguise() { return sp.getBoolean("disguise", false); }

@@ -375,7 +375,9 @@ public class QuizPanel {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (pinOpen) return false;
         if (keyCode == KeyEvent.KEYCODE_BACK) return true;
-        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
+                || keyCode == KeyEvent.KEYCODE_ENTER
+                || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
             if (event.getRepeatCount() == 0) {
                 okHolding = true;
                 okPinFired = false;
@@ -400,7 +402,9 @@ public class QuizPanel {
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) return true;
-        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER
+                || keyCode == KeyEvent.KEYCODE_ENTER
+                || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
             handler.removeCallbacks(okPinHold);
             boolean shouldClick = okHolding && !okPinFired && !pinOpen;
             okHolding = false;
