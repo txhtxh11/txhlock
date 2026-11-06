@@ -1,4 +1,4 @@
-# 每日壁纸（答题锁屏）· 小米电视版 v2.0.0
+# 每日壁纸（答题锁屏）· 小米电视版 v2.0.1
 
 > **用户只需要把这一句话发给豆包（电脑版 / 工作 模式）：**
 >
@@ -6,7 +6,7 @@
 
 ---
 
-> **仓库只保留最新版：`apk/` 目录里只有 `txhlock_v2.0.0.apk`。安装请只用本 README 的链接，不要从旧版本或旧 Release 下载。**
+> **仓库只保留最新版：`apk/` 目录里只有 `txhlock_v2.0.1.apk`。安装请只用本 README 的链接，不要从旧版本或旧 Release 下载。**
 
 > **v2.0 更新**：新增「错题解析 + 错题重练」和「应用内更新」。1.9.34 用户需要手动装一次 2.0；装好 2.0 后，在家长设置里点「检查更新」即可下载新版。
 
@@ -19,13 +19,13 @@
 1. **下载安装器**（任选一个国内镜像）：
 
 ```powershell
-Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v2.0.0/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v2.0.1/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 备选：
 
 ```powershell
-Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0.0/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0.1/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 2. **直接运行，让脚本自己扫局域网找电视**：
@@ -56,7 +56,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -TvI
 
 ```powershell
 adb -s 192.168.50.139:5555 shell "dumpsys package com.kidslock | grep versionName"
-# 期望：versionName=2.0.0
+# 期望：versionName=2.0.1
 adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
 # 期望：Service[label=每日壁纸 ...]
 ```
@@ -70,7 +70,7 @@ adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
 把 ② 的「用户使用指南」原样发给用户，或发图文指南 PDF：
 
 ```
-https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v2.0.0.pdf
+https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v2.0.1.pdf
 ```
 
 ### 豆包的边界（重要）
@@ -102,14 +102,14 @@ https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v2.0.0.pdf
 
 | 文件 | 地址 |
 | --- | --- |
-| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0.0/apk/txhlock_v2.0.0.apk |
-| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v2.0.0/txhlock_v2.0.0.apk |
-| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v2.0.0/txhlock_v2.0.0.apk |
-| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v2.0.0/tools/install.ps1 |
-| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v2.0.0.pdf |
+| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0.1/apk/txhlock_v2.0.1.apk |
+| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v2.0.1/txhlock_v2.0.1.apk |
+| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v2.0.1/txhlock_v2.0.1.apk |
+| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v2.0.1/tools/install.ps1 |
+| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v2.0.1.pdf |
 
-- 文件大小：**4,424,427 字节**
-- MD5：`ac6e0da2abe0be8041dec8c9c61389af`
+- 文件大小：**4,424,276 字节**
+- MD5：`efc30d7fa2324131223a2ead054c1368`
 - 适用：Android 4.3–14（API 18–34），已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ### 安装（用户，三种方式任选一种）
@@ -127,13 +127,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -TvIp 192.168.
 
 **方式二：U 盘**
 
-把 `txhlock_v2.0.0.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
+把 `txhlock_v2.0.1.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
 
 **方式三：ADB 命令**
 
 ```bash
 adb connect 192.168.50.139:5555
-adb install -r txhlock_v2.0.0.apk
+adb install -r txhlock_v2.0.1.apk
 adb shell settings put secure enabled_accessibility_services com.kidslock/com.kidslock.BootAccessibility
 adb shell settings put secure accessibility_enabled 1
 adb shell am start -n com.kidslock/.LauncherWallpaper
@@ -193,15 +193,15 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 - **自启动显示「未确认」/系统里没有自启动开关？** 小米等电视有「自启动」开关；Sony、Google TV 等原生系统没有这个开关，不用管——只要无障碍已开启，开机后会自动恢复。重启一次电视后再看：绿色=已生效。
 - **手机扫码打不开？** 确认同一 WiFi（不是访客网络）、直接输验证页地址、路由器没开 AP 隔离。
 - **遥控器没有菜单键？** 壁纸页长按 OK 键 10 秒进家长设置；锁屏页长按 OK 键 10 秒呼出家长密码。\n- **设置页按菜单键没反应？** 正常：设置页不响应菜单键；只有锁屏答题页/壁纸页长按才用菜单键。
-- **Android 12/13/14 点图标闪退？** 升级到 v2.0.0：修复了 PendingIntent 缺少 FLAG_IMMUTABLE 的崩溃。
+- **Android 12/13/14 点图标闪退？** 升级到 v2.0.1：修复了 PendingIntent 缺少 FLAG_IMMUTABLE 的崩溃。
 - **Android 14 悬浮层没盖住？** 设置 → 应用 → 每日壁纸 → 显示在其他应用上层，手动允许。
 - **忘记家长密码？** 默认 `1234`；改过又忘了只能卸载重装（会清空设置）。
 - **卸载**：设置 → 应用 → 每日壁纸 → 卸载；或家长设置 → 帮助 → 还原并卸载。
 
 ### 版本（用户）
 
-- 当前：**v2.0.0**（versionCode 210）
-- APK：4,424,427 字节，MD5 `ac6e0da2abe0be8041dec8c9c61389af`
+- 当前：**v2.0.1**（versionCode 211）
+- APK：4,424,276 字节，MD5 `efc30d7fa2324131223a2ead054c1368`
 - 更新日志：https://github.com/txhtxh11/txhlock/releases
 
 ---
