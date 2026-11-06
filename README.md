@@ -206,7 +206,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ## 开发者（豆包可忽略）
 
-> **发版规则**：`apk/` 只保留最新版 APK；每次运行 `tools/publish_share.ps1 -Version x.y.z`，清空 `D:\share` 后只放两个文件：`txhlock.apk`、`每日壁纸-安装使用指南.pdf`。
+> **发版规则**：`apk/` 只保留最新版 APK；每次运行 `tools/publish_share.ps1 -Version x.y.z`，清空 `D:\share` 后只放两个带版本号的文件：`txhlock_v版本号.apk`、`每日壁纸-安装使用指南-v版本号.pdf`。
 
 - 源码：`app/`（Java，minSdk 18，targetSdk 33，compileSdk 34）
 - 构建：

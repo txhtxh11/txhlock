@@ -19,7 +19,7 @@ New-Item -ItemType Directory -Force -Path $ShareDir | Out-Null
 # 每次先清空，只放最新 APK + 安装指南两个文件
 Get-ChildItem -LiteralPath $ShareDir -Force | Remove-Item -Recurse -Force
 
-Copy-Item $apk (Join-Path $ShareDir "txhlock.apk") -Force
-Copy-Item $guide (Join-Path $ShareDir "每日壁纸-安装使用指南.pdf") -Force
+Copy-Item $apk (Join-Path $ShareDir "txhlock_v$Version.apk") -Force
+Copy-Item $guide (Join-Path $ShareDir "每日壁纸-安装使用指南-v$Version.pdf") -Force
 
 Get-ChildItem -LiteralPath $ShareDir -File | Select-Object Name, Length
