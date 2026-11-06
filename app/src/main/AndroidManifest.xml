@@ -36,11 +36,17 @@
         android:theme="@style/Theme.KidsLock"
         android:supportsRtl="false">
 
-        <!-- 家长设置（不在桌面直接出现：从「每日壁纸」长按菜单键 5 秒进入） -->
+        <!-- 家长设置（只有壁纸界面长按菜单键进入） -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- 旧快捷方式兜底：点进来直接跳回壁纸 -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:taskAffinity="com.kidslock.settings"
             android:excludeFromRecents="true"
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
@@ -48,7 +54,8 @@
         <activity
             android:name=".WallpaperActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.kidslock.wall"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/Theme.KidsLock.Wallpaper" />
 

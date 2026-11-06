@@ -34,7 +34,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "1.9.10"
+$script:Version = "1.9.12"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 
@@ -469,7 +469,7 @@ try {
 # 5.3 启动应用
 if (-not $NoLaunch) {
     try {
-        & $adb -s $target shell "am start -n com.kidslock/.MainActivity" 2>&1 | Out-Null
+        & $adb -s $target shell "am start -n com.kidslock/.LauncherWallpaper" 2>&1 | Out-Null
         Log "  ✓ 已在电视上打开应用（桌面名：答题锁屏 / 每日壁纸）" "Green"
     } catch {
         Log "  ! 没能在电视上自动打开，请到电视桌面点「答题锁屏」图标" "Yellow"

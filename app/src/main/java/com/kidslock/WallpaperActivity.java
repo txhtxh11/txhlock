@@ -116,7 +116,9 @@ public class WallpaperActivity extends Activity {
 
     private void openSettings() {
         try {
-            startActivity(new Intent(this, MainActivity.class));
+            Intent i = new Intent(this, SettingsActivity.class);
+            i.putExtra("from_wallpaper", true);
+            startActivity(i);
         } catch (Throwable t) {
             Log.w(TAG, "open settings failed", t);
         }
