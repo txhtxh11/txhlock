@@ -110,6 +110,8 @@ public class QuizService extends Service {
 
     @Override public void onCreate() {
         super.onCreate();
+        try { MiniWeb.start(this); } catch (Throwable t) { }
+        super.onCreate();
         prefs = new Prefs(this);
         // 服务启动即做一次接续判定（开机、被杀后重启都走这里）：
         // 短离开 → 续时且保留锁屏状态；长离开或跨夜 → 清零解锁、从零计时。

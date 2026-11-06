@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -619,11 +621,40 @@ public class SettingsActivity extends Activity {
         });
         padRef[0] = pad;
         pad.setCancelVisible(false);
-        card.addView(pad, new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // 左边密码键盘，右边二维码：手机扫码后输入同一个家长密码即可在手机上设置
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.addView(pad, new LinearLayout.LayoutParams(0,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        if (MiniWeb.start(this)) {
+            String url = MiniWeb.url();
+            LinearLayout col = new LinearLayout(this);
+            col.setOrientation(LinearLayout.VERTICAL);
+            col.setGravity(Gravity.CENTER_HORIZONTAL);
+            if (url != null) {
+                Bitmap bmp = QrUtil.make(url, Ui.dp(this, 150));
+                if (bmp != null) {
+                    ImageView iv = new ImageView(this);
+                    iv.setImageBitmap(bmp);
+                    col.addView(iv, new LinearLayout.LayoutParams(
+                            Ui.dp(this, 150), Ui.dp(this, 150)));
+                }
+                TextView t = Ui.text(this, "手机扫码设置\n（同一 WiFi）\n" + url,
+                        13, 0xFF8FA3B8, false);
+                t.setGravity(Gravity.CENTER);
+                t.setPadding(0, Ui.dp(this, 8), 0, 0);
+                col.addView(t);
+            }
+            row.addView(col, new LinearLayout.LayoutParams(
+                    Ui.dp(this, 210), ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+        card.addView(row);
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                Ui.dp(this, 500), ViewGroup.LayoutParams.WRAP_CONTENT);
+                Ui.dp(this, 760), ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
         gateLayer.addView(card, lp);
     }
@@ -961,6 +992,11 @@ public class SettingsActivity extends Activity {
                 });
             }
         }
+    }
+
+    @Override protected void onDestroy() {
+        MiniWeb.stop();
+        super.onDestroy();
     }
 
     @Override protected void onResume() {

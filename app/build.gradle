@@ -10,8 +10,8 @@ android {
         applicationId "com.kidslock"
         minSdk 18
         targetSdk 33
-        versionCode 106
-        versionName "1.9.16"
+        versionCode 107
+        versionName "1.9.17"
     }
 
     signingConfigs {
@@ -48,6 +48,7 @@ android {
 
 // SMB 瀹㈡埛绔簱锛堝眬鍩熺綉鍏变韩棰樺簱鍚屾锛? slf4j 绌哄疄鐜帮紙Android 鏃犺嚜甯﹀疄鐜帮級
 dependencies {
+    implementation files('libs/core-3.3.0.jar')
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
     implementation 'org.slf4j:slf4j-nop:1.7.36'
 }
