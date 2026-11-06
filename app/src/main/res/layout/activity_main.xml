@@ -278,6 +278,10 @@
                 android:text="开机先答题：开（点此关闭）" />
 
             <TextView
+                style="@style/Hint"
+                android:text="开：每次真正开机/重启都先答题；关：沿用重启前状态（已锁仍锁，没锁就接着上次计时）。关机超过「长关机」时长会按长关机规则清零。" />
+
+            <TextView
                 android:id="@+id/btnOverlay"
                 style="@style/RowBtn"
                 android:layout_marginTop="10dp"
