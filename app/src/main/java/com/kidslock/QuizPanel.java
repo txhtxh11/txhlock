@@ -35,9 +35,12 @@ public class QuizPanel {
     private final Context ctx;
     private final Prefs prefs;
     private final Handler handler = new Handler(Looper.getMainLooper());
-    // 没有菜单键的遥控器：锁屏页长按返回键 3 秒也能呼出家长密码
-    private final Runnable backPinHold = new Runnable() {
+    // 锁屏页统一用 OK 键：长按 3 秒呼出家长密码；短按 OK 仍然是选答案
+    private boolean okHolding = false;
+    private boolean okPinFired = false;
+    private final Runnable okPinHold = new Runnable() {
         @Override public void run() {
+            okPinFired = true;
             if (!pinOpen) showParentPin();
         }
     };
@@ -284,7 +287,7 @@ public class QuizPanel {
             tvHint.setText("今日观看时间已用完 · 答对也不能解锁 · 请家长按【菜单键】输入密码");
             tvHint.setTextColor(Ui.color(ctx, R.color.warn));
         } else {
-            tvHint.setText("用方向键选答案，按 OK 确认 · 菜单键输入家长密码");
+            tvHint.setText("用方向键选答案，短按 OK 确认 · 长按 OK 键 3 秒输入家长密码");
             tvHint.setTextColor(Ui.color(ctx, R.color.text_dim));
         }
     }
@@ -371,8 +374,13 @@ public class QuizPanel {
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (pinOpen) return false;
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (event.getRepeatCount() == 0) handler.postDelayed(backPinHold, 3000);
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            if (event.getRepeatCount() == 0) {
+                okHolding = true;
+                okPinFired = false;
+                handler.postDelayed(okPinHold, 3000);
+            }
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -391,8 +399,15 @@ public class QuizPanel {
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            handler.removeCallbacks(backPinHold);
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            handler.removeCallbacks(okPinHold);
+            boolean shouldClick = okHolding && !okPinFired && !pinOpen;
+            okHolding = false;
+            if (shouldClick && root != null) {
+                View f = root.findFocus();
+                if (f != null) f.performClick();
+            }
             return true;
         }
         return false;
