@@ -122,27 +122,27 @@ public final class UpdateManager {
                 File out = new File(a.getCacheDir(), UpdateProvider.NAME);
                 String err = null;
                 try {
-                    if (out.exists()) out.delete();
                     boolean ok = false;
                     for (int i = 0; i < info.urls.length && !ok; i++) {
                         String u = info.urls[i];
                         if (u == null || u.length() == 0) continue;
                         try {
                             download(u, out, a, l);
-                            ok = out.exists() && out.length() > 1024;
+                            if (out.exists() && out.length() > 1024) {
+                                if (info.md5 == null || info.md5.length() == 0
+                                        || info.md5.equalsIgnoreCase(md5(out))) {
+                                    ok = true;
+                                } else {
+                                    err = "MD5 校验失败";
+                                    out.delete();
+                                }
+                            }
                         } catch (Throwable t) {
                             err = t.getMessage();
-                            if (out.exists()) out.delete();
+                            // 保留已下载的部分，换镜像时继续续传
                         }
                     }
                     if (!ok) throw new RuntimeException(err == null ? "下载失败" : err);
-                    if (info.md5 != null && info.md5.length() > 0) {
-                        String actual = md5(out);
-                        if (!info.md5.equalsIgnoreCase(actual)) {
-                            out.delete();
-                            throw new RuntimeException("MD5 校验失败");
-                        }
-                    }
                     final File file = out;
                     a.runOnUiThread(new Runnable() {
                         @Override public void run() {
@@ -188,22 +188,30 @@ public final class UpdateManager {
     }
 
     private static void download(String url, File out, Activity a, final Listener l) throws Exception {
+        long offset = out.exists() ? out.length() : 0L;
         HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
         tls12(c);
-        c.setConnectTimeout(10000);
-        c.setReadTimeout(30000);
+        c.setConnectTimeout(15000);
+        c.setReadTimeout(60000);
         c.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android TV) txhlock-updater");
+        c.setRequestProperty("Accept-Encoding", "identity");
+        if (offset > 0) c.setRequestProperty("Range", "bytes=" + offset + "-");
         c.setInstanceFollowRedirects(true);
+        int code = c.getResponseCode();
+        if (code != 200 && code != 206) throw new RuntimeException("HTTP " + code);
+        boolean append = offset > 0 && code == 206;
+        if (offset > 0 && code == 200) offset = 0;   // 镜像不支持续传，从头来
         InputStream is = c.getInputStream();
         int total = c.getContentLength();
-        FileOutputStream fos = new FileOutputStream(out);
+        FileOutputStream fos = new FileOutputStream(out, append);
         byte[] buf = new byte[16384];
         int n, done = 0, lastPct = -1;
         while ((n = is.read(buf)) > 0) {
             fos.write(buf, 0, n);
             done += n;
             if (total > 0) {
-                final int pct = Math.min(100, done * 100 / total);
+                long whole = offset + total;
+                final int pct = (int) Math.min(100, (offset + done) * 100 / whole);
                 if (pct != lastPct && (pct % 5 == 0 || pct == 100)) {
                     lastPct = pct;
                     a.runOnUiThread(new Runnable() {
