@@ -22,13 +22,13 @@ import java.net.URL;
 /** 应用内更新：检查 GitHub 上的 update.json，下载 APK、校验 MD5，再拉起系统安装器。 */
 public final class UpdateManager {
     private static final String[] META_URLS = {
-            "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/update.json",
             "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/update.json",
             "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/update.json",
             "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/update.json",
+            "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/update.json",
             "https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@dev/update.json",
-            "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/update.json",
-            "https://raw.githubusercontent.com/txhtxh11/txhlock/master/update.json"
+            "https://raw.githubusercontent.com/txhtxh11/txhlock/master/update.json",
+            "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@master/update.json"
     };
 
     public interface Listener {

@@ -1,12 +1,12 @@
 {
-    "md5":  "46c9362702bd73d45f7f5bfb4a5ffd7f",
+    "md5":  "5f1e18f9ba0a2bac8228a8cf37968de1",
     "urls":  [
-                 "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/apk/txhlock_v2.0.1-dev.apk",
-                 "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.1-dev.apk",
-                 "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.1-dev.apk",
-                 "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.1-dev.apk"
+                 "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
+                 "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
+                 "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
+                 "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/apk/txhlock_v2.0.2-dev.apk"
              ],
-    "versionCode":  201,
-    "versionName":  "2.0.1-dev",
-    "notes":  "测试应用内更新：2.0.0 应能检查到 2.0.1、下载、校验并拉起安装器。\n包含错题解析重练。"
+    "versionCode":  202,
+    "versionName":  "2.0.2-dev",
+    "notes":  "测试更新：2.0.1 应检查到 2.0.2，下载并拉起安装器。"
 }

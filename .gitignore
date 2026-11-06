@@ -25,3 +25,6 @@ Thumbs.db
 
 # dev build log
 build_out.txt
+
+# 开发调试截图（根目录）
+/*.png
