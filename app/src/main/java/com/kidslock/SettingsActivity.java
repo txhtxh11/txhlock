@@ -44,7 +44,7 @@ public class SettingsActivity extends Activity {
     private Prefs prefs;
     private QuizEngine engine;
 
-    private TextView tvVersion, btnEnable, btnHoldMinus, btnHoldPlus, tvHoldSec, tvAutoStart,
+    private TextView tvVersion, btnEnable, btnHoldMinus, btnHoldPlus, tvHoldSec,
             btnSingleMinus, btnSinglePlus, tvSingle,
             btnDailyMinus, btnDailyPlus, tvDaily,
             btnAwayMinus, btnAwayPlus, tvAway,
@@ -156,7 +156,6 @@ public class SettingsActivity extends Activity {
         tvAccState = (TextView) findViewById(R.id.tvAccState);
         btnOverlay = (TextView) findViewById(R.id.btnOverlay);
         btnSysSettings = (TextView) findViewById(R.id.btnSysSettings);
-        tvAutoStart = (TextView) findViewById(R.id.tvAutoStart);
         btnHomeSetup = (TextView) findViewById(R.id.btnHomeSetup);
         tvHelp = (TextView) findViewById(R.id.tvHelp);
         btnFixAcc = (TextView) findViewById(R.id.btnFixAcc);
@@ -461,19 +460,45 @@ public class SettingsActivity extends Activity {
     }
 
     private void refreshAutoStart() {
-        if (tvAutoStart == null) return;
+        if (btnSysSettings == null) return;
         long up = android.os.SystemClock.elapsedRealtime();
         long bootWall = System.currentTimeMillis() - up;
         long last = prefs.lastBootAt();
-        if (last >= bootWall - 120000L) {
-            tvAutoStart.setText("自启动：本次开机已自动启动");
-            tvAutoStart.setTextColor(getResources().getColor(R.color.ok));
-        } else if (up < 10L * 60L * 1000L) {
-            tvAutoStart.setText("自启动：本次开机未自动启动（点下面的按钮去系统设置打开）");
-            tvAutoStart.setTextColor(getResources().getColor(R.color.danger));
+        boolean on = last >= bootWall - 120000L;
+        boolean off = !on && up < 10L * 60L * 1000L;
+
+        if (on) {
+            // 已开启：不需要用户操作，只显示状态，不做成按钮
+            btnSysSettings.setText("自启动：已开启（系统里已允许，无需操作）");
+            btnSysSettings.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 17);
+            btnSysSettings.setTextColor(getResources().getColor(R.color.ok));
+            btnSysSettings.setBackgroundColor(0x00000000);
+            btnSysSettings.setGravity(Gravity.LEFT);
+            btnSysSettings.setPadding(0, Ui.dp(this, 6), 0, Ui.dp(this, 6));
+            btnSysSettings.setClickable(false);
+            btnSysSettings.setFocusable(false);
+            btnSysSettings.setFocusableInTouchMode(false);
+            if (btnSysSettings.getLayoutParams() != null) {
+                btnSysSettings.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                btnSysSettings.requestLayout();
+            }
         } else {
-            tvAutoStart.setText("自启动：未检测到（系统不提供查询，建议去系统设置确认）");
-            tvAutoStart.setTextColor(getResources().getColor(R.color.warn));
+            // 未开启 / 未确认：必须用户手动去系统设置，才做成按钮
+            btnSysSettings.setText(off
+                    ? "自启动：未开启（点此去系统设置）"
+                    : "自启动：未确认（点此去系统设置）");
+            btnSysSettings.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 24);
+            btnSysSettings.setTextColor(getResources().getColor(R.color.text_main));
+            btnSysSettings.setBackgroundResource(R.drawable.bg_option);
+            btnSysSettings.setGravity(Gravity.CENTER);
+            btnSysSettings.setPadding(0, 0, 0, 0);
+            btnSysSettings.setClickable(true);
+            btnSysSettings.setFocusable(true);
+            btnSysSettings.setFocusableInTouchMode(true);
+            if (btnSysSettings.getLayoutParams() != null) {
+                btnSysSettings.getLayoutParams().height = Ui.dp(this, 76);
+                btnSysSettings.requestLayout();
+            }
         }
     }
 
