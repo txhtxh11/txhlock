@@ -76,7 +76,7 @@
                 <TextView
                     android:id="@+id/tvHoldSec"
                     style="@style/StepValue"
-                    android:text="5" />
+                    android:text="10" />
 
                 <TextView
                     android:id="@+id/btnHoldPlus"
@@ -86,7 +86,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="壁纸界面按住 OK 键这么久才进家长设置（默认 5 秒）。" />
+                android:text="壁纸界面按住 OK 键这么久才进家长设置（默认 10 秒）。" />
 
             <TextView style="@style/Label" android:text="锁屏页长按 OK 解锁（秒）" />
 
@@ -100,7 +100,7 @@
                 <TextView
                     android:id="@+id/tvUnlockSec"
                     style="@style/StepValue"
-                    android:text="5" />
+                    android:text="10" />
 
                 <TextView
                     android:id="@+id/btnUnlockPlus"
@@ -110,7 +110,7 @@
 
             <TextView
                 style="@style/Hint"
-                android:text="锁屏答题页按住 OK 键这么久呼出家长密码（默认 5 秒）。" />
+                android:text="锁屏答题页按住 OK 键这么久呼出家长密码（默认 10 秒）。" />
 
             <TextView style="@style/Label" android:text="单次连续观看（分钟，到点答题解锁）" />
 

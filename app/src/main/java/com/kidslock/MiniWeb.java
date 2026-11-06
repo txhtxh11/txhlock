@@ -277,8 +277,8 @@ public final class MiniWeb {
             prefs.setDailyMinutes(clamp(intval(f, "daily", 0), 0, 720));
             prefs.setAwayResetMinutes(clamp(intval(f, "away", 30), 0, 1440));
             prefs.setRequiredCorrect(clamp(intval(f, "correct", 3), 1, 10));
-            prefs.setHoldSeconds(clamp(intval(f, "hold", 5), 3, 20));
-            prefs.setUnlockHoldSeconds(clamp(intval(f, "unlock_hold", 5), 3, 20));
+            prefs.setHoldSeconds(clamp(intval(f, "hold", 10), 3, 20));
+            prefs.setUnlockHoldSeconds(clamp(intval(f, "unlock_hold", 10), 3, 20));
             prefs.setLockOnBoot(f.containsKey("boot"));
             String pin = f.get("pin");
             if (pin != null && pin.matches("\\d{4,8}")) prefs.setPin(pin);
