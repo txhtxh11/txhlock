@@ -353,6 +353,11 @@ if ($found.Count -eq 0) {
 
 $found = @($found | Select-Object -Unique)
 
+# 指定了 -TvIp 时，只允许装到这台，绝不自动选别的设备
+if ($TvIp -ne "") {
+    $found = @($found | Where-Object { $_ -like "$TvIp`:*" -or $_ -eq $TvIp })
+}
+
 # 3.5 找到多台时让用户选
 $target = $null
 if ($found.Count -eq 1) {
