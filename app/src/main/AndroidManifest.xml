@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- 局域网 SMB 访问 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 应用内更新：拉起系统安装器 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- 读取自定义题库：
          Android 10 及以下用 READ_EXTERNAL_STORAGE；
          Android 11+ 分区存储下读取 Download 目录的 txt 用 MANAGE_EXTERNAL_STORAGE -->
@@ -129,5 +131,11 @@
              原因：接管桌面会改写系统的"默认桌面"记录，卸载后未必能干净还原。
              现在锁屏靠"无障碍保活"把前台抢回来，对系统桌面零改动，
              卸载后小米电视桌面 100% 恢复原样。 -->
+        <provider
+            android:name=".UpdateProvider"
+            android:authorities="${applicationId}.updates"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
     </application>
 </manifest>

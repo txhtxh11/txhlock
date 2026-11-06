@@ -54,7 +54,7 @@ public class SettingsActivity extends Activity {
             tvQuizStatus, btnExportQuiz, btnReloadQuiz, btnClearLocal,
             tvSmbStatus, btnSmbSetup, btnSmbSyncNow,
             btnChangePin, btnBootLock, tvHomeStatus, btnAcc, tvAccStatus, tvAccState,
-            btnOverlay, btnSysSettings, btnHomeSetup, tvHelp, btnFixAcc, btnTestLock;
+            btnOverlay, btnSysSettings, btnUpdate, btnHomeSetup, tvHelp, btnFixAcc, btnTestLock;
 
     private LinearLayout editionRow, typeGrid;
     private FrameLayout gateLayer;
@@ -159,6 +159,7 @@ public class SettingsActivity extends Activity {
         tvAccState = (TextView) findViewById(R.id.tvAccState);
         btnOverlay = (TextView) findViewById(R.id.btnOverlay);
         btnSysSettings = (TextView) findViewById(R.id.btnSysSettings);
+        btnUpdate = (TextView) findViewById(R.id.btnUpdate);
         btnHomeSetup = (TextView) findViewById(R.id.btnHomeSetup);
         tvHelp = (TextView) findViewById(R.id.tvHelp);
         btnFixAcc = (TextView) findViewById(R.id.btnFixAcc);
@@ -170,7 +171,7 @@ public class SettingsActivity extends Activity {
                 btnCorrMinus, btnCorrPlus, btnLevelMinus, btnLevelPlus,
                 btnExportQuiz, btnReloadQuiz, btnClearLocal, btnSmbSetup, btnSmbSyncNow,
                 btnChangePin, btnBootLock, btnAcc, btnOverlay, btnSysSettings,
-                btnHomeSetup, btnFixAcc, btnTestLock}) {
+                btnUpdate, btnHomeSetup, btnFixAcc, btnTestLock}) {
             v.setClickable(true);
             v.setFocusable(true);
         }
@@ -415,6 +416,9 @@ public class SettingsActivity extends Activity {
         btnSysSettings.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { openAppSettings(); }
         });
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { checkUpdate(); }
+        });
         btnHomeSetup.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { showUninstallGuide(); }
         });
@@ -457,8 +461,10 @@ public class SettingsActivity extends Activity {
         int local = countLocalTxt();
         String src = local > 0 ? ("内置 + 本地 " + local + " 个文件") : "内置题库";
         if (total > 0) {
+            String wrong = engine == null ? "" : ("\n错题本：" + engine.wrongCount()
+                    + " 道（答错优先重练，答对移出）");
             tvQuizStatus.setText("已加载 " + total + " 道题（" + src + "），共 " + sections
-                    + " 个知识段。当前教材：" + Prefs.editionName(prefs.textbook()));
+                    + " 个知识段。当前教材：" + Prefs.editionName(prefs.textbook()) + wrong);
         } else {
             tvQuizStatus.setText("题库未加载：请检查存储读取权限");
         }
@@ -471,6 +477,50 @@ public class SettingsActivity extends Activity {
         } else {
             tvSmbStatus.setText("SMB 同步未开启");
         }
+    }
+
+    private void checkUpdate() {
+        btnUpdate.setEnabled(false);
+        btnUpdate.setText("检查更新中…");
+        UpdateManager.check(this, new UpdateManager.Listener() {
+            @Override public void onResult(final UpdateManager.UpdateInfo info, final String error) {
+                btnUpdate.setEnabled(true);
+                btnUpdate.setText("检查更新");
+                if (error != null) {
+                    toast("检查更新失败：" + error);
+                    return;
+                }
+                if (info == null) {
+                    toast("已是最新版本（" + AppVer.VERSION + "）");
+                    return;
+                }
+                new android.app.AlertDialog.Builder(SettingsActivity.this)
+                        .setTitle("发现新版本 " + info.versionName)
+                        .setMessage(info.notes == null ? "" : info.notes)
+                        .setPositiveButton("下载更新", new android.content.DialogInterface.OnClickListener() {
+                            @Override public void onClick(android.content.DialogInterface d, int w) {
+                                UpdateManager.downloadAndInstall(SettingsActivity.this, info,
+                                        new UpdateManager.Listener() {
+                                            @Override public void onResult(UpdateManager.UpdateInfo i, String e) { }
+                                            @Override public void onStatus(String msg) { toast(msg); }
+                                            @Override public void onProgress(int percent) {
+                                                btnUpdate.setText("下载中 " + percent + "%");
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
+            }
+
+            @Override public void onStatus(String msg) {
+                toast(msg);
+            }
+
+            @Override public void onProgress(int percent) {
+                btnUpdate.setText("下载中 " + percent + "%");
+            }
+        });
     }
 
     private void refreshAutoStart() {

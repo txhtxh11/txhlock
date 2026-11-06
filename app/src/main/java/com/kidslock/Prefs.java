@@ -198,6 +198,9 @@ public class Prefs {
     public int unlockHoldSeconds() { return sp.getInt("unlock_hold_sec", 10); }
     public void setUnlockHoldSeconds(int v) { sp.edit().putInt("unlock_hold_sec", v).apply(); }
 
+    public boolean wrongPractice() { return sp.getBoolean("wrong_practice", true); }
+    public void setWrongPractice(boolean v) { sp.edit().putBoolean("wrong_practice", v).apply(); }
+
     public boolean disguise() { return sp.getBoolean("disguise", false); }
     public void setDisguise(boolean v) { sp.edit().putBoolean("disguise", v).apply(); }
 

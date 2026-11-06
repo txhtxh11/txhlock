@@ -1,0 +1,11 @@
+{
+    "md5":  "7bfc3d301641947fe669cd3c55097dd8",
+    "urls":  [
+                 "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/apk/txhlock_v2.0.0-dev.apk",
+                 "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.0-dev.apk",
+                 "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.0-dev.apk"
+             ],
+    "versionCode":  200,
+    "versionName":  "2.0.0-dev",
+    "notes":  "1. 错题解析与错题重练：答错显示解析，错题优先重练，答对才移出。\n2. 应用内更新：设置里检查更新，下载并拉起安装器。"
+}

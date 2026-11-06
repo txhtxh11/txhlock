@@ -344,6 +344,17 @@
                 style="@style/RowBtn"
                 android:text="自启动：检测中…" />
 
+            <TextView style="@style/Label" android:text="版本更新" />
+
+            <TextView
+                android:id="@+id/btnUpdate"
+                style="@style/RowBtn"
+                android:text="检查更新" />
+
+            <TextView
+                style="@style/Hint"
+                android:text="从 GitHub 下载最新版并拉起系统安装器；安装时还要点一次「安装」。" />
+
             <TextView
                 android:id="@+id/btnHomeSetup"
                 style="@style/RowBtn"

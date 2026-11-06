@@ -19,6 +19,7 @@ public class QuizEngine {
     private final Prefs prefs;
     private final QuizLoader loader;
     private final android.content.Context context;
+    private final WrongBook wrongBook;
     private final Random rnd = new Random();
 
     // 内置题库（作为题库缺失时的兜底）：String[]{题干, 答案}
@@ -56,6 +57,7 @@ public class QuizEngine {
         this.context = ctx;
         this.prefs = prefs;
         this.loader = new QuizLoader();
+        this.wrongBook = new WrongBook(ctx);
         // 家长点"重新加载题库"时会重建引擎，强制重读
         loader.loadFrom(ctx, true);
     }
@@ -64,6 +66,10 @@ public class QuizEngine {
     public QuizQuestion nextQuestion() {
         // 带节流；本地/SMB 题库有新增后能自动生效
         loader.loadFrom(context, false);
+        if (prefs.wrongPractice()) {
+            QuizQuestion w = wrongBook.next();
+            if (w != null) return w;
+        }
         int types = prefs.quizTypes();
         int grade = prefs.grade();
 
@@ -87,9 +93,14 @@ public class QuizEngine {
         for (int attempt = 0; attempt < 8; attempt++) {
             int type = active.get(rnd.nextInt(active.size()));
             QuizQuestion q = build(type, grade);
-            if (q != null) return q;
+            if (q != null) {
+                decorate(q);
+                return q;
+            }
         }
-        return mathQuestion(grade);   // 兜底：口算永远有题
+        QuizQuestion fallback = mathQuestion(grade);
+        decorate(fallback);
+        return fallback;   // 兜底：口算永远有题
     }
 
     private QuizQuestion build(int type, int grade) {
@@ -355,6 +366,22 @@ public class QuizEngine {
      * 生成 4 个文本选项并打乱。
      * 优先用题目自带的干扰项（题库第三列）；不足 3 个才从同段其他答案里补。
      */
+    public void onAnswered(QuizQuestion q, boolean correct) {
+        if (q == null) return;
+        if (correct) wrongBook.remove(q);
+        else wrongBook.add(q);
+    }
+
+    public int wrongCount() {
+        return wrongBook.size();
+    }
+
+    private void decorate(QuizQuestion q) {
+        if (q == null) return;
+        if (q.key == null || q.key.length() == 0) q.key = WrongBook.keyOf(q);
+        if (q.explanation == null || q.explanation.length() == 0) q.explanation = Explanation.make(q);
+    }
+
     private void fillOptions(QuizQuestion q, List<String[]> pool, String[] item) {
         String correct = item[QuizLoader.IDX_A];
         String dstr = item.length > QuizLoader.IDX_D ? item[QuizLoader.IDX_D] : "";

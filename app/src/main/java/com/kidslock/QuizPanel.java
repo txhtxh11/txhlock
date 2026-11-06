@@ -69,7 +69,7 @@ public class QuizPanel {
 
     private QuizEngine engine;
     private View root;
-    private TextView tvQuestion, tvProgress, tvHint, tvFeedback;
+    private TextView tvQuestion, tvProgress, tvHint, tvFeedback, tvExplain;
     private final TextView[] optTexts = new TextView[4];
     private final String[] OPT_LETTERS = {"A", "B", "C", "D"};
 
@@ -154,6 +154,16 @@ public class QuizPanel {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         flp.bottomMargin = Ui.dp(ctx, 10);
         col.addView(tvFeedback, flp);
+
+        tvExplain = Ui.text(ctx, "", 18, Ui.color(ctx, R.color.text_dim), false);
+        tvExplain.setGravity(Gravity.CENTER);
+        tvExplain.setMaxLines(4);
+        tvExplain.setLineSpacing(Ui.dp(ctx, 3), 1f);
+        tvExplain.setVisibility(View.GONE);
+        LinearLayout.LayoutParams elp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        elp.bottomMargin = Ui.dp(ctx, 8);
+        col.addView(tvExplain, elp);
 
         LinearLayout row = new LinearLayout(ctx);
         row.setOrientation(LinearLayout.HORIZONTAL);
@@ -245,6 +255,10 @@ public class QuizPanel {
     private void showNextQuestion() {
         current = engine.nextQuestion();
         tvQuestion.setText(current.question);
+        if (tvExplain != null) {
+            tvExplain.setVisibility(View.GONE);
+            tvExplain.setText("");
+        }
         applyQuestionSize(current.question);
         // 四个答案用同一个字号（取最长的那条），整行看起来才整齐
         int maxLen = 0;
@@ -330,6 +344,7 @@ public class QuizPanel {
         if (optTexts[index] != null) optTexts[index].requestFocus();
         if (index == current.correctIndex) {
             progress++;
+            engine.onAnswered(current, true);
             markOption(index, true);
             tvFeedback.setText("✓ 答对了");
             tvFeedback.setTextColor(Ui.color(ctx, R.color.ok));
@@ -367,19 +382,25 @@ public class QuizPanel {
             }, 600);
         } else {
             progress = 0;
+            engine.onAnswered(current, false);
             markOption(index, false);
             optTexts[current.correctIndex].setBackgroundResource(R.drawable.bg_option_correct);
             tvFeedback.setText("✗ 正确答案是 " + OPT_LETTERS[current.correctIndex] + "."
                     + current.options[current.correctIndex]);
             tvFeedback.setTextColor(Ui.color(ctx, R.color.danger));
+            if (current.explanation != null && current.explanation.length() > 0) {
+                tvExplain.setText(current.explanation);
+                tvExplain.setVisibility(View.VISIBLE);
+            }
             updateProgressUI();
             handler.postDelayed(new Runnable() {
                 @Override public void run() {
                     tvFeedback.setText("");
+                    tvExplain.setVisibility(View.GONE);
                     showNextQuestion();
                     answering = false;
                 }
-            }, 1600);
+            }, 3000);
         }
     }
 
