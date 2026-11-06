@@ -1,12 +1,12 @@
 {
-    "md5":  "5f1e18f9ba0a2bac8228a8cf37968de1",
+    "md5":  "ac6e0da2abe0be8041dec8c9c61389af",
     "urls":  [
-                 "https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
-                 "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
-                 "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/dev/apk/txhlock_v2.0.2-dev.apk",
-                 "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@dev/apk/txhlock_v2.0.2-dev.apk"
+                 "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v2.0.0/apk/txhlock_v2.0.0.apk",
+                 "https://raw.githubusercontent.com/txhtxh11/txhlock/master/apk/txhlock_v2.0.0.apk",
+                 "https://ghproxy.net/https://raw.githubusercontent.com/txhtxh11/txhlock/master/apk/txhlock_v2.0.0.apk",
+                 "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/master/apk/txhlock_v2.0.0.apk"
              ],
-    "versionCode":  202,
-    "versionName":  "2.0.2-dev",
-    "notes":  "错题解析与错题重练；应用内更新。"
+    "versionCode":  210,
+    "versionName":  "2.0.0",
+    "notes":  "1. 错题解析与错题重练：答错显示解析，错题优先重练，答对才移出。\n2. 应用内更新：设置里检查更新，下载并拉起安装器。"
 }
