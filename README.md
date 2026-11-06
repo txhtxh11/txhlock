@@ -6,81 +6,12 @@
 
 ---
 
-## 豆包电脑版：请按这个顺序执行
+## 豆包电脑版
 
-你是一名电脑上的安装助手。目标：帮用户把电视装上 v1.9.21、把该开的权限开好，最后把使用指南交给用户。
+请阅读本 README 的「下载」「安装」章节，完成电视安装；装好后把「使用指南」交给用户：
 
-### 第 0 步：先确认三件事
-
-1. 电视是 **Android 4.3 及以上**（小米电视 2 / MiTV2-49 已验证）。
-2. 电脑和电视连在**同一个路由器 / 同一个局域网**。
-3. 问用户电视的 IP（电视：设置 → 关于 / 网络信息 → 状态信息里看 IPv4，形如 `192.168.50.139`）。
-
-### 第 1 步：下载安装器
-
-优先用国内镜像（任选一个能下载的）：
-
-```powershell
-# 方式 A：ghfast 镜像
-Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.21/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
-
-# 方式 B：jsDelivr
-Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.21/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
-```
-
-### 第 2 步：安装（一条命令）
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1" -TvIp 192.168.50.139 -NoPause
-```
-
-把 `192.168.50.139` 换成用户电视的真实 IP；不知道 IP 就去掉 `-TvIp`，脚本会自动扫局域网。
-
-脚本会自动完成：
-
-1. 找到 / 下载 adb；
-2. 连接电视、安装 `txhlock_v1.9.21.apk`；
-3. 打开「每日壁纸」的无障碍保活；
-4. 授权悬浮层、设置屏幕常亮；
-5. 启动应用。
-
-如果脚本提示连不上电视：让用户在电视上打开 ADB —— 设置 → 关于 / 系统信息 → 光标移到「产品型号」连按 OK 5~7 次 → 返回 设置 → 开发者选项 → 打开 **ADB 调试**，然后重跑上面的命令。
-
-### 第 3 步：检查是否成功
-
-```powershell
-# 如果 adb 不在 PATH：安装器准备工作目录下的 platform-tools\adb.exe
-adb -s 192.168.50.139:5555 shell "dumpsys package com.kidslock | grep versionName"
-# 期望：versionName=1.9.20
-
-adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
-# 期望：Service[label=每日壁纸 ...]
-```
-
-电视桌面出现 **「每日壁纸」** 图标（不是「答题锁屏」）即安装成功；如果还是旧名字/旧图标，让用户重启一次电视。
-
-### 第 4 步：带用户做首次设置
-
-请让用户拿着遥控器，按下面做（你在旁边解释即可）：
-
-1. 桌面点「每日壁纸」→ 看到壁纸。
-2. **按住菜单键约 10 秒**（最后 2 秒有倒计时）→ 输入家长密码 **1234**。
-3. 确认「监控：已开启」。
-4. 看「无障碍」：如果是红色「未开启」，点「去系统里打开无障碍（当前：未开启）」→ 在系统设置里打开「每日壁纸」的无障碍开关。
-5. 看「自启动」：
-   - 显示 **「自启动：已开启（系统里已允许，无需操作）」** → 不用点；
-   - 显示 **「未开启 / 未确认」** → 点按钮去应用详情页，把自启动打开。
-6. 建议把家长密码改成用户自己的 4~8 位数字（设置 → 修改家长密码）。
-7. 按用户需求设置：单次连续观看（默认 20 分钟）、每日上限（0=不限）、连续答对（默认 3 题）。
-
-### 第 5 步：把使用指南交给用户
-
-- **完整图文指南（PDF）**：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.21.pdf`
-- 把链接发给用户，或直接把下面「给用户的简短使用指南」念/发给用户。
-
-### 第 6 步：告诉用户以后怎么更新
-
-更新只需重跑一次安装器；**小米电视覆盖安装后可能会把无障碍自动关掉**，更新完回「家长设置 → 防绕过」看一眼，红色「未开启」就点一下重开。
+- 图文指南（PDF）：`https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.21.pdf`
+- 或直接把下面「给用户的简短使用指南」念/发给用户。
 
 ---
 
