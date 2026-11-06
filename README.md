@@ -1,4 +1,4 @@
-# 每日壁纸（答题锁屏）· 小米电视版 v1.9.22
+# 每日壁纸（答题锁屏）· 小米电视版 v1.9.23
 
 > **用户只需要把这一句话发给豆包（电脑版 / Agent 模式）：**
 >
@@ -15,13 +15,13 @@
 1. **下载安装器**（任选一个国内镜像）：
 
 ```powershell
-Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.22/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.23/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 备选：
 
 ```powershell
-Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.22/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
+Invoke-WebRequest "https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.23/tools/install.ps1" -OutFile "$env:TEMP\install.ps1"
 ```
 
 2. **直接运行，让脚本自己扫局域网找电视**：
@@ -66,7 +66,7 @@ adb -s 192.168.50.139:5555 shell "dumpsys accessibility"
 把 ② 的「用户使用指南」原样发给用户，或发图文指南 PDF：
 
 ```
-https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf
+https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.23.pdf
 ```
 
 ### 豆包的边界（重要）
@@ -98,15 +98,15 @@ https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf
 
 | 文件 | 地址 |
 | --- | --- |
-| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.22/apk/txhlock_v1.9.22.apk |
-| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.22/txhlock_v1.9.22.apk |
-| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.22/txhlock_v1.9.22.apk |
-| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.22/tools/install.ps1 |
-| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.22.pdf |
+| APK（jsDelivr） | https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.23/apk/txhlock_v1.9.23.apk |
+| APK（ghfast） | https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.23/txhlock_v1.9.23.apk |
+| APK（ghproxy） | https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.23/txhlock_v1.9.23.apk |
+| 安装器脚本 | https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.23/tools/install.ps1 |
+| 图文指南 PDF | https://raw.githubusercontent.com/txhtxh11/txhlock/master/docs/guide-v1.9.23.pdf |
 
-- 文件大小：**4,414,084 字节**
-- MD5：`badd3532128fc46f8fe9dde5d3b94f5b`
-- 适用：Android 4.3（API 18）及以上，已在小米电视 2（MiTV2-49 / 1080p）实机验证
+- 文件大小：**4,414,057 字节**
+- MD5：`11bdca9a836274b9b2da583060f89095`
+- 适用：Android 4.3–14（API 18–34），已在小米电视 2（MiTV2-49 / 1080p）实机验证
 
 ### 安装（用户，三种方式任选一种）
 
@@ -123,13 +123,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -TvIp 192.168.
 
 **方式二：U 盘**
 
-把 `txhlock_v1.9.22.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
+把 `txhlock_v1.9.23.apk` 拷到 U 盘 → 插电视 → 电视「文件管理」里找到 APK → 安装 → 手动打开无障碍。
 
 **方式三：ADB 命令**
 
 ```bash
 adb connect 192.168.50.139:5555
-adb install -r txhlock_v1.9.22.apk
+adb install -r txhlock_v1.9.23.apk
 adb shell settings put secure enabled_accessibility_services com.kidslock/com.kidslock.BootAccessibility
 adb shell settings put secure accessibility_enabled 1
 adb shell am start -n com.kidslock/.LauncherWallpaper
@@ -194,8 +194,8 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ### 版本（用户）
 
-- 当前：**v1.9.22**（versionCode 112）
-- APK：4,414,084 字节，MD5 `badd3532128fc46f8fe9dde5d3b94f5b`
+- 当前：**v1.9.23**（versionCode 113）
+- APK：4,414,057 字节，MD5 `11bdca9a836274b9b2da583060f89095`
 - 更新日志：https://github.com/txhtxh11/txhlock/releases
 
 ---

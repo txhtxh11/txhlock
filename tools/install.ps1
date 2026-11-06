@@ -36,7 +36,7 @@ try {
 try { chcp 65001 > $null } catch { }
 
 $script:LogFile = Join-Path $env:TEMP "txhlock-install.log"
-$script:Version = "1.9.22"
+$script:Version = "1.9.23"
 $script:Pkg = "com.kidslock"
 $script:AccService = "com.kidslock/com.kidslock.BootAccessibility"
 # 常见 ADB 端口；-Port 指定时只用指定的那个

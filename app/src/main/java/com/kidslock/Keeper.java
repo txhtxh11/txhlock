@@ -85,9 +85,11 @@ public final class Keeper {
         AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
         if (am == null) return;
         for (int i = 0; i < delays.length; i++) {
+            int retryFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+            if (Build.VERSION.SDK_INT >= 23) retryFlags |= PendingIntent.FLAG_IMMUTABLE;
             PendingIntent pi = PendingIntent.getBroadcast(c, REQ_RETRY + i,
                     new Intent(c, KeeperReceiver.class).setAction(ACTION_RETRY),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    retryFlags);
             try {
                 am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         SystemClock.elapsedRealtime() + delays[i], pi);
@@ -100,9 +102,11 @@ public final class Keeper {
     public static void scheduleWatchdog(Context c) {
         AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
         if (am == null) return;
+        int wdFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= 23) wdFlags |= PendingIntent.FLAG_IMMUTABLE;
         PendingIntent pi = PendingIntent.getBroadcast(c, REQ_WATCHDOG,
                 new Intent(c, KeeperReceiver.class).setAction(ACTION_WATCHDOG),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                wdFlags);
         try {
             am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + 60000, 60000, pi);
