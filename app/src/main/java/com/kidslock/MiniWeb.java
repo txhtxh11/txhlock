@@ -196,6 +196,13 @@ public final class MiniWeb {
             return;
         }
 
+        if ("/lock".equals(path) && "POST".equals(method)) {
+            if (!authed) { redirect(s, "/"); return; }
+            lockNow();
+            html(s, 200, settingsPage("已发送「立刻锁定」"));
+            return;
+        }
+
         if ("/unlock".equals(path) && "POST".equals(method)) {
             if (!authed) { redirect(s, "/"); return; }
             unlock();
@@ -283,6 +290,24 @@ public final class MiniWeb {
         }
     }
 
+    private void lockNow() {
+        try {
+            prefs.setLocked(true);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override public void run() {
+                    try {
+                        Keeper.startService(app);
+                        Keeper.launchLockNow(app);
+                    } catch (Throwable t) {
+                        Log.w(TAG, "lock now failed", t);
+                    }
+                }
+            });
+        } catch (Throwable t) {
+            Log.w(TAG, "lock now failed", t);
+        }
+    }
+
     private void unlock() {
         try {
             if (prefs.isDailyLocked()) prefs.setDailyExempt(true);
@@ -350,6 +375,7 @@ public final class MiniWeb {
         b.append("<label class=field><span>新家长密码（4~8 位数字，留空不改）</span>")
                 .append("<input name=pin inputmode=numeric maxlength=8 placeholder=\"留空不改\"></label>");
         b.append("<button class=primary>保存设置</button></form>");
+        b.append("<form method=post action=/lock><button class=warn>立刻锁定电视</button></form>");
         b.append("<form method=post action=/unlock><button class=ghost>立刻解锁电视</button></form>");
         b.append("<p class=tip>改完立刻生效；电视上的设置页重新进入后会刷新。</p>");
         b.append("<p class=tip><a href=/logout>退出</a></p>");
@@ -385,6 +411,7 @@ public final class MiniWeb {
                 + "button{width:100%;border:0;border-radius:12px;padding:15px;font-size:17px;"
                 + "font-weight:600;margin-top:12px}"
                 + ".primary{background:#1e5af0;color:#fff}.ghost{background:#223041;color:#cfe0f5}"
+                + ".warn{background:#c94a3d;color:#fff}"
                 + "a{color:#7fb0ff}</style></head><body><div class=wrap>";
     }
 

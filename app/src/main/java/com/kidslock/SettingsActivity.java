@@ -994,11 +994,6 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    @Override protected void onDestroy() {
-        MiniWeb.stop();
-        super.onDestroy();
-    }
-
     @Override protected void onResume() {
         super.onResume();
         if (prefs != null && !prefs.isLocked()) refreshAll();
