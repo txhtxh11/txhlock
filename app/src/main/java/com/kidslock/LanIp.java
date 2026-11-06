@@ -10,18 +10,22 @@ public final class LanIp {
     private LanIp() {}
 
     public static String get() {
+        String fallback = null;
         try {
             for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
                 if (ni == null || !ni.isUp() || ni.isLoopback()) continue;
+                String name = ni.getName() == null ? "" : ni.getName().toLowerCase();
                 for (InetAddress a : Collections.list(ni.getInetAddresses())) {
                     if (a instanceof Inet4Address && a.isSiteLocalAddress()) {
-                        return a.getHostAddress();
+                        // 电视同时插网线时，优先给 WiFi 地址（手机连的是 WiFi）
+                        if (name.startsWith("wlan") || name.startsWith("ap")) return a.getHostAddress();
+                        if (fallback == null) fallback = a.getHostAddress();
                     }
                 }
             }
         } catch (Throwable t) {
             // ignore
         }
-        return null;
+        return fallback;
     }
 }

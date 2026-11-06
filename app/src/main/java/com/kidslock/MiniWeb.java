@@ -119,6 +119,11 @@ public final class MiniWeb {
     // ---------------- HTTP ----------------
 
     private void handle(Socket s) throws Exception {
+        // 只服务局域网：手机用流量/外网访问一律拒绝
+        if (s.getInetAddress() == null || !s.getInetAddress().isSiteLocalAddress()) {
+            try { s.close(); } catch (Throwable t) { }
+            return;
+        }
         s.setSoTimeout(15000);
         BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
         String first = in.readLine();
@@ -315,7 +320,7 @@ public final class MiniWeb {
                 .append("maxlength=8 placeholder=\"家长密码\" autofocus>");
         b.append("<button class=primary>进入设置</button></form>");
         if (err != null) b.append("<p class=err>").append(esc(err)).append("</p>");
-        b.append("<p class=tip>和电视连同一个 WiFi；密码就是电视上的家长密码。</p>");
+        b.append("<p class=tip>手机必须和电视连同一个家庭 WiFi（局域网内有效，用流量打不开）；密码就是电视上的家长密码。</p>");
         b.append("</div></body></html>");
         return b.toString();
     }

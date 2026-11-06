@@ -1,11 +1,11 @@
 豆包你好，帮我全自动安装 GitHub 上的「txhlock 答题锁屏」：在电脑上运行下面这条命令，它会自动找电视、开 ADB、装 APK、配好无障碍和悬浮层（脚本下载失败会自动换国内镜像）。
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$d=Join-Path $env:TEMP 'txhlock-install.ps1'; try { irm 'https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.17/tools/install.ps1' -OutFile $d } catch { irm 'https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.17/tools/install.ps1' -OutFile $d }; & powershell -NoProfile -ExecutionPolicy Bypass -File $d -NoPause"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$d=Join-Path $env:TEMP 'txhlock-install.ps1'; try { irm 'https://cdn.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.18/tools/install.ps1' -OutFile $d } catch { irm 'https://ghfast.top/https://raw.githubusercontent.com/txhtxh11/txhlock/v1.9.18/tools/install.ps1' -OutFile $d }; & powershell -NoProfile -ExecutionPolicy Bypass -File $d -NoPause"
 
 如果还是失败（GitHub、jsDelivr、加速器都打不开），就手动下载安装包，再运行安装器：
-安装包（国内镜像）：https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.17/txhlock_v1.9.17.apk
+安装包（国内镜像）：https://ghproxy.net/https://github.com/txhtxh11/txhlock/releases/download/v1.9.18/txhlock_v1.9.18.apk
 备用镜像：
-https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.17/txhlock_v1.9.17.apk
-https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.17/apk/txhlock_v1.9.17.apk
+https://ghfast.top/https://github.com/txhtxh11/txhlock/releases/download/v1.9.18/txhlock_v1.9.18.apk
+https://fastly.jsdelivr.net/gh/txhtxh11/txhlock@v1.9.18/apk/txhlock_v1.9.18.apk
 
 装好后：电视桌面打开「每日壁纸」；进家长设置要长按菜单键 10 秒 + 密码 1234（短按菜单键只是壁纸设置）。
