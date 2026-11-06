@@ -204,7 +204,7 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 
 ---
 
-## 开发者（豆包可忽略）
+## 开发者（豆包可忽略）`n`n> **发版规则**：`apk/` 只保留最新版 APK；每次运行 `tools/publish_share.ps1 -Version x.y.z`，把最新 APK 和指南覆盖到 `D:\share`。
 
 > **发版规则**：pk/ 只保留最新版 APK；发新版时删掉旧 APK，README 和安装器同步版本号。
 
