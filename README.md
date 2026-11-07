@@ -213,7 +213,8 @@ adb shell am start -n com.kidslock/.LauncherWallpaper
 - **锁屏时按主页键能回桌面？** 点「主页键拦截失效？点此修复」：把无障碍关掉再打开；仍不行确认悬浮层是「已开启」。
 - **自启动显示「未确认」/系统里没有自启动开关？** 小米等电视有「自启动」开关；Sony、Google TV 等原生系统没有这个开关，不用管——只要无障碍已开启，开机后会自动恢复。重启一次电视后再看：绿色=已生效。
 - **手机扫码打不开？** 确认同一 WiFi（不是访客网络）、直接输验证页地址、路由器没开 AP 隔离。
-- **遥控器没有菜单键？** 壁纸页长按 OK 键 10 秒进家长设置；锁屏页长按 OK 键 10 秒呼出家长密码。\n- **设置页按菜单键没反应？** 正常：设置页不响应菜单键；只有锁屏答题页/壁纸页长按才用菜单键。
+- **遥控器没有菜单键？** 壁纸页长按 OK 键 10 秒进家长设置；锁屏页长按 OK 键 10 秒呼出家长密码。
+- **设置页按菜单键没反应？** 正常：设置页不响应菜单键；只有锁屏答题页/壁纸页长按才用菜单键。
 - **Android 12/13/14 点图标闪退？** 升级到 v2.0.1：修复了 PendingIntent 缺少 FLAG_IMMUTABLE 的崩溃。
 - **Android 14 悬浮层没盖住？** 设置 → 应用 → 每日壁纸 → 显示在其他应用上层，手动允许。
 - **忘记家长密码？** 默认 `1234`；改过又忘了只能卸载重装（会清空设置）。
@@ -242,5 +243,34 @@ $env:ANDROID_HOME="C:\path\to\android-sdk"
 
 - 安装器：`tools/install.ps1`（PowerShell，自动找 adb / 扫电视 / 装 APK / 开无障碍）
 - 手机设置页：应用内 `MiniWeb`（端口 8765，局域网 + 家长密码）
+
+## 仓库结构
+
+| 路径 | 说明 |
+| --- | --- |
+| `app/` | Android 应用源码（Java；minSdk 18 / targetSdk 33 / compileSdk 34） |
+| `apk/` | 当前版本安装包（只保留最新一份，旧版本见 Releases） |
+| `docs/` | 使用指南 PDF、题库模板、给豆包的说明 |
+| `tools/` | Windows 一键安装器：`install.ps1`、`一键安装.bat`、`adb.zip` |
+| `截图/` | 界面截图 |
+| `update.json` | 应用内更新检查用的版本清单 |
+
+## 许可证
+
+Copyright (C) 2026 txhtxh11
+
+本项目以 **GNU General Public License v3.0** 发布，全文见 [LICENSE](LICENSE)。
+
+- 可自由使用、修改、分发（含商业使用），但**分发修改版时必须同样以 GPL-3.0 开源**，并保留版权与许可声明。
+- 本软件按「现状」提供，不附带任何明示或默示担保。
+
+### 第三方资源（各自遵循原有许可）
+
+| 资源 | 许可 |
+| --- | --- |
+| `app/src/main/assets/fonts/`（DejaVu、拼音字体） | 见 [LICENSE-DejaVu.txt](app/src/main/assets/fonts/LICENSE-DejaVu.txt) |
+| `app/src/main/assets/wallpapers/` | 见 [LICENSE.txt](app/src/main/assets/wallpapers/LICENSE.txt) |
+| `app/libs/core-3.3.0.jar`（ZXing core） | Apache-2.0 |
+| `tools/adb.zip`（Android SDK Platform-Tools） | Google SDK 许可 |
 
 > 仅用于家长管理自己的电视；请勿用于破解、监控他人设备。

@@ -133,6 +133,23 @@ if (-not $adb) {
     if ($cmd) { $adb = $cmd.Source }
 }
 if (-not $adb) {
+    # 仓库自带 tools\adb.zip：先就地解压，离线也能装
+    $localZip = Join-Path $scriptDir "adb.zip"
+    if (Test-Path $localZip) {
+        Log "  使用同目录的 adb.zip 就地解压…" "DarkGray"
+        $localOut = Join-Path $env:TEMP "txhlock-adb-local"
+        if (Test-Path $localOut) { Remove-Item $localOut -Recurse -Force -ErrorAction SilentlyContinue }
+        try {
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            [System.IO.Compression.ZipFile]::ExtractToDirectory($localZip, $localOut)
+            $found = Get-ChildItem $localOut -Recurse -Filter "adb.exe" | Select-Object -First 1
+            if ($found) { $adb = $found.FullName }
+        } catch {
+            Log "  本地 adb.zip 解压失败，改用下载：$($_.Exception.Message)" "DarkGray"
+        }
+    }
+}
+if (-not $adb) {
     Log "  电脑上没有 adb，正在自动下载（带国内镜像，约 4MB）…" "Yellow"
     $zip = Join-Path $env:TEMP "txhlock-adb.zip"
     $adbUrls = @(
